@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next pisces" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png?v=6.3.0">
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    fastclick: ,
+    lazyload: ,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前言放一些在iOS开发中用来提高效率的脚本工具传送门  codeObfuscated改良版的代码混淆传送门 autoResign是使用企业签名来做ipa包的重签名传送门 inject_with_jailbreaking用来在越狱设备中hook某些app做些调研什么的传送门 class_dump对ipa文件进行头文件的导出传送门">
+<meta name="keywords" content="Hexo, NexT">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS工具集">
+<meta property="og:url" content="https://mrchens.github.io/2017/04/17/iOS-Tools/index.html">
+<meta property="og:site_name" content="MrChens Blog">
+<meta property="og:description" content="前言放一些在iOS开发中用来提高效率的脚本工具传送门  codeObfuscated改良版的代码混淆传送门 autoResign是使用企业签名来做ipa包的重签名传送门 inject_with_jailbreaking用来在越狱设备中hook某些app做些调研什么的传送门 class_dump对ipa文件进行头文件的导出传送门">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://mrchens.github.io/images/article/2017.04/2017-04-17-iOS-Tools-BuildPhase.png">
+<meta property="og:updated_time" content="2017-05-05T08:57:50.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS工具集">
+<meta name="twitter:description" content="前言放一些在iOS开发中用来提高效率的脚本工具传送门  codeObfuscated改良版的代码混淆传送门 autoResign是使用企业签名来做ipa包的重签名传送门 inject_with_jailbreaking用来在越狱设备中hook某些app做些调研什么的传送门 class_dump对ipa文件进行头文件的导出传送门">
+<meta name="twitter:image" content="http://mrchens.github.io/images/article/2017.04/2017-04-17-iOS-Tools-BuildPhase.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://mrchens.github.io/2017/04/17/iOS-Tools/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>iOS工具集 | MrChens Blog</title>
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-112744328-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-112744328-1');
+</script>
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2250627e2fe66049584e97edac149bb6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MrChens Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">Yesterday once more</h1>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/aboutme/" rel="section">About</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">Tags</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">Categories</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">Archives</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-sitemap">
+    <a href="/sitemap.xml" rel="section">Sitemap</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-commonweal">
+    <a href="/404/404.html" rel="section">Commonweal 404</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            Search</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mrchens.github.io/2017/04/17/iOS-Tools/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Moro">
+      <meta itemprop="description" content="It’s amazing how the unexpected,can take your life and change directions.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MrChens Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">iOS工具集
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2017-04-17 23:26:17" itemprop="dateCreated datePublished" datetime="2017-04-17T23:26:17+08:00">2017-04-17</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/工具-Tools/" itemprop="url" rel="index"><span itemprop="name">工具(Tools)</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/04/17/iOS-Tools/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/04/17/iOS-Tools/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/04/17/iOS-Tools/" class="leancloud_visitors" data-flag-title="iOS工具集">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Views: </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><code>前言</code><br>放一些在iOS开发中用来提高效率的脚本工具<a href="https://github.com/MrChens/iOS_Tools" target="_blank" rel="noopener">传送门</a></p>
+<ul>
+<li><code>codeObfuscated</code>改良版的代码混淆<a href="https://github.com/MrChens/codeObfuscated" target="_blank" rel="noopener">传送门</a></li>
+<li><code>autoResign</code>是使用企业签名来做ipa包的重签名<a href="https://github.com/MrChens/iOS_Tools/tree/master/autoResign" target="_blank" rel="noopener">传送门</a></li>
+<li><code>inject_with_jailbreaking</code>用来在越狱设备中hook某些app做些调研什么的<a href="https://github.com/MrChens/iOS_Tools/tree/master/inject_with_jailbreaking" target="_blank" rel="noopener">传送门</a></li>
+<li><code>class_dump</code>对ipa文件进行头文件的导出<a href="https://github.com/MrChens/iOS_Tools/tree/master/class_dump" target="_blank" rel="noopener">传送门</a></li>
+</ul>
+<a id="more"></a>
+<h1 id="codeObfuscated"><a href="#codeObfuscated" class="headerlink" title="codeObfuscated"></a>codeObfuscated</h1><h3 id="本工具是用于混淆方法名和类名"><a href="#本工具是用于混淆方法名和类名" class="headerlink" title="本工具是用于混淆方法名和类名"></a>本工具是用于混淆方法名和类名</h3><ul>
+<li>改良这个脚本工具的初衷:因为项目中使用JSPatch的热修复功能，然后上架的时候被Apple拒绝了，然后就有了这个混淆的工具。如果你也需要混淆JSPatch那么你可以复用<code>obfuscation.list</code>,本人已经通过审核了.</li>
+</ul>
+<blockquote>
+<p>使用本脚本做完了混淆后，可以使用github上整理好的上的<a href="https://github.com/MrChens/iOS_Tools/tree/master/class_dump" target="_blank" rel="noopener">class_dump</a>中的工具做.h文件的dump查看混淆的效果.</p>
+</blockquote>
+<blockquote>
+<p>建议:理论上来说能混淆任意的字符串，但是出于实用性<code>obfuscation.list</code>最好不要放置属性名，我只测试过函数名和类名的混淆，如果有兴趣对其他的字符串做混淆请自行测试。</p>
+</blockquote>
+<p>  该工具是由<a href="http://blog.csdn.net/yiyaaixuexi/article/details/29201699" target="_blank" rel="noopener">念茜的iOS安全攻防（二十三）：Objective-C代码混淆</a>为原型做了以下的修改</p>
+<ul>
+<li>防止生成的随机数有可能重复的问题</li>
+<li><p>防止每次编译程序的时候,<code>codeObfuscation.h</code>文件都会发生变化而导致的每次编译都要很久的问题</p>
+<h3 id="使用步骤"><a href="#使用步骤" class="headerlink" title="使用步骤:"></a>使用步骤:</h3></li>
+<li>将混淆脚本<code>obfuscated.sh</code>和需要混淆的函数名/类名表<code>obfuscation.list</code>这2个文件放到工程的根目录下.</li>
+<li><strong>重要的提示:如果是为了审核通过请不要将<code>obfuscation.list</code>在项目中引用(reference),否则就会和我一样虽然混淆了但是<code>obfuscation.list</code>暴露出了一切还是会被Apple拒绝的,因为你将文件引用入工程会导致它在打包时会将该文件一起打包进去的.</strong></li>
+<li>配置<code>Build Phase</code>:在工程<code>Build Phase</code>中添加执行脚本操作，执行<code>obfuscated.sh</code>如图<img src="http://mrchens.github.io/images/article/2017.04/2017-04-17-iOS-Tools-BuildPhase.png" alt="BuildPhase">.</li>
+<li><p>在<code>obfuscation.list</code>中写入需要混淆的方法名和类名，如:   </p>
+<pre><code>@interface JPCore : NSObject    //其中JPCore是需要混淆的类名
+-(void)sample;  
+-(void)seg1:(NSString *)string seg2:(NSUInteger)num;
+就这样写：   
+JPCore  
+sample  
+seg1    
+seg2
+</code></pre></li>
+<li><p>脚本执行完了以后会生成一个<code>codeObfuscation.h</code>头文件，将此头文件加入工程中并在<code>XXX-Prefix.ch</code>中import</p>
+<pre><code>#ifdef __OBJC__  
+    #import &lt;UIKit/UIKit.h&gt;  
+    #import &lt;Foundation/Foundation.h&gt;  
+    //添加混淆作用的头文件（这个文件名是脚本obfuscated.sh中定义的）  
+    #import &quot;codeObfuscation.h&quot;  
+#endif
+</code></pre></li>
+</ul>
+<h1 id="autoResign"><a href="#autoResign" class="headerlink" title="autoResign"></a>autoResign</h1><h3 id="环境要求"><a href="#环境要求" class="headerlink" title="环境要求:"></a>环境要求:</h3><ol>
+<li>OSX 10.8以上.</li>
+<li>Xcode8.0以上.</li>
+</ol>
+<h3 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式:"></a>使用方式:</h3><ol>
+<li>直接在终端运行<code>autoResign.sh</code>.</li>
+<li>将要需要企业重签名的<code>ipa</code>放入<code>input文件夹</code>中.</li>
+<li>企业重签名后的<code>ipa</code>文件会自动放入<code>output文件夹</code>中.</li>
+</ol>
+<h3 id="重要的"><a href="#重要的" class="headerlink" title="重要的:"></a>重要的:</h3><p>在使用该脚本前您需要确保做了以下几件事:</p>
+<ul>
+<li>配置了企业证书在本地的电脑中(钥匙串中)</li>
+<li>将您的<code>Entitlements.plist</code>,<code>xx.mobileprovision</code>放入resign目录中,文件结构如下图所示</li>
+<li>在<code>resign.config</code>文件中配置<code>Entitlements.plist</code>文件</li>
+<li>在<code>resign.config</code>文件中修改<code>NEW_MOBILEPROVISION</code>的值为您的<code>xx.mobileprovision</code></li>
+<li>在<code>resign.config</code>文件中修改<code>CODESIGN_IDENTITIES</code>的值为您的<code>证书名字</code></li>
+</ul>
+<h3 id="如何获取xx-mobileprovision"><a href="#如何获取xx-mobileprovision" class="headerlink" title="如何获取xx.mobileprovision"></a>如何获取xx.mobileprovision</h3><ul>
+<li>登陆你的企业开发者账号，选择<code>Provisioning Profiles</code>下的<code>Distribution</code>下载你的配置文件</li>
+</ul>
+<h3 id="如何修改Entitlements-plist"><a href="#如何修改Entitlements-plist" class="headerlink" title="如何修改Entitlements.plist"></a>如何修改<code>Entitlements.plist</code></h3><p>假设你的teamID为:<code>yourTeamID</code><br>假设你的<code>application-identifier</code>:为<code>yourTeamID.com.xxx.xxx</code><br>将<code>keychain-access-groups</code>的中的<code>xxx.*</code>改为<code>yourTeamID.*</code><br>将<code>application-identifier</code>中的<code>xxx.xxx.xxx.xxx</code>改为<code>yourTeamID.com.xxx.xxx</code></p>
+<h3 id="文件结构"><a href="#文件结构" class="headerlink" title="文件结构:"></a>文件结构:</h3><pre><code>autoResign/
+├── README.md
+├── autoResign.sh
+├── input
+├── output
+└── resign
+    ├── xx.mobileprovision
+    ├── Entitlements.plist
+    ├── Payload
+    ├── resign.config
+    └── resign.sh
+</code></pre><h1 id="inject-with-jailbreaking"><a href="#inject-with-jailbreaking" class="headerlink" title="inject_with_jailbreaking"></a>inject_with_jailbreaking</h1><h3 id="有空的时候补充一下文档，可以先从传送门过去看看"><a href="#有空的时候补充一下文档，可以先从传送门过去看看" class="headerlink" title="有空的时候补充一下文档，可以先从传送门过去看看."></a>有空的时候补充一下文档，可以先从传送门过去看看.</h3><h1 id="class-dump"><a href="#class-dump" class="headerlink" title="class_dump"></a>class_dump</h1><h3 id="导出头文件操作流程文档"><a href="#导出头文件操作流程文档" class="headerlink" title="导出头文件操作流程文档"></a>导出头文件操作流程文档</h3><p><a href="http://stevenygard.com/projects/class-dump/" target="_blank" rel="noopener">class-dump</a></p>
+<p><a href="https://github.com/stefanesser/dumpdecrypted.git" target="_blank" rel="noopener">砸壳(破解)工具</a></p>
+<h4 id="本目录下已经预先放置好了需要使用的工具，如果不能使用请从上面的网址去download新的工具来。"><a href="#本目录下已经预先放置好了需要使用的工具，如果不能使用请从上面的网址去download新的工具来。" class="headerlink" title="本目录下已经预先放置好了需要使用的工具，如果不能使用请从上面的网址去download新的工具来。"></a>本目录下已经预先放置好了需要使用的工具，如果不能使用请从上面的网址去download新的工具来。</h4><p>从App Store下载的ipa是需要先砸壳然后再使用<code>class-dump</code>才能导出头文件.<br>如果是自己打包的企业app直接把ipa解压后的xx.app用<code>class-dump</code>就能导出头文件.</p>
+<h3 id="针对App-Store下载的ipa进行的class-dump-需要越狱的设备"><a href="#针对App-Store下载的ipa进行的class-dump-需要越狱的设备" class="headerlink" title="针对App Store下载的ipa进行的class-dump(需要越狱的设备)"></a>针对App Store下载的ipa进行的<code>class-dump</code>(需要越狱的设备)</h3><ul>
+<li>先从ituness上下载xxx.ipa</li>
+<li>然后将ipa安装到越狱的手机中</li>
+<li>将<code>dumpdecrypted.dylib</code>拷贝到手机的<code>(iOS8)/var/mobile/Containers/Data/Application/xxx-xxx/Documents</code>目录下，在iOS7中是<code>/var/mobile/Applications/xxx-xxx/Documents</code></li>
+<li>iOS8然后再cd到3中的目录下执行:<code>DYLD_INSERT_LIBRARIES=dumpdecrypted.dylib /var/mobile/Containers/Bundle/Application/xxx-xxx/yyy.app/yyy</code><br>iOS7然后再cd到3中的目录下执行:<code>DYLD_INSERT_LIBRARIES=dumpdecrypted.dylib /var/mobile/Applications/xxx-xxx/yyy.app/yyy</code></li>
+<li>然后就会生成<code>yyy.decrypted</code></li>
+<li>使用<code>scp</code>将<code>yyy.decrypted</code>传输到电脑上</li>
+<li><code>./class-dump -H yyy.decrypted -o outputs</code></li>
+<li>然后就能在<code>outputs</code>中看到导出的头文件</li>
+</ul>
+<h3 id="针对不需要砸壳的ipa进行的class-dump-不需要越狱的设备"><a href="#针对不需要砸壳的ipa进行的class-dump-不需要越狱的设备" class="headerlink" title="针对不需要砸壳的ipa进行的class-dump(不需要越狱的设备)"></a>针对不需要砸壳的ipa进行的class-dump(不需要越狱的设备)</h3><ul>
+<li>将xxx.ipa解压到<code>class-dump</code>同个目录下，然后使用下面的命令将头文件导出到<code>outputs</code>目录下:</li>
+<li><code>./class-dump -H xx.app -o  outputs</code></li>
+<li>然后就能在<code>outputs</code>中看到导出的头文件</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wechat_qrcode.jpg" alt="Moro wechat" style="width: 200px; max-width: 100%;"/>
+    <div>扫码关注一个很懒的程序员!</div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>好冷啊!早知道不做开发!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>Donate</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechat_reward.JPG" alt="Moro WeChat Pay"/>
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay_reward.JPG" alt="Moro Alipay"/>
+        <p>Alipay</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Moro</li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://mrchens.github.io/2017/04/17/iOS-Tools/" title="iOS工具集">https://mrchens.github.io/2017/04/17/iOS-Tools/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under CC BY-NC-SA 3.0 unless stating additionally.</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/27/2016-year-end-report/" rel="next" title="2016年终总结">
+                <i class="fa fa-chevron-left"></i> 2016年终总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/05/mitmproxy-for-iOS-app-usage/" rel="prev" title="mitmproxy for iOS app usage">
+                mitmproxy for iOS app usage <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Moro</p>
+              <p class="site-description motion-element" itemprop="description">It’s amazing how the unexpected,can take your life and change directions.</p>
+          </div>
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/MrChens" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/LableTag" target="_blank" title="Twitter" rel="external nofollow"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/325751212" target="_blank" title="Weibo" rel="external nofollow"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#codeObfuscated"><span class="nav-number">1.</span> <span class="nav-text">codeObfuscated</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#本工具是用于混淆方法名和类名"><span class="nav-number">1.0.1.</span> <span class="nav-text">本工具是用于混淆方法名和类名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用步骤"><span class="nav-number">1.0.2.</span> <span class="nav-text">使用步骤:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#autoResign"><span class="nav-number">2.</span> <span class="nav-text">autoResign</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#环境要求"><span class="nav-number">2.0.1.</span> <span class="nav-text">环境要求:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用方式"><span class="nav-number">2.0.2.</span> <span class="nav-text">使用方式:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重要的"><span class="nav-number">2.0.3.</span> <span class="nav-text">重要的:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何获取xx-mobileprovision"><span class="nav-number">2.0.4.</span> <span class="nav-text">如何获取xx.mobileprovision</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何修改Entitlements-plist"><span class="nav-number">2.0.5.</span> <span class="nav-text">如何修改Entitlements.plist</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件结构"><span class="nav-number">2.0.6.</span> <span class="nav-text">文件结构:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#inject-with-jailbreaking"><span class="nav-number">3.</span> <span class="nav-text">inject_with_jailbreaking</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#有空的时候补充一下文档，可以先从传送门过去看看"><span class="nav-number">3.0.1.</span> <span class="nav-text">有空的时候补充一下文档，可以先从传送门过去看看.</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#class-dump"><span class="nav-number">4.</span> <span class="nav-text">class_dump</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#导出头文件操作流程文档"><span class="nav-number">4.0.1.</span> <span class="nav-text">导出头文件操作流程文档</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#本目录下已经预先放置好了需要使用的工具，如果不能使用请从上面的网址去download新的工具来。"><span class="nav-number">4.0.1.1.</span> <span class="nav-text">本目录下已经预先放置好了需要使用的工具，如果不能使用请从上面的网址去download新的工具来。</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#针对App-Store下载的ipa进行的class-dump-需要越狱的设备"><span class="nav-number">4.0.2.</span> <span class="nav-text">针对App Store下载的ipa进行的class-dump(需要越狱的设备)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#针对不需要砸壳的ipa进行的class-dump-不需要越狱的设备"><span class="nav-number">4.0.3.</span> <span class="nav-text">针对不需要砸壳的ipa进行的class-dump(不需要越狱的设备)</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Moro</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" rel="external nofollow" href="https://theme-next.org">NexT.Pisces</a> v6.3.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'https://mrchens.github.io/2017/04/17/iOS-Tools/';
+        this.page.identifier = '2017/04/17/iOS-Tools/';
+        this.page.title = 'iOS工具集';
+        };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("Rbmck7R3KAm9W7niGDdiqynV-gzGzoHsz", "vkjMmth4lwiUrDQ7gMeA9MkM");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            
+            counter.save(null, {
+              success: function(counter) {
+                
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(counter.get('time'));
+                
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            
+              var newcounter = new Counter();
+              /* Set ACL */
+              var acl = new AV.ACL();
+              acl.setPublicReadAccess(true);
+              acl.setPublicWriteAccess(true);
+              newcounter.setACL(acl);
+              /* End Set ACL */
+              newcounter.set("title", title);
+              newcounter.set("url", url);
+              newcounter.set("time", 1);
+              newcounter.save(null, {
+                success: function(newcounter) {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+                },
+                error: function(newcounter, error) {
+                  console.log('Failed to create');
+                }
+              });
+            
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
