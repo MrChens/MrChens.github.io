@@ -111,16 +111,16 @@
   <meta name="description" content="前言 对每个程序员来说调试(Debug)是一个不可或缺的技能">
 <meta name="keywords" content="Hexo, NexT">
 <meta property="og:type" content="article">
-<meta property="og:title" content="debug with crashlog step 1">
+<meta property="og:title" content="根据`crash.log`调试BUG">
 <meta property="og:url" content="https://mrchens.github.io/2018/07/26/debug-with-crashlog/index.html">
 <meta property="og:site_name" content="MrChens Blog">
 <meta property="og:description" content="前言 对每个程序员来说调试(Debug)是一个不可或缺的技能">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://mrchens.github.io/images/article/2018.07/code.png">
 <meta property="og:image" content="http://mrchens.github.io/images/article/2018.07/ida.png">
-<meta property="og:updated_time" content="2018-07-30T08:41:33.183Z">
+<meta property="og:updated_time" content="2018-08-05T08:50:11.881Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="debug with crashlog step 1">
+<meta name="twitter:title" content="根据`crash.log`调试BUG">
 <meta name="twitter:description" content="前言 对每个程序员来说调试(Debug)是一个不可或缺的技能">
 <meta name="twitter:image" content="http://mrchens.github.io/images/article/2018.07/code.png">
 
@@ -139,7 +139,7 @@
   };
 </script>
 
-  <title>debug with crashlog step 1 | MrChens Blog</title>
+  <title>根据`crash.log`调试BUG | MrChens Blog</title>
   
 
 
@@ -387,7 +387,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">debug with crashlog step 1
+          <h2 class="post-title" itemprop="name headline">根据`crash.log`调试BUG
               
             
           </h2>
@@ -456,7 +456,7 @@
 
           
           
-             <span id="/2018/07/26/debug-with-crashlog/" class="leancloud_visitors" data-flag-title="debug with crashlog step 1">
+             <span id="/2018/07/26/debug-with-crashlog/" class="leancloud_visitors" data-flag-title="根据`crash.log`调试BUG">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -493,8 +493,8 @@
 <blockquote>
 <p>偵錯（英语：Debug），又稱除錯，是发现和减少计算机程序或电子仪器设备中程序错误的一个过程（<a href="https://zh.wikipedia.org/wiki/调试" target="_blank" rel="noopener">wiki-调试</a>）</p>
 </blockquote>
-<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><pre><code>做SDK开发，难免会有些app因为嵌入了SDK然后出现了crash，这时候就需要你具备一定的debug的能来找到crash的位置并修复.
-</code></pre><h1 id="调试前所拥有的材料"><a href="#调试前所拥有的材料" class="headerlink" title="调试前所拥有的材料"></a>调试前所拥有的材料</h1><ul>
+<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><pre><code>做SDK开发，难免会有些app因为嵌入了SDK然后出现了crash，这时候就需要你具备一定的`debug`的能力找到`crash`的位置并修复.
+</code></pre><h1 id="调试前已有的资料"><a href="#调试前已有的资料" class="headerlink" title="调试前已有的资料"></a>调试前已有的资料</h1><ul>
 <li>崩溃发生时所对应的ipa文件<ul>
 <li><code>debug.ipa</code></li>
 </ul>
@@ -767,7 +767,7 @@ sp: 0x000000016dfba8e0   pc: 0x0000000180757604 cpsr: 0x60000000
     <strong>Post author:  </strong>Moro</li>
   <li class="post-copyright-link">
     <strong>Post link: </strong>
-    <a href="https://mrchens.github.io/2018/07/26/debug-with-crashlog/" title="debug with crashlog step 1">https://mrchens.github.io/2018/07/26/debug-with-crashlog/</a>
+    <a href="https://mrchens.github.io/2018/07/26/debug-with-crashlog/" title="根据`crash.log`调试BUG">https://mrchens.github.io/2018/07/26/debug-with-crashlog/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice:  </strong>All articles in this blog are licensed under CC BY-NC-SA 3.0 unless stating additionally.</li>
@@ -796,6 +796,10 @@ sp: 0x000000016dfba8e0   pc: 0x0000000180757604 cpsr: 0x60000000
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/05/debug-with-bt/" rel="prev" title="借助`lldb`的`bt`命令`Debug`">
+                借助`lldb`的`bt`命令`Debug` <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -917,7 +921,7 @@ sp: 0x000000016dfba8e0   pc: 0x0000000180757604 cpsr: 0x60000000
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#调试前所拥有的材料"><span class="nav-number">2.</span> <span class="nav-text">调试前所拥有的材料</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CRASH重现的操作步骤"><span class="nav-number">3.</span> <span class="nav-text">CRASH重现的操作步骤:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查看debug-crash文件：（下面贴出来的就是debug-crash的部分关键信息）"><span class="nav-number">4.</span> <span class="nav-text">查看debug.crash文件：（下面贴出来的就是debug.crash的部分关键信息）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#根据debug-crash中的信息我们能得到的对我们调试有用的信息"><span class="nav-number">4.1.</span> <span class="nav-text">根据debug.crash中的信息我们能得到的对我们调试有用的信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定位-借助IDA定位崩溃在代码中的位置"><span class="nav-number">4.2.</span> <span class="nav-text">定位:借助IDA定位崩溃在代码中的位置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-偷懒定位崩溃位置的方式"><span class="nav-number">4.2.1.</span> <span class="nav-text">1. 偷懒定位崩溃位置的方式:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-偷懒定位崩溃位置的方式"><span class="nav-number">4.2.2.</span> <span class="nav-text">2. 偷懒定位崩溃位置的方式:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-如果没有F5且从汇编指令中无法找到蛛丝马迹"><span class="nav-number">4.2.3.</span> <span class="nav-text">3. 如果没有F5且从汇编指令中无法找到蛛丝马迹</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#猜测-根据定位到的代码以及debug-crash中的其他信息"><span class="nav-number">4.3.</span> <span class="nav-text">猜测:根据定位到的代码以及debug.crash中的其他信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#验证猜测"><span class="nav-number">4.4.</span> <span class="nav-text">验证猜测:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#复现crash"><span class="nav-number">4.5.</span> <span class="nav-text">复现crash</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Note"><span class="nav-number">5.</span> <span class="nav-text">Note</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#调试前已有的资料"><span class="nav-number">2.</span> <span class="nav-text">调试前已有的资料</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CRASH重现的操作步骤"><span class="nav-number">3.</span> <span class="nav-text">CRASH重现的操作步骤:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查看debug-crash文件：（下面贴出来的就是debug-crash的部分关键信息）"><span class="nav-number">4.</span> <span class="nav-text">查看debug.crash文件：（下面贴出来的就是debug.crash的部分关键信息）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#根据debug-crash中的信息我们能得到的对我们调试有用的信息"><span class="nav-number">4.1.</span> <span class="nav-text">根据debug.crash中的信息我们能得到的对我们调试有用的信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定位-借助IDA定位崩溃在代码中的位置"><span class="nav-number">4.2.</span> <span class="nav-text">定位:借助IDA定位崩溃在代码中的位置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-偷懒定位崩溃位置的方式"><span class="nav-number">4.2.1.</span> <span class="nav-text">1. 偷懒定位崩溃位置的方式:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-偷懒定位崩溃位置的方式"><span class="nav-number">4.2.2.</span> <span class="nav-text">2. 偷懒定位崩溃位置的方式:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-如果没有F5且从汇编指令中无法找到蛛丝马迹"><span class="nav-number">4.2.3.</span> <span class="nav-text">3. 如果没有F5且从汇编指令中无法找到蛛丝马迹</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#猜测-根据定位到的代码以及debug-crash中的其他信息"><span class="nav-number">4.3.</span> <span class="nav-text">猜测:根据定位到的代码以及debug.crash中的其他信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#验证猜测"><span class="nav-number">4.4.</span> <span class="nav-text">验证猜测:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#复现crash"><span class="nav-number">4.5.</span> <span class="nav-text">复现crash</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Note"><span class="nav-number">5.</span> <span class="nav-text">Note</span></a></li></ol></div>
             
 
           </div>
@@ -1088,7 +1092,7 @@ sp: 0x000000016dfba8e0   pc: 0x0000000180757604 cpsr: 0x60000000
       var disqus_config = function () {
         this.page.url = 'https://mrchens.github.io/2018/07/26/debug-with-crashlog/';
         this.page.identifier = '2018/07/26/debug-with-crashlog/';
-        this.page.title = 'debug with crashlog step 1';
+        this.page.title = '根据`crash.log`调试BUG';
         };
       function loadComments () {
         var d = document, s = d.createElement('script');

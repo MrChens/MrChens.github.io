@@ -108,24 +108,25 @@
 
 
 
-  <meta name="description" content="It’s amazing how the unexpected,can take your life and change directions.">
+  <meta name="description" content="前言 对每个程序员来说调试(Debug)是一个不可或缺的技能">
 <meta name="keywords" content="Hexo, NexT">
-<meta property="og:type" content="website">
-<meta property="og:title" content="MrChens Blog">
-<meta property="og:url" content="https://mrchens.github.io/categories/工具-Tools/index.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="借助`lldb`的`bt`命令`Debug`">
+<meta property="og:url" content="https://mrchens.github.io/2018/08/05/debug-with-bt/index.html">
 <meta property="og:site_name" content="MrChens Blog">
-<meta property="og:description" content="It’s amazing how the unexpected,can take your life and change directions.">
+<meta property="og:description" content="前言 对每个程序员来说调试(Debug)是一个不可或缺的技能">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-08-05T09:02:12.064Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MrChens Blog">
-<meta name="twitter:description" content="It’s amazing how the unexpected,can take your life and change directions.">
+<meta name="twitter:title" content="借助`lldb`的`bt`命令`Debug`">
+<meta name="twitter:description" content="前言 对每个程序员来说调试(Debug)是一个不可或缺的技能">
 
 
 
 
 
 
-  <link rel="canonical" href="https://mrchens.github.io/categories/工具-Tools/"/>
+  <link rel="canonical" href="https://mrchens.github.io/2018/08/05/debug-with-bt/"/>
 
 
 
@@ -135,7 +136,7 @@
   };
 </script>
 
-  <title>Category: 工具(Tools) | MrChens Blog</title>
+  <title>借助`lldb`的`bt`命令`Debug` | MrChens Blog</title>
   
 
 
@@ -201,7 +202,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -263,7 +264,7 @@
         
         
           
-          <li class="menu-item menu-item-categories menu-item-active">
+          <li class="menu-item menu-item-categories">
     <a href="/categories/" rel="section">Categories</a>
   </li>
         
@@ -346,119 +347,280 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block category">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h2>工具(Tools)<small>Category</small>
-        </h2>
-      </div>
+  
 
-      
-        
+  
+  
+  
+
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mrchens.github.io/2018/08/05/debug-with-bt/">
 
-      <h3 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Moro">
+      <meta itemprop="description" content="It’s amazing how the unexpected,can take your life and change directions.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MrChens Blog">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2017/07/05/mitmproxy-for-iOS-app-usage/" itemprop="url">
-              
-                <span itemprop="name">mitmproxy for iOS app usage</span>
-              
-            </a>
         
-      </h3>
+          <h2 class="post-title" itemprop="name headline">借助`lldb`的`bt`命令`Debug`
+              
+            
+          </h2>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-07-05T18:48:58+08:00"
-              content="2017-07-05" >
-          07-05
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
 
-    </header>
-  </article>
+            
+            
+            
 
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-08-05 16:26:21" itemprop="dateCreated datePublished" datetime="2018-08-05T16:26:21+08:00">2018-08-05</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/调试-Debug/" itemprop="url" rel="index"><span itemprop="name">调试(Debug)</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/08/05/debug-with-bt/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/08/05/debug-with-bt/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/08/05/debug-with-bt/" class="leancloud_visitors" data-flag-title="借助`lldb`的`bt`命令`Debug`">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Views: </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-        
+      
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-            <a class="post-title-link" href="/2017/04/17/iOS-Tools/" itemprop="url">
-              
-                <span itemprop="name">iOS工具集</span>
-              
-            </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-04-17T23:26:17+08:00"
-              content="2017-04-17" >
-          04-17
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+      
+        <p><code>前言</code></p>
+<pre><code>对每个程序员来说调试(Debug)是一个不可或缺的技能
+</code></pre><a id="more"></a>
+<blockquote>
+<p>偵錯（英语：Debug），又稱除錯，是发现和减少计算机程序或电子仪器设备中程序错误的一个过程（<a href="https://zh.wikipedia.org/wiki/调试" target="_blank" rel="noopener">wiki-调试</a>）</p>
+</blockquote>
+<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>做SDK开发，难免会有些app接入SDK后并没有达到所需要的效果，这时候就需要你具备一定的<code>debug</code>的能力找到问题的所在并提示/建议app开发人员进行修改.</p>
+<p>比如: app开发人员并没有按照SDK接入文档进行<code>Coding</code>，又或是app开发人员按照SDK接入文档进行Coding(但由于app的业务逻辑比较复杂隐藏,某些细节忽略了)导致没有达到所需的效果.</p>
+<h1 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h1><ul>
+<li>某民直播APP，在接入我方SDK后发现：在进入首页的直播平台后，会有几条请求无法被SDK引导(以下简称<code>流量泄露</code>)</li>
+<li>某民直播APP开发人员，一再确认已按照SDK接入文档进行Coding</li>
+</ul>
+<h1 id="调试前已有的资料"><a href="#调试前已有的资料" class="headerlink" title="调试前已有的资料"></a>调试前已有的资料</h1><ul>
+<li>流量泄露时对应的抓包数据</li>
+<li>某民直播提供的IPA包</li>
+</ul>
+<h1 id="问题重现的操作步骤"><a href="#问题重现的操作步骤" class="headerlink" title="问题重现的操作步骤:"></a>问题重现的操作步骤:</h1><h1 id="查看抓包数据"><a href="#查看抓包数据" class="headerlink" title="查看抓包数据"></a>查看抓包数据</h1><h1 id="根据抓包数据能得到的有用数据"><a href="#根据抓包数据能得到的有用数据" class="headerlink" title="根据抓包数据能得到的有用数据"></a>根据抓包数据能得到的有用数据</h1><h1 id="猜测"><a href="#猜测" class="headerlink" title="猜测:"></a>猜测:</h1><h1 id="借助打点日志"><a href="#借助打点日志" class="headerlink" title="借助打点日志"></a>借助打点日志</h1><h1 id="借助hook技术对可疑API进行hook并打印hooklog"><a href="#借助hook技术对可疑API进行hook并打印hooklog" class="headerlink" title="借助hook技术对可疑API进行hook并打印hooklog"></a>借助hook技术对可疑API进行<code>hook</code>并打印<code>hooklog</code></h1><h1 id="复现问题"><a href="#复现问题" class="headerlink" title="复现问题"></a>复现问题</h1>
       
     </div>
 
+    
+
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wechat_qrcode.jpg" alt="Moro wechat" style="width: 200px; max-width: 100%;"/>
+    <div>扫码关注一个很懒的程序员!</div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>好冷啊!早知道不做开发!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>Donate</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechat_reward.JPG" alt="Moro WeChat Pay"/>
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay_reward.JPG" alt="Moro Alipay"/>
+        <p>Alipay</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Moro</li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://mrchens.github.io/2018/08/05/debug-with-bt/" title="借助`lldb`的`bt`命令`Debug`">https://mrchens.github.io/2018/08/05/debug-with-bt/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under CC BY-NC-SA 3.0 unless stating additionally.</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/26/debug-with-crashlog/" rel="next" title="根据`crash.log`调试BUG">
+                <i class="fa fa-chevron-left"></i> 根据`crash.log`调试BUG
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+  </div>
 
 
           </div>
           
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -479,8 +641,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -527,6 +698,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#案例"><span class="nav-number">2.</span> <span class="nav-text">案例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#调试前已有的资料"><span class="nav-number">3.</span> <span class="nav-text">调试前已有的资料</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#问题重现的操作步骤"><span class="nav-number">4.</span> <span class="nav-text">问题重现的操作步骤:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查看抓包数据"><span class="nav-number">5.</span> <span class="nav-text">查看抓包数据</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#根据抓包数据能得到的有用数据"><span class="nav-number">6.</span> <span class="nav-text">根据抓包数据能得到的有用数据</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#猜测"><span class="nav-number">7.</span> <span class="nav-text">猜测:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#借助打点日志"><span class="nav-number">8.</span> <span class="nav-text">借助打点日志</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#借助hook技术对可疑API进行hook并打印hooklog"><span class="nav-number">9.</span> <span class="nav-text">借助hook技术对可疑API进行hook并打印hooklog</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#复现问题"><span class="nav-number">10.</span> <span class="nav-text">复现问题</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -669,6 +856,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
 
   
 
@@ -683,6 +874,23 @@
     <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
   
 
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'https://mrchens.github.io/2018/08/05/debug-with-bt/';
+        this.page.identifier = '2018/08/05/debug-with-bt/';
+        this.page.title = '借助`lldb`的`bt`命令`Debug`';
+        };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
   
 
 
