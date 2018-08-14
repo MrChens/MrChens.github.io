@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="MrChens Blog">
 <meta property="og:description" content="先讲讲怎样才是一份好的技术简历首先，一份好的简历不光说明事实，更通过FAB模式来增强其说服力。  Feature：是什么 Advantage：比别人好在哪些地方 Benefit：如果雇佣你，招聘方会得到什么好处  其次，写简历和写议论文不同，过分的论证会显得自夸，反而容易引起反感，所以要点到为止。这里的技巧是，提供论据，把论点留给阅读简历的人自己去得出。放论据要具体，最基本的是要数字化，好的论据要">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-08-14T15:45:45.104Z">
+<meta property="og:updated_time" content="2018-08-14T16:30:05.745Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MrChens简历">
 <meta name="twitter:description" content="先讲讲怎样才是一份好的技术简历首先，一份好的简历不光说明事实，更通过FAB模式来增强其说服力。  Feature：是什么 Advantage：比别人好在哪些地方 Benefit：如果雇佣你，招聘方会得到什么好处  其次，写简历和写议论文不同，过分的论证会显得自夸，反而容易引起反感，所以要点到为止。这里的技巧是，提供论据，把论点留给阅读简历的人自己去得出。放论据要具体，最基本的是要数字化，好的论据要">
@@ -511,12 +511,26 @@
 </ul>
 <hr>
 <h1 id="工作经历"><a href="#工作经历" class="headerlink" title="工作经历"></a>工作经历</h1><p>（工作经历按逆序排列，最新的在最前边，按公司做一级分组，公司内按二级分组）</p>
-<h2 id="网宿科技股份有限公司-城市-厦门（-2015年7月-至今-）"><a href="#网宿科技股份有限公司-城市-厦门（-2015年7月-至今-）" class="headerlink" title="网宿科技股份有限公司 城市:厦门（ 2015年7月 ~ 至今 ）"></a>网宿科技股份有限公司 城市:厦门（ 2015年7月 ~ 至今 ）</h2><h3 id="第三方APP流量引导"><a href="#第三方APP流量引导" class="headerlink" title="第三方APP流量引导"></a>第三方APP流量引导</h3><p>我在此项目负责SDK的迭代需求，撰写SDK接入文档，定位排查SDK崩溃问题(顺带定位第三方app崩溃问题)，配合<br>第三方app的开发人员做接入工作，对线上发生流量泄露的第三方app做逆向分析并找到泄露原因后和第三方app的开发者做沟通并修复问题。</p>
-<p>其中稍微有点技术的就是利用<code>runtime</code>对对第三方app内的<code>AsyncSocket</code>进行<code>hook</code>使其能被引导；借用<code>ida</code>、<code>Hopper</code>、越狱手机等工具对某浏览器做逆向分析其<code>wkwebview</code>的流量劫持方式；通过第三方app提供的crash日志定位sdk(sdk去除了符号表的)发生崩溃的位置和原因，当时这个crash影响很大，第三方app的一度要关停sdk的功能，还好当天晚上便定位到问题并让我们的运维关闭某个错误参数的下发及时让第三方app停止关停sdk功能的行为，为公司减少了大量金钱的损失。</p>
-<p>这个项目中比较困难的工作就是对做过代码混淆的第三方app做流量泄露分析&amp;定位问题，最困难的工作应该是<code>wkwebview</code>的流量引导(<code>wkwebview</code>的流量引导理论上有一些进展(<a href="https://github.com/MrChens/WKWebViewHacker" target="_blank" rel="noopener">WKWebViewHacker</a>)以及一些无法通过<code>objcrutime</code>,<code>fishhook</code>等技术做劫持的地方如<code>cfsocket</code>,<code>cfstream</code>。</p>
-<h3 id="U玩"><a href="#U玩" class="headerlink" title="U玩"></a>U玩</h3><p>我在此项目负责了哪些工作，分别在哪些地方做得出色/和别人不一样/成长快，这个项目中，我最困难的问题是什么，我采取了什么措施，最后结果如何。这个项目中，我最自豪的技术细节是什么，为什么，实施前和实施后的数据对比如何，同事和领导对此的反应如何。</p>
-<p>编写打包脚本，企业重签名</p>
-<h3 id="上网助手"><a href="#上网助手" class="headerlink" title="上网助手"></a>上网助手</h3><p>（每个公司写2~3个核心项目就好了，如果你有非常大量的项目，那么按分类进行合并，每一类选一个典型写出来。其他的一笔带过即可。）</p>
+<h2 id="网宿科技股份有限公司-城市-厦门（-2015年7月-至今-）"><a href="#网宿科技股份有限公司-城市-厦门（-2015年7月-至今-）" class="headerlink" title="网宿科技股份有限公司 城市:厦门（ 2015年7月 ~ 至今 ）"></a>网宿科技股份有限公司 城市:厦门（ 2015年7月 ~ 至今 ）</h2><h3 id="第三方APP流量引导"><a href="#第三方APP流量引导" class="headerlink" title="第三方APP流量引导"></a>第三方APP流量引导</h3><ul>
+<li><p>我在此项目负责<code>SDK</code>的迭代需求，撰写<code>SDK</code>接入文档，定位排查<code>SDK</code>崩溃问题(顺带定位第三方<code>APP</code>崩溃问题)，配合<br>第三方<code>APP</code>的开发人员做接入工作，对线上发生流量泄露的第三方<code>APP</code>做逆向分析并找到泄露原因后和第三方<code>APP</code>的开发者做沟通并修复问题。</p>
+</li>
+<li><p>其中稍微有点技术的就是利用<code>runtime</code>对对第三方<code>APP</code>内的<code>AsyncSocket</code>进行<code>hook</code>使其能被引导；借用<code>ida</code>、<code>Hopper</code>、越狱手机等工具对某浏览器做逆向分析其<code>wkwebview</code>的流量劫持方式；通过第三方<code>APP</code>提供的crash日志定位<code>SDK</code>(<code>SDK</code>去除了符号表的)发生崩溃的位置和原因，当时这个crash影响很大，第三方<code>APP</code>的一度要关停<code>SDK</code>的功能，还好当天晚上便定位到问题并让我们的运维关闭某个错误参数的下发及时让第三方<code>APP</code>停止关停<code>SDK</code>功能的行为，为公司减少了大量金钱的损失。</p>
+</li>
+<li><p>这个项目中比较困难的工作就是对做过代码混淆的第三方<code>APP</code>做流量泄露分析&amp;定位问题，最困难的工作应该是<code>wkwebview</code>的流量引导(<code>wkwebview</code>的流量引导理论上有一些进展(<a href="https://github.com/MrChens/WKWebViewHacker" target="_blank" rel="noopener">WKWebViewHacker</a>)以及一些无法通过<code>objcrutime</code>,<code>fishhook</code>等技术做劫持的地方如<code>cfsocket</code>,<code>cfstream</code>。</p>
+</li>
+<li><p>因为不是每个第三方<code>APP</code>的开发都会按照<code>SDK</code>接入文档好好码代码，所以我们团队的QA人员还需要对第三方<code>APP</code>做流量测试。这就需要第三方<code>APP</code>在提交到<code>itunesconnect</code>前要先把<code>ipa</code>包给QA人员测试，但QA人员的测试机并不在注册在对方的账号下，对于QA人员来说不能安装对方的<code>APP</code>是个大问题。<br>所以为了使<code>IPA</code>包能安装到我们QA人员的测试机上，我写了个企业重签名脚本<a href="https://github.com/MrChens/iOS_Tools/tree/master/autoResign" target="_blank" rel="noopener">autoResign</a>给QA人员并配置好证书，只要他们执行脚本就能安装该<code>IPA</code>到手机</p>
+</li>
+</ul>
+<h3 id="U玩"><a href="#U玩" class="headerlink" title="U玩"></a>U玩</h3><ul>
+<li><p>我在此项目中负责<code>U玩</code>的日常迭代开发，因为项目中需要用到播放视频的功能使用了<code>ijkplayer</code>这个开源库，在使用过程中发现了一个在播放<code>m3u8</code>视频的时候时长显示不对，做了些修改并提了个<code>PR</code>.</p>
+</li>
+<li><p>曾经因为服务端下发了非预期的参数导致<code>U玩</code>在启动时就会马上<code>crash</code>的大事故，所以领导希望能有个热修复。那时候<code>JSPatch</code>刚刚兴起，我便将其源码接入<code>U玩</code>。后来因为审核过程中被苹果爸爸发现使用该技术上架被拒，于是写了个简单的代码混淆脚本<a href="https://github.com/MrChens/codeObfuscated" target="_blank" rel="noopener">codeObfuscated</a>并成功通过审核</p>
+</li>
+<li><p>因为<code>U玩</code>有<code>企业版</code>和<code>App Store版</code>的需求，所以经常需要根据不同的版本会有些在打包时需要用到不同的配置，每次都是手动修改配置为对应版本的<code>release</code>版并在<code>Xcode</code>点<code>archive</code>点<code>export</code>…<br>打包个一两次倒还好，但是时间长了就觉得这个很浪费时间，于是自己写了个自动打包脚本:<a href="https://github.com/MrChens/iOS_Tools/tree/master/B%26A%26D" target="_blank" rel="noopener">B&amp;A&amp;D</a>(脚本的功能有：根据配置决定是打包<code>企业版</code>还是<code>App Store版</code>以及将对应的一些配置自动修改为<code>release</code>版)</p>
+</li>
+</ul>
+<h3 id="上网助手"><a href="#上网助手" class="headerlink" title="上网助手"></a>上网助手</h3><p>我在此项目负责了哪些工作，分别在哪些地方做得出色/和别人不一样/成长快，这个项目中，我最困难的问题是什么，我采取了什么措施，最后结果如何。这个项目中，我最自豪的技术细节是什么，为什么，实施前和实施后的数据对比如何，同事和领导对此的反应如何。</p>
+<p>（每个公司写2~3个核心项目就好了，如果你有非常大量的项目，那么按分类进行合并，每一类选一个典型写出来。其他的一笔带过即可。）</p>
 <h2 id="新大陆软件工程有限公司-城市-福州（-2015年3月-2015年7月-）"><a href="#新大陆软件工程有限公司-城市-福州（-2015年3月-2015年7月-）" class="headerlink" title="新大陆软件工程有限公司 城市:福州（ 2015年3月 ~ 2015年7月 ）"></a>新大陆软件工程有限公司 城市:福州（ 2015年3月 ~ 2015年7月 ）</h2><h3 id="MNO项目"><a href="#MNO项目" class="headerlink" title="MNO项目"></a>MNO项目</h3><p>我在此项目负责了哪些工作，分别在哪些地方做得出色/和别人不一样/成长快，这个项目中，我最困难的问题是什么，我采取了什么措施，最后结果如何。这个项目中，我最自豪的技术细节是什么，为什么，实施前和实施后的数据对比如何，同事和领导对此的反应如何。</p>
 <h3 id="PQR项目"><a href="#PQR项目" class="headerlink" title="PQR项目"></a>PQR项目</h3><p>我在此项目负责了哪些工作，分别在哪些地方做得出色/和别人不一样/成长快，这个项目中，我最困难的问题是什么，我采取了什么措施，最后结果如何。这个项目中，我最自豪的技术细节是什么，为什么，实施前和实施后的数据对比如何，同事和领导对此的反应如何。</p>
 <h2 id="业余瞎弄"><a href="#业余瞎弄" class="headerlink" title="业余瞎弄"></a>业余瞎弄</h2><p>（每个公司写2~3个核心项目就好了，如果你有非常大量的项目，那么按分类进行合并，每一类选一个典型写出来。其他的一笔带过即可。）</p>
