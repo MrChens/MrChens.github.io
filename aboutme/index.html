@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="MrChens Blog">
 <meta property="og:description" content="先讲讲怎样才是一份好的技术简历首先，一份好的简历不光说明事实，更通过FAB模式来增强其说服力。  Feature：是什么 Advantage：比别人好在哪些地方 Benefit：如果雇佣你，招聘方会得到什么好处  其次，写简历和写议论文不同，过分的论证会显得自夸，反而容易引起反感，所以要点到为止。这里的技巧是，提供论据，把论点留给阅读简历的人自己去得出。放论据要具体，最基本的是要数字化，好的论据要">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-08-13T15:15:09.125Z">
+<meta property="og:updated_time" content="2018-08-14T15:45:45.104Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MrChens简历">
 <meta name="twitter:description" content="先讲讲怎样才是一份好的技术简历首先，一份好的简历不光说明事实，更通过FAB模式来增强其说服力。  Feature：是什么 Advantage：比别人好在哪些地方 Benefit：如果雇佣你，招聘方会得到什么好处  其次，写简历和写议论文不同，过分的论证会显得自夸，反而容易引起反感，所以要点到为止。这里的技巧是，提供论据，把论点留给阅读简历的人自己去得出。放论据要具体，最基本的是要数字化，好的论据要">
@@ -503,7 +503,7 @@
 <li>陈世龙-男-1991</li>
 <li>学历:本科-福建农林大学-软件工程</li>
 <li>工作年限：3年</li>
-<li>期望职位：iOS程序员</li>
+<li>期望职位：iOS软件工程师</li>
 <li>期望城市：深圳、厦门、杭州</li>
 <li>微博：<a href="https://weibo.com/325751212" target="_blank" rel="noopener">@程序员的日常</a></li>
 <li>博客：<a href="https://mrchens.github.io">https://mrchens.github.io</a></li>
@@ -511,8 +511,11 @@
 </ul>
 <hr>
 <h1 id="工作经历"><a href="#工作经历" class="headerlink" title="工作经历"></a>工作经历</h1><p>（工作经历按逆序排列，最新的在最前边，按公司做一级分组，公司内按二级分组）</p>
-<h2 id="网宿科技股份有限公司-城市-厦门（-2015年7月-至今-）"><a href="#网宿科技股份有限公司-城市-厦门（-2015年7月-至今-）" class="headerlink" title="网宿科技股份有限公司 城市:厦门（ 2015年7月 ~ 至今 ）"></a>网宿科技股份有限公司 城市:厦门（ 2015年7月 ~ 至今 ）</h2><h3 id="第三方APP流量引导"><a href="#第三方APP流量引导" class="headerlink" title="第三方APP流量引导"></a>第三方APP流量引导</h3><p>我在此项目负责了哪些工作，分别在哪些地方做得出色/和别人不一样/成长快，这个项目中，我最困难的问题是什么，我采取了什么措施，最后结果如何。这个项目中，我最自豪的技术细节是什么，为什么，实施前和实施后的数据对比如何，同事和领导对此的反应如何。</p>
+<h2 id="网宿科技股份有限公司-城市-厦门（-2015年7月-至今-）"><a href="#网宿科技股份有限公司-城市-厦门（-2015年7月-至今-）" class="headerlink" title="网宿科技股份有限公司 城市:厦门（ 2015年7月 ~ 至今 ）"></a>网宿科技股份有限公司 城市:厦门（ 2015年7月 ~ 至今 ）</h2><h3 id="第三方APP流量引导"><a href="#第三方APP流量引导" class="headerlink" title="第三方APP流量引导"></a>第三方APP流量引导</h3><p>我在此项目负责SDK的迭代需求，撰写SDK接入文档，定位排查SDK崩溃问题(顺带定位第三方app崩溃问题)，配合<br>第三方app的开发人员做接入工作，对线上发生流量泄露的第三方app做逆向分析并找到泄露原因后和第三方app的开发者做沟通并修复问题。</p>
+<p>其中稍微有点技术的就是利用<code>runtime</code>对对第三方app内的<code>AsyncSocket</code>进行<code>hook</code>使其能被引导；借用<code>ida</code>、<code>Hopper</code>、越狱手机等工具对某浏览器做逆向分析其<code>wkwebview</code>的流量劫持方式；通过第三方app提供的crash日志定位sdk(sdk去除了符号表的)发生崩溃的位置和原因，当时这个crash影响很大，第三方app的一度要关停sdk的功能，还好当天晚上便定位到问题并让我们的运维关闭某个错误参数的下发及时让第三方app停止关停sdk功能的行为，为公司减少了大量金钱的损失。</p>
+<p>这个项目中比较困难的工作就是对做过代码混淆的第三方app做流量泄露分析&amp;定位问题，最困难的工作应该是<code>wkwebview</code>的流量引导(<code>wkwebview</code>的流量引导理论上有一些进展(<a href="https://github.com/MrChens/WKWebViewHacker" target="_blank" rel="noopener">WKWebViewHacker</a>)以及一些无法通过<code>objcrutime</code>,<code>fishhook</code>等技术做劫持的地方如<code>cfsocket</code>,<code>cfstream</code>。</p>
 <h3 id="U玩"><a href="#U玩" class="headerlink" title="U玩"></a>U玩</h3><p>我在此项目负责了哪些工作，分别在哪些地方做得出色/和别人不一样/成长快，这个项目中，我最困难的问题是什么，我采取了什么措施，最后结果如何。这个项目中，我最自豪的技术细节是什么，为什么，实施前和实施后的数据对比如何，同事和领导对此的反应如何。</p>
+<p>编写打包脚本，企业重签名</p>
 <h3 id="上网助手"><a href="#上网助手" class="headerlink" title="上网助手"></a>上网助手</h3><p>（每个公司写2~3个核心项目就好了，如果你有非常大量的项目，那么按分类进行合并，每一类选一个典型写出来。其他的一笔带过即可。）</p>
 <h2 id="新大陆软件工程有限公司-城市-福州（-2015年3月-2015年7月-）"><a href="#新大陆软件工程有限公司-城市-福州（-2015年3月-2015年7月-）" class="headerlink" title="新大陆软件工程有限公司 城市:福州（ 2015年3月 ~ 2015年7月 ）"></a>新大陆软件工程有限公司 城市:福州（ 2015年3月 ~ 2015年7月 ）</h2><h3 id="MNO项目"><a href="#MNO项目" class="headerlink" title="MNO项目"></a>MNO项目</h3><p>我在此项目负责了哪些工作，分别在哪些地方做得出色/和别人不一样/成长快，这个项目中，我最困难的问题是什么，我采取了什么措施，最后结果如何。这个项目中，我最自豪的技术细节是什么，为什么，实施前和实施后的数据对比如何，同事和领导对此的反应如何。</p>
 <h3 id="PQR项目"><a href="#PQR项目" class="headerlink" title="PQR项目"></a>PQR项目</h3><p>我在此项目负责了哪些工作，分别在哪些地方做得出色/和别人不一样/成长快，这个项目中，我最困难的问题是什么，我采取了什么措施，最后结果如何。这个项目中，我最自豪的技术细节是什么，为什么，实施前和实施后的数据对比如何，同事和领导对此的反应如何。</p>
