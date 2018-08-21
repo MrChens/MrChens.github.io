@@ -118,7 +118,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://mrchens.github.io/images/article/2018.08/leak_wireShark.png">
 <meta property="og:image" content="http://mrchens.github.io/images/article/2018.08/wireshark_detail.png">
-<meta property="og:updated_time" content="2018-08-21T16:05:39.507Z">
+<meta property="og:updated_time" content="2018-08-21T16:09:52.523Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="借助lldb的bt命令Debug">
 <meta name="twitter:description" content="前言 对每个程序员来说调试(Debug)是一个不可或缺的技能">
@@ -509,11 +509,13 @@
 <li>首页随便逛逛，点开一个直播间<h1 id="查看抓包数据"><a href="#查看抓包数据" class="headerlink" title="查看抓包数据"></a>查看抓包数据</h1>wireShark抓包图:</li>
 </ul>
 <p><img src="http://mrchens.github.io/images/article/2018.08/leak_wireShark.png" alt="wireShark抓包图" title="wireShark详细"></p>
-<p><img src="http://mrchens.github.io/images/article/2018.08/wireshark_detail.png" alt="wireShark详细" title="wireShark详细"></p>
+<p>follow tcp flow of <code>FvlrC6LHMC9LspI_jVj-qzDhktiq</code>:<br><img src="http://mrchens.github.io/images/article/2018.08/wireshark_detail.png" alt="wireShark详细" title="wireShark详细"></p>
 <h1 id="根据抓包数据能得到的有用数据"><a href="#根据抓包数据能得到的有用数据" class="headerlink" title="根据抓包数据能得到的有用数据"></a>根据抓包数据能得到的有用数据</h1><ul>
 <li>从图中红色圈起来的部分我们可以知道该http请求发往的<code>Destination</code>不是<code>36.250.87.88</code></li>
 <li>绿色圈起来的部分是我们SDK有意让其不走我们的的节点<code>36.250.87.88</code></li>
-<li>除了有意使其不走节点<code>36.250.87.88</code>，剩下的就是泄露的流量<h1 id="猜测"><a href="#猜测" class="headerlink" title="猜测:"></a>猜测:</h1></li>
+<li>除了有意使其不走节点<code>36.250.87.88</code>，剩下的就是泄露的流量</li>
+<li>从UA看<code>FvlrC6LHMC9LspI_jVj-qzDhktiq</code>这条请求确实是某民app发出的</li>
+<li>从<code>Content-Type</code>可以看出这是个zip包之类的资源(判定是一个需要下载的资源)<h1 id="猜测"><a href="#猜测" class="headerlink" title="猜测:"></a>猜测:</h1></li>
 </ul>
 <h1 id="借助打点日志"><a href="#借助打点日志" class="headerlink" title="借助打点日志"></a>借助打点日志</h1><h1 id="借助hook技术对可疑API进行hook并打印hooklog"><a href="#借助hook技术对可疑API进行hook并打印hooklog" class="headerlink" title="借助hook技术对可疑API进行hook并打印hooklog"></a>借助hook技术对可疑API进行<code>hook</code>并打印<code>hooklog</code></h1><h1 id="复现问题"><a href="#复现问题" class="headerlink" title="复现问题"></a>复现问题</h1>
       
