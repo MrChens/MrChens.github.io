@@ -11,8 +11,10 @@
 
 
 
+  
 
-<html class="theme-next pisces" lang="zh-Hans">
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -47,10 +49,6 @@
 
 
 
-
-  
-  
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
 
 
@@ -89,11 +87,11 @@
     scheme: 'Pisces',
     version: '6.3.0',
     sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
-    fancybox: true,
+    fancybox: false,
     fastclick: false,
     lazyload: false,
     tabs: true,
-    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     algolia: {
       applicationID: '',
       apiKey: '',
@@ -382,7 +380,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="DeafChen">
       <meta itemprop="description" content="It’s amazing how the unexpected,can take your life and change directions.">
-      <meta itemprop="image" content="/images/avatar1.png">
+      <meta itemprop="image" content="/images/avatar.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -738,7 +736,7 @@ if ! has(&apos;gui_running&apos;)
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <img class="site-author-image" itemprop="image"
-                src="/images/avatar1.png"
+                src="/images/avatar.png"
                 alt="DeafChen" />
             
               <p class="site-author-name" itemprop="name">DeafChen</p>
@@ -946,8 +944,6 @@ if ! has(&apos;gui_running&apos;)
 
 
 
-  
-
 
 
 
@@ -975,11 +971,6 @@ if ! has(&apos;gui_running&apos;)
   
   
     <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
   
 
 
@@ -1395,7 +1386,7 @@ if ! has(&apos;gui_running&apos;)
 
   
   <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
-  <script>AV.initialize("Rbmck7R3KAm9W7niGDdiqynV-gzGzoHsz", "vkjMmth4lwiUrDQ7gMeA9MkM");</script>
+  <script>AV.initialize("Rbmck7R3KAm9W7niGDdiqynV-gzGzoHsz", "vkjMmth4lwiUrDQ7gMeA9MkM#<app_key>");</script>
   <script>
     function showTime(Counter) {
       var query = new AV.Query(Counter);
