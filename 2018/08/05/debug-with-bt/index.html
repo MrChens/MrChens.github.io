@@ -118,7 +118,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://mrchens.github.io/images/article/2018.08/leak_wireShark.png">
 <meta property="og:image" content="http://mrchens.github.io/images/article/2018.08/wireshark_detail.png">
-<meta property="og:updated_time" content="2018-08-21T16:11:10.725Z">
+<meta property="og:updated_time" content="2018-08-23T10:54:02.983Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="借助lldb的bt命令Debug">
 <meta name="twitter:description" content="前言 对每个程序员来说调试(Debug)是一个不可或缺的技能">
@@ -514,10 +514,218 @@
 <li>从图中红色圈起来的部分我们可以知道该http请求发往的<code>Destination</code>不是<code>36.250.87.88</code></li>
 <li>绿色圈起来的部分是我们SDK有意让其不走我们的的节点<code>36.250.87.88</code></li>
 <li>除了有意使其不走节点<code>36.250.87.88</code>，剩下的就是泄露的流量</li>
-<li>从UA看<code>FvlrC6LHMC9LspI_jVj-qzDhktiq</code>这条请求确实是某民app发出的</li>
-<li>从<code>Content-Type</code>可以看出这是个zip包之类的资源(判定是一个需要下载的资源)<h1 id="猜测"><a href="#猜测" class="headerlink" title="猜测:"></a>猜测:</h1></li>
+<li>从<code>UA</code>看<code>FvlrC6LHMC9LspI_jVj-qzDhktiq</code>这条请求确实是某民app发出的</li>
+<li>从<code>Content-Type</code>可以看出这是个zip包之类的资源(判定是一个需要下载的资源)</li>
 </ul>
-<h1 id="借助打点日志"><a href="#借助打点日志" class="headerlink" title="借助打点日志"></a>借助打点日志</h1><h1 id="借助hook技术对可疑API进行hook并打印hooklog"><a href="#借助hook技术对可疑API进行hook并打印hooklog" class="headerlink" title="借助hook技术对可疑API进行hook并打印hooklog"></a>借助hook技术对可疑API进行<code>hook</code>并打印<code>hooklog</code></h1><h1 id="复现问题"><a href="#复现问题" class="headerlink" title="复现问题"></a>复现问题</h1>
+<h1 id="判定泄露类型"><a href="#判定泄露类型" class="headerlink" title="判定泄露类型:"></a>判定泄露类型:</h1><blockquote>
+<p>SDK现有的技术壁垒</p>
+<ul>
+<li>不支持wkwebview的流量引导</li>
+<li>不支持cfsocket和cfstream写的</li>
+<li>不支持对Apple的一些服务的流量引导</li>
+<li>如果有session的创建比sdk的session创建的早，则会导致泄漏</li>
+<li>如果有第三方也对我们hook的API也做了hook，有可能会导致泄漏</li>
+</ul>
+</blockquote>
+<ul>
+<li><code>UA</code>判定不是<code>wkwebview</code>发出的流量</li>
+<li>应该不是cfsocket和cfstream的流量，下载数据，是我的话应该会选择<code>downloadSession</code>来做的</li>
+<li>不是Apple的一些后台服务发出的流量</li>
+<li>可能<code>session</code>创建时没有挂上sdk的<code>nsurlprotocol</code></li>
+<li>第三方也对我们hook的API做了hook</li>
+</ul>
+<h1 id="借助OC语言的特性使用methodSwizzling对可疑session相关的API进行hook并打印session的实例地址"><a href="#借助OC语言的特性使用methodSwizzling对可疑session相关的API进行hook并打印session的实例地址" class="headerlink" title="借助OC语言的特性使用methodSwizzling对可疑session相关的API进行hook并打印session的实例地址"></a>借助OC语言的特性使用methodSwizzling对可疑<code>session</code>相关的API进行<code>hook</code>并打印<code>session</code>的实例地址</h1><pre><code>#import &quot;NSURLSession+Hooked.h&quot;
+#import &quot;MethodSwizzling.h&quot;
+@implementation NSURLSession (Hooked)
+
++ (void)load {
+    if ([WSPXConfig enableHook]) {
+
+    exchangeInstanceMethod([NSURLSession class], @selector(downloadTaskWithRequest:), @selector(debugHookedDownloadTaskWithRequest:));
+
+    exchangeInstanceMethod([NSURLSession class], @selector(dataTaskWithRequest:), @selector(debugHookedDataTaskWithRequest:));
+    exchangeInstanceMethod([NSURLSession class], @selector(dataTaskWithURL:), @selector(debugHookedDataTaskWithURL:));
+    exchangeInstanceMethod([NSURLSession class], @selector(uploadTaskWithRequest:fromFile:), @selector(debugHookedUploadTaskWithRequest:fromFile:));
+    exchangeInstanceMethod([NSURLSession class], @selector(uploadTaskWithRequest:fromData:), @selector(debugHookedUploadTaskWithRequest:fromData:));
+    exchangeInstanceMethod([NSURLSession class], @selector(uploadTaskWithStreamedRequest:), @selector(debugHookedUploadTaskWithStreamedRequest:));
+    exchangeInstanceMethod([NSURLSession class], @selector(downloadTaskWithURL:), @selector(debugHookedDownloadTaskWithURL:));
+    exchangeInstanceMethod([NSURLSession class], @selector(downloadTaskWithResumeData:), @selector(debugHookedDownloadTaskWithResumeData:));
+        exchangeMethodClass([NSURLSession class],
+                            @selector(sessionWithConfiguration:delegate:delegateQueue:),
+                            @selector(debugHookedSessionWithConfiguration:delegate:delegateQueue:));
+    }
+}
+
++ (NSURLSession *)debugHookedSessionWithConfiguration:(NSURLSessionConfiguration *)configuration delegate:(id&lt;NSURLSessionDelegate&gt;)delegate delegateQueue:(NSOperationQueue *)queue {
+    NSURLSession* finalSession = [self debugHookedSessionWithConfiguration:configuration delegate:delegate delegateQueue:queue];
+    NSLog(@&quot;Hallo--&gt;session debugHookedSessionWithConfiguration -&gt; session(%@), delegate(%@)\n&quot;,finalSession, delegate);
+    return finalSession;
+}
+/* Creates a data task with the given request.  The request may have a body stream. */
+- (NSURLSessionDataTask *)debugHookedDataTaskWithRequest:(NSURLRequest *)request; {
+    NSLog(@&quot;Hallo--&gt;session(%@), --&gt;request(%@) \n%s&quot;, self, request, __PRETTY_FUNCTION__);
+    return [self debugHookedDataTaskWithRequest:request];
+}
+
+/* Creates a data task to retrieve the contents of the given URL. */
+- (NSURLSessionDataTask *)debugHookedDataTaskWithURL:(NSURL *)url; {
+    NSLog(@&quot;Hallo--&gt;session(%@), --&gt;url(%@) \n%s&quot;, self, url, __PRETTY_FUNCTION__);
+    return [self debugHookedDataTaskWithURL:url];
+}
+
+/* Creates an upload task with the given request.  The body of the request will be created from the file referenced by fileURL */
+- (NSURLSessionUploadTask *)debugHookedUploadTaskWithRequest:(NSURLRequest *)request fromFile:(NSURL *)fileURL; {
+    NSLog(@&quot;Hallo--&gt;session(%@), --&gt;request(%@) \n%s&quot;, self, request, __PRETTY_FUNCTION__);
+    return [self debugHookedUploadTaskWithRequest:request fromFile:fileURL];
+}
+
+/* Creates an upload task with the given request.  The body of the request is provided from the bodyData. */
+- (NSURLSessionUploadTask *)debugHookedUploadTaskWithRequest:(NSURLRequest *)request fromData:(NSData *)bodyData; {
+    NSLog(@&quot;Hallo--&gt;session(%@), --&gt;request(%@) \n%s&quot;, self, request, __PRETTY_FUNCTION__);
+    return [self debugHookedUploadTaskWithRequest:request fromData:bodyData];
+}
+
+/* Creates an upload task with the given request.  The previously set body stream of the request (if any) is ignored and the URLSession:task:needNewBodyStream: delegate will be called when the body payload is required. */
+- (NSURLSessionUploadTask *)debugHookedUploadTaskWithStreamedRequest:(NSURLRequest *)request; {
+   NSLog(@&quot;Hallo--&gt;session(%@), --&gt;request(%@) \n%s&quot;, self, request, __PRETTY_FUNCTION__);
+    return [self debugHookedUploadTaskWithStreamedRequest:request];
+}
+
+/* Creates a download task with the given request. */
+- (NSURLSessionDownloadTask *)debugHookedDownloadTaskWithRequest:(NSURLRequest *)request; {
+    NSLog(@&quot;Hallo--&gt;session(%@), --&gt;request(%@) \n%s&quot;, self, request, __PRETTY_FUNCTION__);
+    return [self debugHookedDownloadTaskWithRequest:request];
+}
+
+/* Creates a download task to download the contents of the given URL. */
+- (NSURLSessionDownloadTask *)debugHookedDownloadTaskWithURL:(NSURL *)url; {
+    NSLog(@&quot;Hallo--&gt;session(%@), --&gt;url(%@) \n%s&quot;, self, url, __PRETTY_FUNCTION__);
+    return [self debugHookedDownloadTaskWithURL:url];
+}
+
+/* Creates a download task with the resume data.  If the download cannot be successfully resumed, URLSession:task:didCompleteWithError: will be called. */
+- (NSURLSessionDownloadTask *)debugHookedDownloadTaskWithResumeData:(NSData *)resumeData;{
+    NSLog(@&quot;Hallo--&gt;session(%@), \n%s&quot;, self, __PRETTY_FUNCTION__);
+    return [self debugHookedDownloadTaskWithResumeData:resumeData];
+}
+@end
+</code></pre><h1 id="借助MonkeyDev动态库注入工具将上面的代码注入某民的可执行文件"><a href="#借助MonkeyDev动态库注入工具将上面的代码注入某民的可执行文件" class="headerlink" title="借助MonkeyDev动态库注入工具将上面的代码注入某民的可执行文件"></a>借助MonkeyDev动态库注入工具将上面的代码注入某民的可执行文件</h1><ul>
+<li>具体如何使用该工具我就不再赘述，不懂的话可以去看<a href="https://github.com/AloneMonkey/MonkeyDev/wiki" target="_blank" rel="noopener">Wiki</a></li>
+</ul>
+<h1 id="复现问题"><a href="#复现问题" class="headerlink" title="复现问题"></a>复现问题</h1><ul>
+<li>使用<code>Wireshark</code>对手机进行抓包</li>
+<li>点开首页随便逛逛，点开一个直播间</li>
+<li>如愿<code>Wireshark</code>中出现了那个泄露的关键字符串<code>FvlrC6LHMC9LspI_jVj-qzDhktiq</code></li>
+<li>也如愿收获了一大堆log</li>
+</ul>
+<h1 id="在log寻找线索"><a href="#在log寻找线索" class="headerlink" title="在log寻找线索"></a>在log寻找线索</h1><ul>
+<li>在log中搜索关键字<code>FvlrC6LHMC9LspI_jVj-qzDhktiq</code>找到如下这条<pre><code>2018-08-02 15:27:46.070729+0800 QuanMinTV-Mini[1529:185056] Hallo--&gt;session(&lt;__NSURLSessionLocal: 0x1741d8150&gt;), --&gt;request(&lt;NSURLRequest: 0x174214f90&gt; { URL: http://attachment.shouyintv.cn/FvlrC6LHMC9LspI_jVj-qzDhktiq })
+</code></pre>-[NSURLSession(Hooked) debugHookedDownloadTaskWithRequest:]</li>
+<li>根据上面得到的那条log，拿到<code>0x1741d8150</code>，并对log文件进行过滤得到如下结果:<pre><code> 2018-08-02 15:09:49.403756+0800 QuanMinTV-Mini[1529:182446] Hallo--&gt;session debugHookedSessionWithConfiguration -&gt; session(&lt;__NSURLSessionLocal: 0x1741d8150&gt;), delegate(&lt;AFHTTPSessionManager: 0x1701d9140, baseURL: (null), session: (null), operationQueue: &lt;NSOperationQueue: 0x17422cb80&gt;{name = &apos;NSOperationQueue 0x17422cb80&apos;}&gt;)
+2018-08-02 15:09:49.418955+0800 QuanMinTV-Mini[1529:182446] Hallo--&gt;session(&lt;__NSURLSessionLocal: 0x1741d8150&gt;), --&gt;request(&lt;NSMutableURLRequest: 0x17001aa40&gt; { URL: https://api-shouyin.quanmin.tv/public/version/check/2/4346?cid=6&amp;conn=3G&amp;cv=iphone2_4.3.40&amp;debug=0&amp;dev=1F57FD00-74E2-4007-942B-8F9744151B9B&amp;device=&amp;nonce=QBMHVSNPSZJQUOOFNEVPZXFPAHNNXIWE&amp;os=30&amp;osversion=ios_10.3.1&amp;sign=B2DEA231ED08CD9BDDABD0C75B7714FB&amp;toid=-1&amp;ua=iPhone7%2C2 })
+2018-08-02 15:09:49.424917+0800 QuanMinTV-Mini[1529:182446] Hallo--&gt;session(&lt;__NSURLSessionLocal: 0x1741d8150&gt;), --&gt;request(&lt;NSMutableURLRequest: 0x1740194c0&gt; { URL: https://api-shouyin.quanmin.tv/public/app/msg?cid=6&amp;conn=3G&amp;cv=iphone2_4.3.40&amp;debug=0&amp;dev=1F57FD00-74E2-4007-942B-8F9744151B9B&amp;device=&amp;nonce=NHWKXUEVMDFVAJINOJRHPOWUNYSWZSBP&amp;os=30&amp;osversion=ios_10.3.1&amp;sign=4787B043ECCD08701DAAA511A1A57E11&amp;toid=-1&amp;ua=iPhone7%2C2 })
+2018-08-02 15:09:49.426879+0800 QuanMinTV-Mini[1529:182446] Hallo--&gt;session(&lt;__NSURLSessionLocal: 0x1741d8150&gt;), --&gt;request(&lt;NSMutableURLRequest: 0x17001ab50&gt; { URL: https://api-shouyin.quanmin.tv/public/config/gift/version?cid=6&amp;conn=3G&amp;cv=iphone2_4.3.40&amp;debug=0&amp;dev=1F57FD00-74E2-4007-942B-8F9744151B9B&amp;device=&amp;nonce=EPTGXBVCVGWNNMOAEJPDFCMKGIMRTKTY&amp;os=30&amp;osversion=ios_10.3.1&amp;sign=96C4834DAB7554ECCC1A4CB1100D7A8B&amp;toid=-1&amp;ua=iPhone7%2C2 })
+2018-08-02 15:09:49.428882+0800 QuanMinTV-Mini[1529:182446] Hallo--&gt;session(&lt;__NSURLSessionLocal: 0x1741d8150&gt;), --&gt;request(&lt;NSMutableURLRequest: 0x17001ac10&gt; { URL: https://api-shouyin.quanmin.tv/bag/propConfigVersion?cid=6&amp;conn=3G&amp;cv=iphone2_4.3.40&amp;debug=0&amp;dev=1F57FD00-74E2-4007-942B-8F9744151B9B&amp;device=&amp;nonce=DIYIROKGPMHUYPIEMJUMWDPDWJPBQYIP&amp;os=30&amp;osversion=ios_10.3.1&amp;sign=417C6DC17E0B63EFF3D4A22FBEE0C60F&amp;toid=-1&amp;ua=iPhone7%2C2 })
+2018-08-02 15:09:49.431908+0800 QuanMinTV-Mini[1529:182446] Hallo--&gt;session(&lt;__NSURLSessionLocal: 0x1741d8150&gt;), --&gt;request(&lt;NSMutableURLRequest: 0x174019700&gt; { URL: https://api-shouyin.quanmin.tv/public/app/act?cid=6&amp;conn=3G&amp;cv=iphone2_4.3.40&amp;debug=0&amp;dev=1F57FD00-74E2-4007-942B-8F9744151B9B&amp;device=&amp;nonce=QCATFARGNZSQTESFECNREAJFSYGCYBVN&amp;os=30&amp;osversion=ios_10.3.1&amp;sign=8C631191D38D45F6BFD5BAE1504DB99D&amp;toid=-1&amp;ua=iPhone7%2C2 })
+2018-08-02 15:09:49.932752+0800 QuanMinTV-Mini[1529:182446] Hallo--&gt;session(&lt;__NSURLSessionLocal: 0x1741d8150&gt;), --&gt;request(&lt;NSMutableURLRequest: 0x17401a440&gt; { URL: https://api-shouyin.quanmin.tv/auth/check?cid=6&amp;conn=3G&amp;cv=iphone2_4.3.40&amp;debug=0&amp;dev=1F57FD00-74E2-4007-942B-8F9744151B9B&amp;device=&amp;nonce=KQVXMQLGZUVPBYNKMYRRQKFSYAKAWJBQ&amp;os=30&amp;osversion=ios_10.3.1&amp;sign=98A1A861B795A6FE5E5FA9D8F81CCD08&amp;toid=-1&amp;ua=iPhone7%2C2 })
+2018-08-02 15:09:52.778470+0800 QuanMinTV-Mini[1529:182446] Hallo--&gt;session(&lt;__NSURLSessionLocal: 0x1741d8150&gt;), --&gt;request(&lt;NSMutableURLRequest: 0x174203ca0&gt; { URL: https://api-shouyin.quanmin.tv/bag/propConfig?cid=6&amp;client=app&amp;conn=3G&amp;cv=iphone2_4.3.40&amp;debug=0&amp;dev=1F57FD00-74E2-4007-942B-8F9744151B9B&amp;device=&amp;nonce=KLPMQQQLQPRGWLBERPQBDEHOHTCVZRNV&amp;os=30&amp;osversion=ios_10.3.1&amp;sign=C8B31DD95B00DCB64ADA533C6D275CF8&amp;toid=-1&amp;ua=iPhone7%2C2 })
+2018-08-02 15:09:55.811342+0800 QuanMinTV-Mini[1529:182446] Hallo--&gt;session(&lt;__NSURLSessionLocal: 0x1741d8150&gt;), --&gt;request(&lt;NSMutableURLRequest: 0x170216310&gt; { URL: https://api-shouyin.quanmin.tv/auth/check?cid=6&amp;conn=3G&amp;cv=iphone2_4.3.40&amp;debug=0&amp;dev=1F57FD00-74E2-4007-942B-8F9744151B9B&amp;device=&amp;nonce=KQXUGSPOATHXRNJGGVWSIRVVXGLEFHXM&amp;os=30&amp;osversion=ios_10.3.1&amp;sign=0D0762A1D2C39E2904035AE8C248F826&amp;toid=-1&amp;ua=iPhone7%2C2 })
+2018-08-02 15:09:58.884550+0800 QuanMinTV-Mini[1529:182446] Hallo--&gt;session(&lt;__NSURLSessionLocal: 0x1741d8150&gt;), --&gt;request(&lt;NSMutableURLRequest: 0x1702132b0&gt; { URL: https://api-shouyin.quanmin.tv/auth/check?cid=6&amp;conn=3G&amp;cv=iphone2_4.3.40&amp;debug=0&amp;dev=1F57FD00-74E2-4007-942B-8F9744151B9B&amp;device=&amp;nonce=BYRNKTDIGMVYPVYYGXSOXENFPQIUBGHN&amp;os=30&amp;osversion=ios_10.3.1&amp;sign=D00DF763A33CC62288FA219D98DBBBA4&amp;toid=-1&amp;ua=iPhone7%2C2 })
+2018-08-02 15:10:02.214492+0800 QuanMinTV-Mini[1529:182446] Hallo--&gt;session(&lt;__NSURLSessionLocal: 0x1741d8150&gt;), --&gt;request(&lt;NSMutableURLRequest: 0x17401bb90&gt; { URL: https://api-shouyin.quanmin.tv/auth/check?cid=6&amp;conn=3G&amp;cv=iphone2_4.3.40&amp;debug=0&amp;dev=1F57FD00-74E2-4007-942B-8F9744151B9B&amp;device=&amp;nonce=FKQONYAGQJHWBPJEQVXHTXOXYEDMMNBV&amp;os=30&amp;osversion=ios_10.3.1&amp;sign=B784F426048B7DC5EF1B86988725D822&amp;toid=-1&amp;ua=iPhone7%2C2 })
+onLocal: 0x1741d8150&gt;), --&gt;request(&lt;NSMutableURLRequest: 0x170218e00&gt; { URL: https://api-shouyin.quanmin.tv/user/honor/single?cid=6&amp;conn=3G&amp;cv=iphone2_4.3.40&amp;debug=0&amp;dev=1F57FD00-74E2-4007-942B-8F9744151B9B&amp;device=&amp;nonce=USEAFOCLRVOYRAHHGOYDIHUKOFITNSHQ&amp;os=30&amp;osversion=ios_10.3.1&amp;owid=1639748150&amp;sign=A22A2E14B358545B355D8C454DAC828F&amp;toid=-1&amp;ua=iPhone7%2C2 })
+2018-08-02 15:27:45.693859+0800 QuanMinTV-Mini[1529:182446] Hallo--&gt;session(&lt;__NSURLSessionLocal: 0x1741d8150&gt;), --&gt;request(&lt;NSMutableURLRequest: 0x17021aaa0&gt; { URL: https://api-shouyin.quanmin.tv/public/config/gift/version?cid=6&amp;conn=WIFI&amp;cv=iphone2_4.3.40&amp;debug=0&amp;dev=1F57FD00-74E2-4007-942B-8F9744151B9B&amp;device=&amp;nonce=MSARXVQPBUSSTRXVLBLM2018-08-02 15:27:45.695986+0800 QuanMinTV-Mini[1529:182446] Hallo--&gt;session(&lt;__NSURLSessionLocal: 0x1741d8150&gt;), --&gt;request(&lt;NSMutableURLRequest: 0x1742141d0&gt; { URL: https://api-shouyin.quanmin.tv/bag/propConfigVersion?cid=6&amp;conn=WIFI&amp;cv=iphone2_4.3.40&amp;debug=0&amp;dev=1F57FD00-74E2-4007-942B-8F9744151B9B&amp;device=&amp;nonce=WGKLJVVVABHMMKTOHJJXVRBVNCIVDMDF&amp;os=30&amp;osversion=ios_10.3.1&amp;sign=F20484F9E26A949403144286937FFD2F&amp;toid=-1&amp;ua=iPhone7%2C2 })
+2018-08-02 15:27:45.980003+0800 QuanMinTV-Mini[1529:182446] Hallo--&gt;session(&lt;__NSURLSessionLocal: 0x1741d8150&gt;), --&gt;request(&lt;NSMutableURLRequest: 0x174213ec0&gt; { URL: https://api-shouyin.quanmin.tv/bag/propConfig?cid=6&amp;client=app&amp;conn=WIFI&amp;cv=iphone2_4.3.40&amp;debug=0&amp;dev=1F57FD00-74E2-4007-942B-8F9744151B9B&amp;device=&amp;nonce=BZMZIXOWSUALQDCKSCZUBAQYMLTRSNYX&amp;os=30&amp;osversion=ios_10.3.1&amp;sign=E4D305CACD884D959D8A242C8C28DC06&amp;toid=-1&amp;ua=iPhone7%2C2 })
+2018-08-02 15:27:46.070729+0800 QuanMinTV-Mini[1529:185056] Hallo--&gt;session(&lt;__NSURLSessionLocal: 0x1741d8150&gt;), --&gt;request(&lt;NSURLRequest: 0x174214f90&gt; { URL: http://attachment.shouyintv.cn/FvlrC6LHMC9LspI_jVj-qzDhktiq })
+</code></pre></li>
+<li><p>从上面的log中第一条可以判定该条<code>session</code>是由<code>AFHTTPSessionManager</code>创建的并不是我们sdk创建的,或者说该<code>session</code>在我们sdk在hook<code>sessionWithConfiguration:delegate:delegateQueue:</code>之前就已经创建了</p>
+</li>
+<li><p>因为以前有看过<code>AFHTTPSessionManager</code>的session初始化方法所以我直接在Xcode中使用符号断点在<code>-[AFHTTPSessionManager initWithBaseURL:sessionConfiguration:]</code>下了个断点</p>
+</li>
+<li>并且也在我们sdk启动的方法下了个符号断点<code>+[WSPX start]</code></li>
+<li>如果Xcode先停在了<code>-[AFHTTPSessionManager initWithBaseURL:sessionConfiguration:]</code>那么可以确定就是因为<code>session</code>没有挂上sdk的<code>nsurlprotocol</code>，导致该<code>session</code>无法被我们sdk进行流量引导</li>
+<li><p>如下是断点<code>-[AFHTTPSessionManager initWithBaseURL:sessionConfiguration:]</code>触发时使用bt查看堆栈</p>
+<pre><code>   (lldb) bt
+* thread #1, queue = &apos;com.apple.main-thread&apos;, stop reason = breakpoint 9.1
+  * frame #0: 0x00000001007ad6c4 QuanMinTV-Mini`-[DVLHttpManager initWithBaseUrl:]
+    frame #1: 0x00000001001eaac0 QuanMinTV-Mini`-[ZXHttpTask init] + 132
+    frame #2: 0x00000001001eaa1c QuanMinTV-Mini`___lldb_unnamed_symbol2824$$QuanMinTV-Mini + 36
+    frame #3: 0x0000000105f8da10 libdispatch.dylib`_dispatch_client_callout + 16
+    frame #4: 0x0000000105f8e778 libdispatch.dylib`dispatch_once_f + 116
+    frame #5: 0x00000001001ea9f4 QuanMinTV-Mini`+[ZXHttpTask sharedManager] + 112
+    frame #6: 0x00000001001eb268 QuanMinTV-Mini`+[ZXHttpTask GET:parameters:taskResponse:] + 164
+    frame #7: 0x00000001007a48d4 QuanMinTV-Mini`-[ZXUserModel checkUpate:] + 344
+    frame #8: 0x00000001007a2604 QuanMinTV-Mini`-[ZXUserModel delayFetchThings] + 56
+    frame #9: 0x000000010079e9f8 QuanMinTV-Mini`-[ZXUserModel fetchData] + 56
+    frame #10: 0x00000001007a0080 QuanMinTV-Mini`-[ZXUserModel userInfo] + 148
+    frame #11: 0x0000000100623fb8 QuanMinTV-Mini`-[AppDelegate setupBugly] + 408
+    frame #12: 0x0000000100623798 QuanMinTV-Mini`-[AppDelegate application:didFinishLaunchingWithOptions:] + 184
+    frame #13: 0x00000001940c72dc UIKit`-[UIApplication _handleDelegateCallbacksWithOptions:isSuspended:restoreState:] + 380
+    frame #14: 0x00000001942d3800 UIKit`-[UIApplication _callInitializationDelegatesForMainScene:transitionContext:] + 3452
+    frame #15: 0x00000001942d92a8 UIKit`-[UIApplication _runWithMainScene:transitionContext:completion:] + 1684
+    frame #16: 0x00000001942edde0 UIKit`__84-[UIApplication _handleApplicationActivationWithScene:transitionContext:completion:]_block_invoke.3151 + 48
+    frame #17: 0x00000001942d653c UIKit`-[UIApplication workspaceDidEndTransaction:] + 168
+    frame #18: 0x000000018facf884 FrontBoardServices`__FBSSERIALQUEUE_IS_CALLING_OUT_TO_A_BLOCK__ + 36
+    frame #19: 0x000000018facf6f0 FrontBoardServices`-[FBSSerialQueue _performNext] + 176
+    frame #20: 0x000000018facfaa0 FrontBoardServices`-[FBSSerialQueue _performNextFromRunLoopSource] + 56
+    frame #21: 0x000000018ded5424 CoreFoundation`__CFRUNLOOP_IS_CALLING_OUT_TO_A_SOURCE0_PERFORM_FUNCTION__ + 24
+    frame #22: 0x000000018ded4d94 CoreFoundation`__CFRunLoopDoSources0 + 540
+    frame #23: 0x000000018ded29a0 CoreFoundation`__CFRunLoopRun + 744
+    frame #24: 0x000000018de02d94 CoreFoundation`CFRunLoopRunSpecific + 424
+    frame #25: 0x00000001940c045c UIKit`-[UIApplication _run] + 652
+    frame #26: 0x00000001940bb130 UIKit`UIApplicationMain + 208
+    frame #27: 0x0000000100a0f8d4 QuanMinTV-Mini`___lldb_unnamed_symbol16136$$QuanMinTV-Mini + 88
+    frame #28: 0x000000018ce1159c libdyld.dylib`start + 4
+</code></pre></li>
+<li><p>从上面的调用栈可以整理出如下的调用关系1:</p>
+<pre><code>[AppDelegate application:didFinishLaunchingWithOptions:]
+[AppDelegate setupBugly]
+[ZXUserModel userInfo]
+[ZXUserModel fetchData]
+[ZXUserModel delayFetchThings]
+[ZXUserModel checkUpate:]
+[ZXHttpTask GET:parameters:taskResponse:]
+[ZXHttpTask sharedManager]
+.
+.
+.
+[ZXHttpTask init]
+[DVLHttpManager initWithBaseUrl:]
+[AFHTTPSessionManager initWithBaseURL:sessionConfiguration:]
+</code></pre></li>
+<li>如下是符号断点<code>+[WSPX start]</code>触发时使用bt查看的堆栈<pre><code>(lldb) bt
+* thread #1, queue = &apos;com.apple.main-thread&apos;, stop reason = breakpoint 8.1
+* frame #0: 0x0000000100d46a34 QuanMinTV-Mini`+[WSPX start]
+frame #1: 0x00000001008c027c QuanMinTV-Mini`+[QMFreeFlowManager start] + 40
+frame #2: 0x0000000100623830 QuanMinTV-Mini`-[AppDelegate application:didFinishLaunchingWithOptions:] + 336
+frame #3: 0x00000001940c72dc UIKit`-[UIApplication _handleDelegateCallbacksWithOptions:isSuspended:restoreState:] + 380
+frame #4: 0x00000001942d3800 UIKit`-[UIApplication _callInitializationDelegatesForMainScene:transitionContext:] + 3452
+frame #5: 0x00000001942d92a8 UIKit`-[UIApplication _runWithMainScene:transitionContext:completion:] + 1684
+frame #6: 0x00000001942edde0 UIKit`__84-[UIApplication _handleApplicationActivationWithScene:transitionContext:completion:]_block_invoke.3151 + 48
+frame #7: 0x00000001942d653c UIKit`-[UIApplication workspaceDidEndTransaction:] + 168
+frame #8: 0x000000018facf884 FrontBoardServices`__FBSSERIALQUEUE_IS_CALLING_OUT_TO_A_BLOCK__ + 36
+frame #9: 0x000000018facf6f0 FrontBoardServices`-[FBSSerialQueue _performNext] + 176
+frame #10: 0x000000018facfaa0 FrontBoardServices`-[FBSSerialQueue _performNextFromRunLoopSource] + 56
+frame #11: 0x000000018ded5424 CoreFoundation`__CFRUNLOOP_IS_CALLING_OUT_TO_A_SOURCE0_PERFORM_FUNCTION__ + 24
+frame #12: 0x000000018ded4d94 CoreFoundation`__CFRunLoopDoSources0 + 540
+frame #13: 0x000000018ded29a0 CoreFoundation`__CFRunLoopRun + 744
+frame #14: 0x000000018de02d94 CoreFoundation`CFRunLoopRunSpecific + 424
+frame #15: 0x00000001940c045c UIKit`-[UIApplication _run] + 652
+frame #16: 0x00000001940bb130 UIKit`UIApplicationMain + 208
+frame #17: 0x0000000100a0f8d4 QuanMinTV-Mini`___lldb_unnamed_symbol16136$$QuanMinTV-Mini + 88
+frame #18: 0x000000018ce1159c libdyld.dylib`start + 4
+</code></pre></li>
+<li>从上面的调用栈可以整理出如下的调用关系2:<pre><code>[WSPX start]
+[QMFreeFlowManager start]
+[AppDelegate application:didFinishLaunchingWithOptions:]
+</code></pre></li>
+<li>说明一下：断点是先触发了<code>-[AFHTTPSessionManager initWithBaseURL:sessionConfiguration:]</code>然后放行再触发了<code>+[WSPX start]</code></li>
+</ul>
+<h1 id="排查结论"><a href="#排查结论" class="headerlink" title="排查结论:"></a>排查结论:</h1><ul>
+<li>根据断点的触发先后关系，可以确定是因为session没有挂上sdk的<code>nsurlprotocol</code>，导致该session无法被我们sdk进行流量引导</li>
+<li>然后将调用关系1和调用关系2结合得出:<code>[QMFreeFlowManager start]</code>比<code>[AppDelegate setupBugly]</code>调用的晚导致的。</li>
+<li>将上述结论发给某民直播的开发者，让其将<code>[QMFreeFlowManager start]</code>放在<code>[AppDelegate setupBugly]</code>之前调用</li>
+</ul>
+
       
     </div>
 
@@ -725,7 +933,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#案例"><span class="nav-number">2.</span> <span class="nav-text">案例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#调试前已有的资料"><span class="nav-number">3.</span> <span class="nav-text">调试前已有的资料</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#问题重现的操作步骤"><span class="nav-number">4.</span> <span class="nav-text">问题重现的操作步骤:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查看抓包数据"><span class="nav-number">5.</span> <span class="nav-text">查看抓包数据</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#根据抓包数据能得到的有用数据"><span class="nav-number">6.</span> <span class="nav-text">根据抓包数据能得到的有用数据</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#猜测"><span class="nav-number">7.</span> <span class="nav-text">猜测:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#借助打点日志"><span class="nav-number">8.</span> <span class="nav-text">借助打点日志</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#借助hook技术对可疑API进行hook并打印hooklog"><span class="nav-number">9.</span> <span class="nav-text">借助hook技术对可疑API进行hook并打印hooklog</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#复现问题"><span class="nav-number">10.</span> <span class="nav-text">复现问题</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#案例"><span class="nav-number">2.</span> <span class="nav-text">案例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#调试前已有的资料"><span class="nav-number">3.</span> <span class="nav-text">调试前已有的资料</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#问题重现的操作步骤"><span class="nav-number">4.</span> <span class="nav-text">问题重现的操作步骤:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查看抓包数据"><span class="nav-number">5.</span> <span class="nav-text">查看抓包数据</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#根据抓包数据能得到的有用数据"><span class="nav-number">6.</span> <span class="nav-text">根据抓包数据能得到的有用数据</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#判定泄露类型"><span class="nav-number">7.</span> <span class="nav-text">判定泄露类型:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#借助OC语言的特性使用methodSwizzling对可疑session相关的API进行hook并打印session的实例地址"><span class="nav-number">8.</span> <span class="nav-text">借助OC语言的特性使用methodSwizzling对可疑session相关的API进行hook并打印session的实例地址</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#借助MonkeyDev动态库注入工具将上面的代码注入某民的可执行文件"><span class="nav-number">9.</span> <span class="nav-text">借助MonkeyDev动态库注入工具将上面的代码注入某民的可执行文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#复现问题"><span class="nav-number">10.</span> <span class="nav-text">复现问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#在log寻找线索"><span class="nav-number">11.</span> <span class="nav-text">在log寻找线索</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#排查结论"><span class="nav-number">12.</span> <span class="nav-text">排查结论:</span></a></li></ol></div>
             
 
           </div>
