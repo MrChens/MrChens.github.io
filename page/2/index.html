@@ -72,6 +72,8 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png?v=6.3.0">
 
 
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
 
 
 
@@ -88,8 +90,8 @@
     version: '6.3.0',
     sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
-    fastclick: ,
-    lazyload: ,
+    fastclick: false,
+    lazyload: false,
     tabs: true,
     motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     algolia: {
@@ -109,15 +111,15 @@
 
 
   <meta name="description" content="It’s amazing how the unexpected,can take your life and change directions.">
-<meta name="keywords" content="Hexo, NexT">
+<meta name="keywords" content="iOS">
 <meta property="og:type" content="website">
-<meta property="og:title" content="MrChens Blog">
+<meta property="og:title" content="DeafChen">
 <meta property="og:url" content="https://mrchens.github.io/page/2/index.html">
-<meta property="og:site_name" content="MrChens Blog">
+<meta property="og:site_name" content="DeafChen">
 <meta property="og:description" content="It’s amazing how the unexpected,can take your life and change directions.">
 <meta property="og:locale" content="zh-Hans">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MrChens Blog">
+<meta name="twitter:title" content="DeafChen">
 <meta name="twitter:description" content="It’s amazing how the unexpected,can take your life and change directions.">
 
 
@@ -135,7 +137,7 @@
   };
 </script>
 
-  <title>MrChens Blog</title>
+  <title>DeafChen</title>
   
 
 
@@ -213,13 +215,13 @@
     <div class="custom-logo-site-title">
       <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">MrChens Blog</span>
+        <span class="site-title">DeafChen</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
     
       
-        <h1 class="site-subtitle" itemprop="description">Yesterday once more</h1>
+        <p class="site-subtitle">Yesterday once more</p>
       
     
   </div>
@@ -244,49 +246,56 @@
         
           
           <li class="menu-item menu-item-home">
-    <a href="/" rel="section">Home</a>
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
   </li>
         
         
         
           
           <li class="menu-item menu-item-about">
-    <a href="/aboutme/" rel="section">About</a>
+    <a href="/aboutme/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />About</a>
   </li>
         
         
         
           
           <li class="menu-item menu-item-tags">
-    <a href="/tags/" rel="section">Tags</a>
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
   </li>
         
         
         
           
           <li class="menu-item menu-item-categories">
-    <a href="/categories/" rel="section">Categories</a>
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />Categories</a>
   </li>
         
         
         
           
           <li class="menu-item menu-item-archives">
-    <a href="/archives/" rel="section">Archives</a>
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
   </li>
         
         
         
           
           <li class="menu-item menu-item-sitemap">
-    <a href="/sitemap.xml" rel="section">Sitemap</a>
+    <a href="/sitemap.xml" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />Sitemap</a>
   </li>
         
         
         
           
           <li class="menu-item menu-item-commonweal">
-    <a href="/404/404.html" rel="section">Commonweal 404</a>
+    <a href="/404/404.html" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />Commonweal 404</a>
   </li>
 
       
@@ -295,7 +304,8 @@
           
             <a href="javascript:;" class="popup-trigger">
           
-            Search</a>
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />Search</a>
         </li>
       
     </ul>
@@ -370,13 +380,13 @@
     <link itemprop="mainEntityOfPage" href="https://mrchens.github.io/2015/12/06/about-collectionviewlayout/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Moro">
+      <meta itemprop="name" content="DeafChen">
       <meta itemprop="description" content="It’s amazing how the unexpected,can take your life and change directions.">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar1.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MrChens Blog">
+      <meta itemprop="name" content="DeafChen">
     </span>
 
     
@@ -384,14 +394,14 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">
+          <h1 class="post-title" itemprop="name headline">
                 
                 <a class="post-title-link" href="/2015/12/06/about-collectionviewlayout/" itemprop="url">
                   关于collectionView的布局
                 </a>
               
             
-          </h2>
+          </h1>
         
 
         <div class="post-meta">
@@ -416,6 +426,22 @@
               <time title="Created: 2015-12-06 20:42:34" itemprop="dateCreated datePublished" datetime="2015-12-06T20:42:34+08:00">2015-12-06</time>
             
 
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2016-12-27 22:59:23" itemprop="dateModified" datetime="2016-12-27T22:59:23+08:00">2016-12-27</time>
+              
             
           </span>
 
@@ -557,13 +583,13 @@
     <link itemprop="mainEntityOfPage" href="https://mrchens.github.io/2015/09/11/about-the-collectionviewcell-and-view-reuse/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Moro">
+      <meta itemprop="name" content="DeafChen">
       <meta itemprop="description" content="It’s amazing how the unexpected,can take your life and change directions.">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar1.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MrChens Blog">
+      <meta itemprop="name" content="DeafChen">
     </span>
 
     
@@ -571,14 +597,14 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">
+          <h1 class="post-title" itemprop="name headline">
                 
                 <a class="post-title-link" href="/2015/09/11/about-the-collectionviewcell-and-view-reuse/" itemprop="url">
                   关于collectionViewCell的重用
                 </a>
               
             
-          </h2>
+          </h1>
         
 
         <div class="post-meta">
@@ -603,6 +629,22 @@
               <time title="Created: 2015-09-11 20:11:24" itemprop="dateCreated datePublished" datetime="2015-09-11T20:11:24+08:00">2015-09-11</time>
             
 
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2016-12-27 22:59:17" itemprop="dateModified" datetime="2016-12-27T22:59:17+08:00">2016-12-27</time>
+              
             
           </span>
 
@@ -743,13 +785,13 @@
     <link itemprop="mainEntityOfPage" href="https://mrchens.github.io/2015/08/29/view-debugging-in-xcode6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Moro">
+      <meta itemprop="name" content="DeafChen">
       <meta itemprop="description" content="It’s amazing how the unexpected,can take your life and change directions.">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar1.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MrChens Blog">
+      <meta itemprop="name" content="DeafChen">
     </span>
 
     
@@ -757,14 +799,14 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">
+          <h1 class="post-title" itemprop="name headline">
                 
                 <a class="post-title-link" href="/2015/08/29/view-debugging-in-xcode6/" itemprop="url">
                   翻译：使用Xcode6的视图调试
                 </a>
               
             
-          </h2>
+          </h1>
         
 
         <div class="post-meta">
@@ -789,6 +831,22 @@
               <time title="Created: 2015-08-29 13:49:50" itemprop="dateCreated datePublished" datetime="2015-08-29T13:49:50+08:00">2015-08-29</time>
             
 
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2016-12-27 22:59:11" itemprop="dateModified" datetime="2016-12-27T22:59:11+08:00">2016-12-27</time>
+              
             
           </span>
 
@@ -929,13 +987,13 @@
     <link itemprop="mainEntityOfPage" href="https://mrchens.github.io/2015/08/16/touch-events-and-uiresponder/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Moro">
+      <meta itemprop="name" content="DeafChen">
       <meta itemprop="description" content="It’s amazing how the unexpected,can take your life and change directions.">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar1.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MrChens Blog">
+      <meta itemprop="name" content="DeafChen">
     </span>
 
     
@@ -943,14 +1001,14 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">
+          <h1 class="post-title" itemprop="name headline">
                 
                 <a class="post-title-link" href="/2015/08/16/touch-events-and-uiresponder/" itemprop="url">
                   触摸事件和UIResponder
                 </a>
               
             
-          </h2>
+          </h1>
         
 
         <div class="post-meta">
@@ -975,6 +1033,22 @@
               <time title="Created: 2015-08-16 20:57:06" itemprop="dateCreated datePublished" datetime="2015-08-16T20:57:06+08:00">2015-08-16</time>
             
 
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2016-12-27 22:59:06" itemprop="dateModified" datetime="2016-12-27T22:59:06+08:00">2016-12-27</time>
+              
             
           </span>
 
@@ -1113,13 +1187,13 @@
     <link itemprop="mainEntityOfPage" href="https://mrchens.github.io/2015/08/08/iphone-accelerometer-and-device-orientation/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Moro">
+      <meta itemprop="name" content="DeafChen">
       <meta itemprop="description" content="It’s amazing how the unexpected,can take your life and change directions.">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar1.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MrChens Blog">
+      <meta itemprop="name" content="DeafChen">
     </span>
 
     
@@ -1127,14 +1201,14 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">
+          <h1 class="post-title" itemprop="name headline">
                 
                 <a class="post-title-link" href="/2015/08/08/iphone-accelerometer-and-device-orientation/" itemprop="url">
                   翻译：iPhone的加速计和设备的方向
                 </a>
               
             
-          </h2>
+          </h1>
         
 
         <div class="post-meta">
@@ -1159,6 +1233,22 @@
               <time title="Created: 2015-08-08 15:41:04" itemprop="dateCreated datePublished" datetime="2015-08-08T15:41:04+08:00">2015-08-08</time>
             
 
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2016-12-27 22:59:01" itemprop="dateModified" datetime="2016-12-27T22:59:01+08:00">2016-12-27</time>
+              
             
           </span>
 
@@ -1299,13 +1389,13 @@
     <link itemprop="mainEntityOfPage" href="https://mrchens.github.io/2015/08/07/supported-the-special-orientation-of-special-view/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Moro">
+      <meta itemprop="name" content="DeafChen">
       <meta itemprop="description" content="It’s amazing how the unexpected,can take your life and change directions.">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar1.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MrChens Blog">
+      <meta itemprop="name" content="DeafChen">
     </span>
 
     
@@ -1313,14 +1403,14 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">
+          <h1 class="post-title" itemprop="name headline">
                 
                 <a class="post-title-link" href="/2015/08/07/supported-the-special-orientation-of-special-view/" itemprop="url">
                   让某个特定的viewController支持某个特定的旋转方向
                 </a>
               
             
-          </h2>
+          </h1>
         
 
         <div class="post-meta">
@@ -1345,6 +1435,22 @@
               <time title="Created: 2015-08-07 22:01:01" itemprop="dateCreated datePublished" datetime="2015-08-07T22:01:01+08:00">2015-08-07</time>
             
 
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2016-12-27 22:58:54" itemprop="dateModified" datetime="2016-12-27T22:58:54+08:00">2016-12-27</time>
+              
             
           </span>
 
@@ -1483,13 +1589,13 @@
     <link itemprop="mainEntityOfPage" href="https://mrchens.github.io/2015/07/17/beginning-adaptive-layout-tutorial/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Moro">
+      <meta itemprop="name" content="DeafChen">
       <meta itemprop="description" content="It’s amazing how the unexpected,can take your life and change directions.">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar1.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MrChens Blog">
+      <meta itemprop="name" content="DeafChen">
     </span>
 
     
@@ -1497,14 +1603,14 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">
+          <h1 class="post-title" itemprop="name headline">
                 
                 <a class="post-title-link" href="/2015/07/17/beginning-adaptive-layout-tutorial/" itemprop="url">
                   翻译：layout适配教程
                 </a>
               
             
-          </h2>
+          </h1>
         
 
         <div class="post-meta">
@@ -1529,6 +1635,22 @@
               <time title="Created: 2015-07-17 22:13:58" itemprop="dateCreated datePublished" datetime="2015-07-17T22:13:58+08:00">2015-07-17</time>
             
 
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2016-12-27 22:58:47" itemprop="dateModified" datetime="2016-12-27T22:58:47+08:00">2016-12-27</time>
+              
             
           </span>
 
@@ -1652,13 +1774,13 @@
     <link itemprop="mainEntityOfPage" href="https://mrchens.github.io/2015/06/04/the-low-use-of-sdwebimage/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Moro">
+      <meta itemprop="name" content="DeafChen">
       <meta itemprop="description" content="It’s amazing how the unexpected,can take your life and change directions.">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar1.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MrChens Blog">
+      <meta itemprop="name" content="DeafChen">
     </span>
 
     
@@ -1666,14 +1788,14 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">
+          <h1 class="post-title" itemprop="name headline">
                 
                 <a class="post-title-link" href="/2015/06/04/the-low-use-of-sdwebimage/" itemprop="url">
                   SDWebImage的低级使用
                 </a>
               
             
-          </h2>
+          </h1>
         
 
         <div class="post-meta">
@@ -1698,6 +1820,22 @@
               <time title="Created: 2015-06-04 14:31:45" itemprop="dateCreated datePublished" datetime="2015-06-04T14:31:45+08:00">2015-06-04</time>
             
 
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2016-12-27 13:36:36" itemprop="dateModified" datetime="2016-12-27T13:36:36+08:00">2016-12-27</time>
+              
             
           </span>
 
@@ -1835,13 +1973,13 @@
     <link itemprop="mainEntityOfPage" href="https://mrchens.github.io/2015/06/04/sdwebimage-fixed-width-cell-images-translation/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Moro">
+      <meta itemprop="name" content="DeafChen">
       <meta itemprop="description" content="It’s amazing how the unexpected,can take your life and change directions.">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar1.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MrChens Blog">
+      <meta itemprop="name" content="DeafChen">
     </span>
 
     
@@ -1849,14 +1987,14 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">
+          <h1 class="post-title" itemprop="name headline">
                 
                 <a class="post-title-link" href="/2015/06/04/sdwebimage-fixed-width-cell-images-translation/" itemprop="url">
                   翻译：使用SDWebImage固定cell images的宽
                 </a>
               
             
-          </h2>
+          </h1>
         
 
         <div class="post-meta">
@@ -1881,6 +2019,22 @@
               <time title="Created: 2015-06-04 09:53:54" itemprop="dateCreated datePublished" datetime="2015-06-04T09:53:54+08:00">2015-06-04</time>
             
 
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2016-12-27 13:36:36" itemprop="dateModified" datetime="2016-12-27T13:36:36+08:00">2016-12-27</time>
+              
             
           </span>
 
@@ -2017,13 +2171,13 @@
     <link itemprop="mainEntityOfPage" href="https://mrchens.github.io/2015/06/03/learn-multi-threading-part-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Moro">
+      <meta itemprop="name" content="DeafChen">
       <meta itemprop="description" content="It’s amazing how the unexpected,can take your life and change directions.">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar1.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MrChens Blog">
+      <meta itemprop="name" content="DeafChen">
     </span>
 
     
@@ -2031,14 +2185,14 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">
+          <h1 class="post-title" itemprop="name headline">
                 
                 <a class="post-title-link" href="/2015/06/03/learn-multi-threading-part-1/" itemprop="url">
                   多线程的学习Part1
                 </a>
               
             
-          </h2>
+          </h1>
         
 
         <div class="post-meta">
@@ -2063,6 +2217,22 @@
               <time title="Created: 2015-06-03 11:37:34" itemprop="dateCreated datePublished" datetime="2015-06-03T11:37:34+08:00">2015-06-03</time>
             
 
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2016-12-27 22:58:34" itemprop="dateModified" datetime="2016-12-27T22:58:34+08:00">2016-12-27</time>
+              
             
           </span>
 
@@ -2218,10 +2388,73 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <p class="site-author-name" itemprop="name">Moro</p>
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar1.png"
+                alt="DeafChen" />
+            
+              <p class="site-author-name" itemprop="name">DeafChen</p>
               <p class="site-description motion-element" itemprop="description">It’s amazing how the unexpected,can take your life and change directions.</p>
           </div>
 
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">33</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
           
 
           
@@ -2230,17 +2463,17 @@
             <div class="links-of-author motion-element">
               
                 <span class="links-of-author-item">
-                  <a href="https://github.com/MrChens" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  <a href="https://github.com/MrChens" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
                   
                 </span>
               
                 <span class="links-of-author-item">
-                  <a href="https://twitter.com/LableTag" target="_blank" title="Twitter" rel="external nofollow"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  <a href="https://twitter.com/LableTag" target="_blank" title="Twitter"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
                   
                 </span>
               
                 <span class="links-of-author-item">
-                  <a href="https://weibo.com/325751212" target="_blank" title="Weibo" rel="external nofollow"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  <a href="https://weibo.com/325751212" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
                   
                 </span>
               
@@ -2277,9 +2510,9 @@
       <div class="footer-inner">
         <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
   <span class="with-love" id="animate">
-    <i class="fa fa-"></i>
+    <i class="fa fa-user"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">Moro</span>
+  <span class="author" itemprop="copyrightHolder">DeafChen</span>
 
   
 
@@ -2287,15 +2520,17 @@
 </div>
 
 
-  
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.7.1</div>
 
 
 
+  <span class="post-meta-divider">|</span>
 
 
 
-
-  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" rel="external nofollow" href="https://theme-next.org">NexT.Pisces</a> v6.3.0</div>
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Pisces</a> v6.3.0</div>
 
 
 
@@ -2414,16 +2649,12 @@
   
 
   
-    <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
+    <script id="dsq-count-scr" src="https://mrchens.disqus.com/count.js" async></script>
   
 
   
 
 
-
-
-
-  
 
 
 
@@ -2441,7 +2672,7 @@
     var isfetched = false;
     var isXml = true;
     // Search DB path;
-    var search_path = "search.xml";
+    var search_path = "";
     if (search_path.length === 0) {
       search_path = "search.xml";
     } else if (/json$/i.test(search_path)) {
@@ -2834,25 +3065,9 @@
             });
           } else {
             
-              var newcounter = new Counter();
-              /* Set ACL */
-              var acl = new AV.ACL();
-              acl.setPublicReadAccess(true);
-              acl.setPublicWriteAccess(true);
-              newcounter.setACL(acl);
-              /* End Set ACL */
-              newcounter.set("title", title);
-              newcounter.set("url", url);
-              newcounter.set("time", 1);
-              newcounter.save(null, {
-                success: function(newcounter) {
-                  var $element = $(document.getElementById(url));
-                  $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
-                },
-                error: function(newcounter, error) {
-                  console.log('Failed to create');
-                }
-              });
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text('Counter not initialized! See more at console err msg.');
+              console.error('ATTENTION! LeanCloud counter has security bug, see here how to solve it: https://github.com/theme-next/hexo-leancloud-counter-security. \n But you also can use LeanCloud without security, by set \'security\' option to \'false\'.');
             
           }
         },
