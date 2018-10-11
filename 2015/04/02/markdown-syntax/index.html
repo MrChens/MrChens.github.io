@@ -116,13 +116,13 @@
 <meta property="og:site_name" content="DeafChen">
 <meta property="og:description" content="前言: markdown的使用在网上已经有很多了，我这边主要是弄些自己写Blog的时候需要的语法。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://mrchens.github.io/images/avatar.png">
 <meta property="og:image" content="http://mrchens.github.io/images/avatar.jpg">
-<meta property="og:image" content="http://mrchens.github.io/images/avatar.jpg">
-<meta property="og:updated_time" content="2018-10-11T14:55:14.019Z">
+<meta property="og:updated_time" content="2018-10-11T15:04:02.473Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Markdown语法说明">
 <meta name="twitter:description" content="前言: markdown的使用在网上已经有很多了，我这边主要是弄些自己写Blog的时候需要的语法。">
-<meta name="twitter:image" content="http://mrchens.github.io/images/avatar.jpg">
+<meta name="twitter:image" content="http://mrchens.github.io/images/avatar.png">
 
 
 
@@ -431,7 +431,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2018-10-11 22:55:14" itemprop="dateModified" datetime="2018-10-11T22:55:14+08:00">2018-10-11</time>
+                <time title="Modified: 2018-10-11 23:04:02" itemprop="dateModified" datetime="2018-10-11T23:04:02+08:00">2018-10-11</time>
               
             
           </span>
@@ -512,7 +512,12 @@
 <pre><code>&amp;copy;
 </code></pre><h1 id="换行"><a href="#换行" class="headerlink" title="换行"></a>换行</h1><p>如果想在markdown中换行，在插入处按入2个空格然后回车就可以。</p>
 <h1 id="标题"><a href="#标题" class="headerlink" title="标题"></a>标题</h1><hr>
-<p>如果想加标题的话，markdonw支持2种标题的语法，类<a href="http://docutils.sourceforge.net/mirror/setext.html" target="_blank" rel="noopener">Setext</a>和类<a href="http://www.aaronsw.com/2002/atx/" target="_blank" rel="noopener">atx</a>形式。例如：<br>    Setext方式：3个或者更多-(或者=)，必须单独一行，可含空格<br>    <code>小标题</code><br>    <code>---</code><br>    <code>大标题</code><br>    <code>===</code><br>下面是效果图  </p>
+<p>如果想加标题的话，markdonw支持2种标题的语法，类<a href="http://docutils.sourceforge.net/mirror/setext.html" target="_blank" rel="noopener">Setext</a>和类<a href="http://www.aaronsw.com/2002/atx/" target="_blank" rel="noopener">atx</a>形式。例如：<br>    Setext方式：3个或者更多-(或者=)，必须单独一行，可含空格  </p>
+<pre><code>小标题  
+---  
+大标题
+===
+</code></pre><p>下面是效果图  </p>
 <h1 id="大标题"><a href="#大标题" class="headerlink" title="大标题  "></a>大标题  </h1><h2 id="小标题"><a href="#小标题" class="headerlink" title="小标题"></a>小标题</h2><pre><code>Atx方式：
 #一级标题
 ##二级标题
@@ -520,9 +525,9 @@
 ####四级标题
 #####五级标题
 ######六级标题
-</code></pre><h1 id="一级标题"><a href="#一级标题" class="headerlink" title="一级标题"></a>一级标题</h1><h2 id="二级标题"><a href="#二级标题" class="headerlink" title="二级标题"></a>二级标题</h2><h3 id="三级标题"><a href="#三级标题" class="headerlink" title="三级标题"></a>三级标题</h3><h4 id="四级标题"><a href="#四级标题" class="headerlink" title="四级标题"></a>四级标题</h4><h5 id="五级标题"><a href="#五级标题" class="headerlink" title="五级标题"></a>五级标题</h5><h6 id="六级标题"><a href="#六级标题" class="headerlink" title="六级标题"></a>六级标题</h6><h1 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h1><pre><code>`翻译成html就是&lt;blockquote&gt;&lt;/blockquote&gt;`s  
-`&gt; 引用1
-&gt;&gt; 引用2`
+</code></pre><h1 id="一级标题"><a href="#一级标题" class="headerlink" title="一级标题"></a>一级标题</h1><h2 id="二级标题"><a href="#二级标题" class="headerlink" title="二级标题"></a>二级标题</h2><h3 id="三级标题"><a href="#三级标题" class="headerlink" title="三级标题"></a>三级标题</h3><h4 id="四级标题"><a href="#四级标题" class="headerlink" title="四级标题"></a>四级标题</h4><h5 id="五级标题"><a href="#五级标题" class="headerlink" title="五级标题"></a>五级标题</h5><h6 id="六级标题"><a href="#六级标题" class="headerlink" title="六级标题"></a>六级标题</h6><h1 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h1><pre><code>翻译成html就是&lt;blockquote&gt;&lt;/blockquote&gt; 
+&gt; 引用1
+&gt;&gt; 引用2
 </code></pre><blockquote>
 <p>我是引用1哦！  </p>
 <blockquote>
@@ -584,7 +589,7 @@ _果然不作死就不会死_
 </code></pre><p><a href="http://mrchens.github.io “MrchensBlog”">Mrchens</a></p>
 <h1 id="图片超链"><a href="#图片超链" class="headerlink" title="图片超链"></a>图片超链</h1><pre><code>多个感叹号，Tooltips可省略，要设置大小只能借助HTML标记
 ![Mrchens Blog](http://mrchens.github.io/images/avatar.jpg &quot;Mrchens Blog&quot;)
-</code></pre><p><img src="http://mrchens.github.io/images/avatar.jpg" alt="Mrchens Blog" title="Mrchens Blog"></p>
+</code></pre><p><img src="http://mrchens.github.io/images/avatar.png" alt="Mrchens Blog" title="Mrchens Blog"></p>
 <h1 id="索引超链：Reference方式"><a href="#索引超链：Reference方式" class="headerlink" title="索引超链：Reference方式"></a>索引超链：Reference方式</h1><pre><code>索引，1 2可以是任意字符
 [Mrchens][1]
 ![Mrchens Photo][2]
@@ -597,10 +602,11 @@ _果然不作死就不会死_
 &lt;http://www.weibo.com/325751212&gt;
 </code></pre><p><a href="http://mrchens.github.io">http://mrchens.github.io</a><br><a href="http://www.weibo.com/325751212" target="_blank" rel="noopener">http://www.weibo.com/325751212</a></p>
 <h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><ul>
-<li><p>行内代码<br>  在第一行后指定编程语言，也可以不指定</p>
-<pre><code><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> s = <span class="string">"hello Markdown"</span></span><br><span class="line">println( s )</span><br></pre></td></tr></table></figure>
-</code></pre>  <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> s = <span class="string">"hello Markdown"</span></span><br><span class="line">println( s )</span><br></pre></td></tr></table></figure>
-</li>
+<li>行内代码<br>  在第一行后指定编程语言，也可以不指定<pre><code><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> s = <span class="string">"hello Markdown"</span></span><br><span class="line">println( s )</span><br></pre></td></tr></table></figure>
+</code></pre></li>
+</ul>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> s = <span class="string">"hello Markdown"</span></span><br><span class="line">println( s )</span><br></pre></td></tr></table></figure>
+<ul>
 <li><p>段落代码<br>  每行文字前加4个空格或者1个Tab</p>
 <pre><code>val s = &quot;hello Markdown&quot;
 println( s )
@@ -693,7 +699,7 @@ baz | baz  | baz
 </tr>
 </tbody>
 </table>
-<h1 id="嵌入视频链接："><a href="#嵌入视频链接：" class="headerlink" title="嵌入视频链接："></a>嵌入视频链接：</h1><pre><code>&lt;video id=&quot;video&quot; controls=&quot;&quot; preload=&quot;none&quot; poster=&quot;http://media.w3.org/2010/05/sintel/poster.png&quot;&gt;
+<h1 id="嵌入视频链接："><a href="#嵌入视频链接：" class="headerlink" title="嵌入视频链接："></a>嵌入视频链接：</h1><pre><code>&lt;video id=&quot;video&quot; controls=&quot;&quot; width=20 preload=&quot;none&quot; poster=&quot;http://media.w3.org/2010/05/sintel/poster.png&quot;&gt;
             &lt;source id=&quot;mp4&quot; src=&quot;http://media.w3.org/2010/05/sintel/trailer.mp4&quot; type=&quot;video/mp4&quot;&gt;
             &lt;source id=&quot;webm&quot; src=&quot;http://media.w3.org/2010/05/sintel/trailer.webm&quot; type=&quot;video/webm&quot;&gt;
             &lt;source id=&quot;ogv&quot; src=&quot;http://media.w3.org/2010/05/sintel/trailer.ogv&quot; type=&quot;video/ogg&quot;&gt;
