@@ -108,22 +108,22 @@
 
 
 
-  <meta name="description" content="前言iOS开发中肯定会接触到苹果的Certificates, Identifiers, Devices, Provisioning Profiles，然后按照网上的教程一步一步配置完成并成功运行调试，但是还是对其中的缘由一知半解。本文就是博主自己去查阅资料并整理相关的知识点来梳理这些关系，如果哪里不对或者理解错误还希望能帮忙指出。如果能给出文档出处的链接，感恩。">
+  <meta name="description" content="前言    iOS开发中肯定会接触到苹果的Certificates, Identifiers, Devices, Provisioning Profiles，然后按照网上的教程一步一步配置完成并成功运行调试，但是还是对其中的缘由一知半解。本文就是博主自己去查阅资料并整理相关的知识点来梳理这些关系，如果哪里不对或者理解错误还希望能帮忙指出。如果能给出文档出处的链接，感恩。">
 <meta name="keywords" content="iOS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS开发中Certificate和Provisioning Profile和app ID的关系">
 <meta property="og:url" content="https://mrchens.github.io/2017/07/07/iOS-the-relation-of-certificate-and-provisioning-profile-and-app-ID/index.html">
 <meta property="og:site_name" content="DeafChen">
-<meta property="og:description" content="前言iOS开发中肯定会接触到苹果的Certificates, Identifiers, Devices, Provisioning Profiles，然后按照网上的教程一步一步配置完成并成功运行调试，但是还是对其中的缘由一知半解。本文就是博主自己去查阅资料并整理相关的知识点来梳理这些关系，如果哪里不对或者理解错误还希望能帮忙指出。如果能给出文档出处的链接，感恩。">
+<meta property="og:description" content="前言    iOS开发中肯定会接触到苹果的Certificates, Identifiers, Devices, Provisioning Profiles，然后按照网上的教程一步一步配置完成并成功运行调试，但是还是对其中的缘由一知半解。本文就是博主自己去查阅资料并整理相关的知识点来梳理这些关系，如果哪里不对或者理解错误还希望能帮忙指出。如果能给出文档出处的链接，感恩。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://mrchens.github.io/images/article/2017.07/2017-07-07-appledevelopercenter.png">
 <meta property="og:image" content="http://mrchens.github.io/images/article/2017.07/2017-07-07-keychain.png">
 <meta property="og:image" content="http://mrchens.github.io/images/article/2017.07/2017-07-07-ProvisioningProfile.png">
 <meta property="og:image" content="http://mrchens.github.io/images/article/2017.07/2017-07-07-appLaunche.png">
-<meta property="og:updated_time" content="2017-07-12T03:19:43.000Z">
+<meta property="og:updated_time" content="2018-10-12T02:40:51.308Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS开发中Certificate和Provisioning Profile和app ID的关系">
-<meta name="twitter:description" content="前言iOS开发中肯定会接触到苹果的Certificates, Identifiers, Devices, Provisioning Profiles，然后按照网上的教程一步一步配置完成并成功运行调试，但是还是对其中的缘由一知半解。本文就是博主自己去查阅资料并整理相关的知识点来梳理这些关系，如果哪里不对或者理解错误还希望能帮忙指出。如果能给出文档出处的链接，感恩。">
+<meta name="twitter:description" content="前言    iOS开发中肯定会接触到苹果的Certificates, Identifiers, Devices, Provisioning Profiles，然后按照网上的教程一步一步配置完成并成功运行调试，但是还是对其中的缘由一知半解。本文就是博主自己去查阅资料并整理相关的知识点来梳理这些关系，如果哪里不对或者理解错误还希望能帮忙指出。如果能给出文档出处的链接，感恩。">
 <meta name="twitter:image" content="http://mrchens.github.io/images/article/2017.07/2017-07-07-appledevelopercenter.png">
 
 
@@ -433,7 +433,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2017-07-12 11:19:43" itemprop="dateModified" datetime="2017-07-12T11:19:43+08:00">2017-07-12</time>
+                <time title="Modified: 2018-10-12 10:40:51" itemprop="dateModified" datetime="2018-10-12T10:40:51+08:00">2018-10-12</time>
               
             
           </span>
@@ -507,7 +507,10 @@
       
 
       
-        <p><code>前言</code><br>iOS开发中肯定会接触到苹果的<code>Certificates</code>, <code>Identifiers</code>, <code>Devices</code>, <code>Provisioning Profiles</code>，然后按照网上的教程一步一步配置完成并成功运行调试，但是还是对其中的缘由一知半解。本文就是博主自己去查阅资料并整理相关的知识点来梳理这些关系，如果哪里不对或者理解错误还希望能帮忙指出。如果能给出文档出处的链接，感恩。</p>
+        <p><code>前言</code>  </p>
+<blockquote>
+<p>iOS开发中肯定会接触到苹果的<code>Certificates</code>, <code>Identifiers</code>, <code>Devices</code>, <code>Provisioning Profiles</code>，然后按照网上的教程一步一步配置完成并成功运行调试，但是还是对其中的缘由一知半解。本文就是博主自己去查阅资料并整理相关的知识点来梳理这些关系，如果哪里不对或者理解错误还希望能帮忙指出。如果能给出文档出处的链接，感恩。</p>
+</blockquote>
 <a id="more"></a>
 <h1 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h1><p>按照下图来介绍</p>
 <p><img src="http://mrchens.github.io/images/article/2017.07/2017-07-07-appledevelopercenter.png" alt="appledevelopercenter"></p>
