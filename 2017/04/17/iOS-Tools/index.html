@@ -108,19 +108,21 @@
 
 
 
-  <meta name="description" content="前言放一些在iOS开发中用来提高效率的脚本工具传送门  codeObfuscated改良版的代码混淆传送门 autoResign是使用企业签名来做ipa包的重签名传送门 inject_with_jailbreaking用来在越狱设备中hook某些app做些调研什么的传送门 class_dump对ipa文件进行头文件的导出传送门">
+  <meta name="description" content="前言放一些在iOS开发中用来提高效率的脚本工具传送门  codeObfuscated 改良版的代码混淆传送门 aUtoReSiGn 是使用企业签名来做ipa包的重签名传送门 inject_with_jailbreaking 用来在越狱设备中hook某些app做些调研什么的传送门 class_dump 对ipa文件进行头文件的导出传送门 B&amp;amp;A&amp;amp;D 构建,打包,并提交Itunesco">
 <meta name="keywords" content="iOS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS工具集">
 <meta property="og:url" content="https://mrchens.github.io/2017/04/17/iOS-Tools/index.html">
 <meta property="og:site_name" content="Zerlz&#39;s blog">
-<meta property="og:description" content="前言放一些在iOS开发中用来提高效率的脚本工具传送门  codeObfuscated改良版的代码混淆传送门 autoResign是使用企业签名来做ipa包的重签名传送门 inject_with_jailbreaking用来在越狱设备中hook某些app做些调研什么的传送门 class_dump对ipa文件进行头文件的导出传送门">
+<meta property="og:description" content="前言放一些在iOS开发中用来提高效率的脚本工具传送门  codeObfuscated 改良版的代码混淆传送门 aUtoReSiGn 是使用企业签名来做ipa包的重签名传送门 inject_with_jailbreaking 用来在越狱设备中hook某些app做些调研什么的传送门 class_dump 对ipa文件进行头文件的导出传送门 B&amp;amp;A&amp;amp;D 构建,打包,并提交Itunesco">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://mrchens.github.io/images/article/2017.04/2017-04-17-iOS-Tools-BuildPhase.png">
-<meta property="og:updated_time" content="2017-05-05T08:57:50.000Z">
+<meta property="og:image" content="https://github.com/MrChens/iOS_Tools/tree/master/isWKoUI">
+<meta property="og:image" content="https://github.com/MrChens/iOS_Tools/blob/master/crashMe/sourcecode.png">
+<meta property="og:updated_time" content="2018-11-08T13:52:28.635Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS工具集">
-<meta name="twitter:description" content="前言放一些在iOS开发中用来提高效率的脚本工具传送门  codeObfuscated改良版的代码混淆传送门 autoResign是使用企业签名来做ipa包的重签名传送门 inject_with_jailbreaking用来在越狱设备中hook某些app做些调研什么的传送门 class_dump对ipa文件进行头文件的导出传送门">
+<meta name="twitter:description" content="前言放一些在iOS开发中用来提高效率的脚本工具传送门  codeObfuscated 改良版的代码混淆传送门 aUtoReSiGn 是使用企业签名来做ipa包的重签名传送门 inject_with_jailbreaking 用来在越狱设备中hook某些app做些调研什么的传送门 class_dump 对ipa文件进行头文件的导出传送门 B&amp;amp;A&amp;amp;D 构建,打包,并提交Itunesco">
 <meta name="twitter:image" content="http://mrchens.github.io/images/article/2017.04/2017-04-17-iOS-Tools-BuildPhase.png">
 
 
@@ -279,7 +281,7 @@
           
           <li class="menu-item menu-item-archives">
     <a href="/archives/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives<span class="badge">35</span></a>
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives<span class="badge">36</span></a>
   </li>
         
         
@@ -430,7 +432,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2017-05-05 16:57:50" itemprop="dateModified" datetime="2017-05-05T16:57:50+08:00">2017-05-05</time>
+                <time title="Modified: 2018-11-08 21:52:28" itemprop="dateModified" datetime="2018-11-08T21:52:28+08:00">2018-11-08</time>
               
             
           </span>
@@ -506,13 +508,17 @@
       
         <p><code>前言</code><br>放一些在iOS开发中用来提高效率的脚本工具<a href="https://github.com/MrChens/iOS_Tools" target="_blank" rel="noopener">传送门</a></p>
 <ul>
-<li><code>codeObfuscated</code>改良版的代码混淆<a href="https://github.com/MrChens/codeObfuscated" target="_blank" rel="noopener">传送门</a></li>
-<li><code>autoResign</code>是使用企业签名来做ipa包的重签名<a href="https://github.com/MrChens/iOS_Tools/tree/master/autoResign" target="_blank" rel="noopener">传送门</a></li>
-<li><code>inject_with_jailbreaking</code>用来在越狱设备中hook某些app做些调研什么的<a href="https://github.com/MrChens/iOS_Tools/tree/master/inject_with_jailbreaking" target="_blank" rel="noopener">传送门</a></li>
-<li><code>class_dump</code>对ipa文件进行头文件的导出<a href="https://github.com/MrChens/iOS_Tools/tree/master/class_dump" target="_blank" rel="noopener">传送门</a></li>
+<li><code>codeObfuscated</code> 改良版的代码混淆<a href="https://github.com/MrChens/codeObfuscated" target="_blank" rel="noopener">传送门</a></li>
+<li><code>aUtoReSiGn</code> 是使用企业签名来做ipa包的重签名<a href="https://github.com/MrChens/iOS_Tools/tree/master/autoResign" target="_blank" rel="noopener">传送门</a></li>
+<li><code>inject_with_jailbreaking</code> 用来在越狱设备中hook某些app做些调研什么的<a href="https://github.com/MrChens/iOS_Tools/tree/master/inject_with_jailbreaking" target="_blank" rel="noopener">传送门</a></li>
+<li><code>class_dump</code> 对ipa文件进行头文件的导出<a href="https://github.com/MrChens/iOS_Tools/tree/master/class_dump" target="_blank" rel="noopener">传送门</a></li>
+<li><code>B&amp;A&amp;D</code> 构建,打包,并提交Itunesconnect上传dsym文件到svn以供后续Debug使用<a href="https://github.com/MrChens/iOS_Tools/tree/master/B%26A%26D" target="_blank" rel="noopener">传送门</a></li>
+<li><code>isWKoUI</code> 检测app内的页面是<code>WKWebview</code>还是<code>UIWebview</code><a href="https://github.com/MrChens/iOS_Tools/tree/master/isWKoUI" target="_blank" rel="noopener">传送门</a></li>
+<li><code>crashMe</code> 演示如何通过<code>crash</code>文件排查<code>app</code>崩溃的问题<a href="https://github.com/MrChens/iOS_Tools/tree/master/crashMe" target="_blank" rel="noopener"> 传送门</a></li>
+<li><code>nextDay</code> 演示什么叫做永远没空研究系列<a href="https://github.com/MrChens/iOS_Tools/tree/master/nextDay" target="_blank" rel="noopener">传送门</a></li>
 </ul>
 <a id="more"></a>
-<h1 id="codeObfuscated"><a href="#codeObfuscated" class="headerlink" title="codeObfuscated"></a>codeObfuscated</h1><h3 id="本工具是用于混淆方法名和类名"><a href="#本工具是用于混淆方法名和类名" class="headerlink" title="本工具是用于混淆方法名和类名"></a>本工具是用于混淆方法名和类名</h3><ul>
+<h1 id="codeObfuscated"><a href="#codeObfuscated" class="headerlink" title="codeObfuscated"></a>codeObfuscated</h1><h2 id="本工具是用于混淆方法名和类名"><a href="#本工具是用于混淆方法名和类名" class="headerlink" title="本工具是用于混淆方法名和类名"></a>本工具是用于混淆方法名和类名</h2><ul>
 <li>改良这个脚本工具的初衷:因为项目中使用JSPatch的热修复功能，然后上架的时候被Apple拒绝了，然后就有了这个混淆的工具。如果你也需要混淆JSPatch那么你可以复用<code>obfuscation.list</code>,本人已经通过审核了.</li>
 </ul>
 <blockquote>
@@ -528,62 +534,106 @@
 <h3 id="使用步骤"><a href="#使用步骤" class="headerlink" title="使用步骤:"></a>使用步骤:</h3></li>
 <li>将混淆脚本<code>obfuscated.sh</code>和需要混淆的函数名/类名表<code>obfuscation.list</code>这2个文件放到工程的根目录下.</li>
 <li><strong>重要的提示:如果是为了审核通过请不要将<code>obfuscation.list</code>在项目中引用(reference),否则就会和我一样虽然混淆了但是<code>obfuscation.list</code>暴露出了一切还是会被Apple拒绝的,因为你将文件引用入工程会导致它在打包时会将该文件一起打包进去的.</strong></li>
-<li>配置<code>Build Phase</code>:在工程<code>Build Phase</code>中添加执行脚本操作，执行<code>obfuscated.sh</code>如图<img src="http://mrchens.github.io/images/article/2017.04/2017-04-17-iOS-Tools-BuildPhase.png" alt="BuildPhase">.</li>
-<li><p>在<code>obfuscation.list</code>中写入需要混淆的方法名和类名，如:   </p>
+<li>配置<code>Build Phase</code>:在工程<code>Build Phase</code>中添加执行脚本操作，执行<code>obfuscated.sh</code>如图<img src="http://mrchens.github.io/images/article/2017.04/2017-04-17-iOS-Tools-BuildPhase.png" alt="BuildPhase"></li>
+<li>在<code>obfuscation.list</code>中写入需要混淆的方法名和类名，如:</li>
+</ul>
 <pre><code>@interface JPCore : NSObject    //其中JPCore是需要混淆的类名
 -(void)sample;  
--(void)seg1:(NSString *)string seg2:(NSUInteger)num;
-就这样写：   
+-(void)seg1:(NSString \*)string seg2:(NSUInteger)num;
+就这样写:
 JPCore  
 sample  
 seg1    
 seg2
-</code></pre></li>
-<li><p>脚本执行完了以后会生成一个<code>codeObfuscation.h</code>头文件，将此头文件加入工程中并在<code>XXX-Prefix.ch</code>中import</p>
+</code></pre><ul>
+<li>脚本执行完了以后会生成一个<code>codeObfuscation.h</code>头文件，将此头文件加入工程中并在<code>XXX-Prefix.ch</code>中import</li>
+</ul>
 <pre><code>#ifdef __OBJC__  
     #import &lt;UIKit/UIKit.h&gt;  
     #import &lt;Foundation/Foundation.h&gt;  
     //添加混淆作用的头文件（这个文件名是脚本obfuscated.sh中定义的）  
     #import &quot;codeObfuscation.h&quot;  
 #endif
-</code></pre></li>
-</ul>
-<h1 id="autoResign"><a href="#autoResign" class="headerlink" title="autoResign"></a>autoResign</h1><h3 id="环境要求"><a href="#环境要求" class="headerlink" title="环境要求:"></a>环境要求:</h3><ol>
+</code></pre><h1 id="aUtoReSiGn"><a href="#aUtoReSiGn" class="headerlink" title="aUtoReSiGn"></a>aUtoReSiGn</h1><h2 id="1-环境要求"><a href="#1-环境要求" class="headerlink" title="1. 环境要求:"></a>1. 环境要求:</h2><ol>
 <li>OSX 10.8以上.</li>
 <li>Xcode8.0以上.</li>
 </ol>
-<h3 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式:"></a>使用方式:</h3><ol>
-<li>直接在终端运行<code>autoResign.sh</code>.</li>
+<h2 id="2-使用方式"><a href="#2-使用方式" class="headerlink" title="2. 使用方式:"></a>2. 使用方式:</h2><ol>
+<li>直接在终端运行<code>aUtoReSiGn.sh</code>.</li>
 <li>将要需要企业重签名的<code>ipa</code>放入<code>input文件夹</code>中.</li>
 <li>企业重签名后的<code>ipa</code>文件会自动放入<code>output文件夹</code>中.</li>
+<li>默认情况下重签名的是Distribution版的，如需重签名<code>Development</code>版的请运行<code>resign/resign.sh</code>脚本</li>
 </ol>
-<h3 id="重要的"><a href="#重要的" class="headerlink" title="重要的:"></a>重要的:</h3><p>在使用该脚本前您需要确保做了以下几件事:</p>
+<h2 id="3-重要的"><a href="#3-重要的" class="headerlink" title="3. 重要的:"></a>3. 重要的:</h2><p>在使用该脚本前您需要确保做了以下几件事:</p>
+<p> <strong>P.S.:请看完全文后再配置，后面附有文件的详细获取/修改步骤</strong> Development和Distribution的区别在于Development的重签名是可以<code>get-task-allow</code></p>
+<h2 id="3-1-Development配置"><a href="#3-1-Development配置" class="headerlink" title="3.1 Development配置"></a>3.1 Development配置</h2><ul>
+<li>配置<code>Development</code>的企业证书在本地的电脑中(钥匙串中)</li>
+<li>将您下载的<code>Development</code>版的<code>xx.mobileprovision</code>放入<code>resign</code>目录中并重命名为<code>EnterPrise_Development.mobileprovision</code>,文件结构如下图<code>文件结构</code>所示</li>
+<li>修改<code>resign</code>中<code>Entitlements/developer/Entitlements.plist</code>的配置</li>
+<li>在<code>resign.config</code>文件中修改<code>CODESIGN_IDENTITIES_DEV</code>的值为您<code>Development</code>版的企业证书名字</li>
+</ul>
+<h2 id="3-1-Distribution配置"><a href="#3-1-Distribution配置" class="headerlink" title="3.1 Distribution配置"></a>3.1 Distribution配置</h2><ul>
+<li>配置<code>Distribution</code>的企业证书在本地的电脑中(钥匙串中)</li>
+<li>将您下载的<code>Distribution</code>版的<code>yy.mobileprovision</code>放入<code>resign</code>目录中并重命名为<code>EnterPrise_Distribution.mobileprovision</code>,文件结构如下图<code>文件结构</code>所示</li>
+<li>修改<code>resign</code>中<code>Entitlements/production/Entitlements.plist</code>的配置</li>
+<li>在<code>resign.config</code>文件中修改<code>CODESIGN_IDENTITIES_DEV</code>的值为您<code>Distribution</code>版的企业证书名字</li>
+</ul>
+<h2 id="3-2-如何修改对应的Entitlements-plist"><a href="#3-2-如何修改对应的Entitlements-plist" class="headerlink" title="3.2 如何修改对应的Entitlements.plist"></a>3.2 如何修改对应的<code>Entitlements.plist</code></h2><ul>
+<li>假设你的<code>teamID</code>为:<code>yourTeamID</code></li>
+<li>假设你的<code>application-identifier</code>:为<code>yourTeamID.com.xxx.xxx</code></li>
+<li>将<code>application-identifier</code>中的<code>yyyy.com.xxx.xxx</code>改为<code>yourTeamID.com.xxx.xxx</code></li>
+<li>将<code>keychain-access-groups</code>的中的<code>yyyy.*</code>改为<code>yourTeamID.*</code></li>
+</ul>
+<p>如果看不懂上面说的是什么鬼.</p>
 <ul>
-<li>配置了企业证书在本地的电脑中(钥匙串中)</li>
-<li>将您的<code>Entitlements.plist</code>,<code>xx.mobileprovision</code>放入resign目录中,文件结构如下图所示</li>
-<li>在<code>resign.config</code>文件中配置<code>Entitlements.plist</code>文件</li>
-<li>在<code>resign.config</code>文件中修改<code>NEW_MOBILEPROVISION</code>的值为您的<code>xx.mobileprovision</code></li>
-<li>在<code>resign.config</code>文件中修改<code>CODESIGN_IDENTITIES</code>的值为您的<code>证书名字</code></li>
+<li><p>Development配置</p>
+<ul>
+<li>将<code>Entitlements/developer/Entitlements.plist</code>中的<code>application-identifier</code>的值，改为<code>EnterPrise_Development.mobileprovision</code>文件中<code>application-identifier</code>中对应的值</li>
+<li>将<code>Entitlements/developer/Entitlements.plist</code>中的<code>keychain-access-groups</code>的值，改为<code>EnterPrise_Development.mobileprovision</code>文件中<code>keychain-access-groups</code>中对应的值</li>
 </ul>
-<h3 id="如何获取xx-mobileprovision"><a href="#如何获取xx-mobileprovision" class="headerlink" title="如何获取xx.mobileprovision"></a>如何获取xx.mobileprovision</h3><ul>
-<li>登陆你的企业开发者账号，选择<code>Provisioning Profiles</code>下的<code>Distribution</code>下载你的配置文件</li>
+</li>
+<li><p>Distribution配置</p>
+<ul>
+<li>将<code>Entitlements/production/Entitlements.plist</code>中的<code>application-identifier</code>的值，改为<code>EnterPrise_Distribution.mobileprovision</code>文件中<code>application-identifier</code>中对应的值</li>
+<li>将<code>Entitlements/production/Entitlements.plist</code>中的<code>keychain-access-groups</code>的值，改为<code>EnterPrise_Distribution.mobileprovision</code>文件中<code>keychain-access-groups</code>中对应的值</li>
 </ul>
-<h3 id="如何修改Entitlements-plist"><a href="#如何修改Entitlements-plist" class="headerlink" title="如何修改Entitlements.plist"></a>如何修改<code>Entitlements.plist</code></h3><p>假设你的teamID为:<code>yourTeamID</code><br>假设你的<code>application-identifier</code>:为<code>yourTeamID.com.xxx.xxx</code><br>将<code>keychain-access-groups</code>的中的<code>xxx.*</code>改为<code>yourTeamID.*</code><br>将<code>application-identifier</code>中的<code>xxx.xxx.xxx.xxx</code>改为<code>yourTeamID.com.xxx.xxx</code></p>
-<h3 id="文件结构"><a href="#文件结构" class="headerlink" title="文件结构:"></a>文件结构:</h3><pre><code>autoResign/
-├── README.md
-├── autoResign.sh
-├── input
-├── output
-└── resign
-    ├── xx.mobileprovision
-    ├── Entitlements.plist
-    ├── Payload
-    ├── resign.config
-    └── resign.sh
-</code></pre><h1 id="inject-with-jailbreaking"><a href="#inject-with-jailbreaking" class="headerlink" title="inject_with_jailbreaking"></a>inject_with_jailbreaking</h1><h3 id="有空的时候补充一下文档，可以先从传送门过去看看"><a href="#有空的时候补充一下文档，可以先从传送门过去看看" class="headerlink" title="有空的时候补充一下文档，可以先从传送门过去看看."></a>有空的时候补充一下文档，可以先从传送门过去看看.</h3><h1 id="class-dump"><a href="#class-dump" class="headerlink" title="class_dump"></a>class_dump</h1><h3 id="导出头文件操作流程文档"><a href="#导出头文件操作流程文档" class="headerlink" title="导出头文件操作流程文档"></a>导出头文件操作流程文档</h3><p><a href="http://stevenygard.com/projects/class-dump/" target="_blank" rel="noopener">class-dump</a></p>
+</li>
+</ul>
+<h2 id="3-3-如何获取对应的xx-mobileprovision"><a href="#3-3-如何获取对应的xx-mobileprovision" class="headerlink" title="3.3 如何获取对应的xx.mobileprovision"></a>3.3 如何获取对应的<code>xx.mobileprovision</code></h2><ul>
+<li>Development<ul>
+<li>登陆你的企业开发者账号，选择<code>Provisioning Profiles</code>下的<code>Development</code>下载<code>Type</code>为<code>iOS Development</code>的<code>Provisioning Profiles</code>文件(P.S.:没试过<code>Type</code>为<code>iOS UniversalDistribution</code>的)</li>
+</ul>
+</li>
+<li>Distribution<ul>
+<li>登陆你的企业开发者账号，选择<code>Provisioning Profiles</code>下的<code>Distribution</code>下载<code>Type</code>为<code>iOS Distribution</code>的<code>Provisioning Profiles</code>文件(P.S.:没试过<code>Type</code>为<code>iOS UniversalDistribution</code>的)</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-4-如何获取您证书的名字"><a href="#3-4-如何获取您证书的名字" class="headerlink" title="3.4 如何获取您证书的名字"></a>3.4 如何获取您证书的名字</h2><ul>
+<li>Development<ul>
+<li>打开电脑中的<code>Keychain Access</code></li>
+<li>找到您的<code>Development</code>企业证书，并双击</li>
+<li>复制证书<code>Common Name</code>中对应的值到<code>resign.config</code>的<code>CODESIGN_IDENTITIES_DEV</code></li>
+</ul>
+</li>
+<li>Distribution<ul>
+<li>打开电脑中的<code>Keychain Access</code></li>
+<li>找到您的<code>Distribution</code>企业证书，并双击</li>
+<li>复制证书<code>Common Name</code>中对应的值到<code>resign.config</code>的<code>CODESIGN_IDENTITIES</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="如果不想使用自动重签名，可以将xx-ipa放在resign目录下-并执行脚本resign-sh"><a href="#如果不想使用自动重签名，可以将xx-ipa放在resign目录下-并执行脚本resign-sh" class="headerlink" title="如果不想使用自动重签名，可以将xx.ipa放在resign目录下,并执行脚本resign.sh"></a>如果不想使用自动重签名，可以将<code>xx.ipa</code>放在<code>resign</code>目录下,并执行脚本<code>resign.sh</code></h2><hr>
+<h2 id="文件结构"><a href="#文件结构" class="headerlink" title="文件结构:"></a>文件结构:</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">aUtoReSiGn</span><br><span class="line">│   ├── README.md</span><br><span class="line">│   ├── aUtoReSiGn.sh</span><br><span class="line">│   └── resign</span><br><span class="line">│       ├── EnterPrise_Development.mobileprovision</span><br><span class="line">│       ├── EnterPrise_Distribution.mobileprovision</span><br><span class="line">│       ├── Entitlements</span><br><span class="line">│       │   ├── developer</span><br><span class="line">│       │   └── production</span><br><span class="line">│       ├── certificate.png</span><br><span class="line">│       ├── provisioning\ profiles.png</span><br><span class="line">│       ├── resign.config</span><br><span class="line">│       └── resign.sh</span><br></pre></td></tr></table></figure>
+<h1 id="inject-with-jailbreaking"><a href="#inject-with-jailbreaking" class="headerlink" title="inject_with_jailbreaking"></a>inject_with_jailbreaking</h1><h2 id="有空的时候补充一下文档，可以先从传送门过去看看"><a href="#有空的时候补充一下文档，可以先从传送门过去看看" class="headerlink" title="有空的时候补充一下文档，可以先从传送门过去看看."></a>有空的时候补充一下文档，可以先从<a href="https://github.com/MrChens/iOS_Tools/tree/master/inject_with_jailbreaking" target="_blank" rel="noopener">传送门</a>过去看看.</h2><h1 id="class-dump"><a href="#class-dump" class="headerlink" title="class_dump"></a>class_dump</h1><h2 id="导出头文件操作流程文档"><a href="#导出头文件操作流程文档" class="headerlink" title="导出头文件操作流程文档"></a>导出头文件操作流程文档</h2><p><a href="http://stevenygard.com/projects/class-dump/" target="_blank" rel="noopener">class-dump</a></p>
 <p><a href="https://github.com/stefanesser/dumpdecrypted.git" target="_blank" rel="noopener">砸壳(破解)工具</a></p>
-<h4 id="本目录下已经预先放置好了需要使用的工具，如果不能使用请从上面的网址去download新的工具来。"><a href="#本目录下已经预先放置好了需要使用的工具，如果不能使用请从上面的网址去download新的工具来。" class="headerlink" title="本目录下已经预先放置好了需要使用的工具，如果不能使用请从上面的网址去download新的工具来。"></a>本目录下已经预先放置好了需要使用的工具，如果不能使用请从上面的网址去download新的工具来。</h4><p>从App Store下载的ipa是需要先砸壳然后再使用<code>class-dump</code>才能导出头文件.<br>如果是自己打包的企业app直接把ipa解压后的xx.app用<code>class-dump</code>就能导出头文件.</p>
-<h3 id="针对App-Store下载的ipa进行的class-dump-需要越狱的设备"><a href="#针对App-Store下载的ipa进行的class-dump-需要越狱的设备" class="headerlink" title="针对App Store下载的ipa进行的class-dump(需要越狱的设备)"></a>针对App Store下载的ipa进行的<code>class-dump</code>(需要越狱的设备)</h3><ul>
+<h2 id="砸壳时遇见如下"><a href="#砸壳时遇见如下" class="headerlink" title="砸壳时遇见如下"></a>砸壳时遇见如下</h2><pre><code>dyld: could not load inserted library &apos;dumpdecrypted.dylib&apos; because no suitable image found. Did find:
+dumpdecrypted.dylib: required code signature missing for &apos;dumpdecrypted.dylib&apos;
+
+security find-identity -v -p codesigning
+codesign --force --verify --verbose --sign &quot;iPhone Developer: xxx xxxx (xxxxxxxxxx)&quot; dumpdecrypted.dylib
+</code></pre><h2 id="本目录下已经预先放置好了需要使用的工具，如果不能使用请从上面的网址去download新的工具来。"><a href="#本目录下已经预先放置好了需要使用的工具，如果不能使用请从上面的网址去download新的工具来。" class="headerlink" title="本目录下已经预先放置好了需要使用的工具，如果不能使用请从上面的网址去download新的工具来。"></a>本目录下已经预先放置好了需要使用的工具，如果不能使用请从上面的网址去download新的工具来。</h2><p>从App Store下载的ipa是需要先砸壳然后再使用<code>class-dump</code>才能导出头文件.<br>如果是自己打包的企业app直接把ipa解压后的xx.app用<code>class-dump</code>就能导出头文件.</p>
+<h2 id="针对App-Store下载的ipa进行的class-dump-需要越狱的设备"><a href="#针对App-Store下载的ipa进行的class-dump-需要越狱的设备" class="headerlink" title="针对App Store下载的ipa进行的class-dump(需要越狱的设备)"></a>针对App Store下载的ipa进行的<code>class-dump</code>(需要越狱的设备)</h2><ul>
 <li>先从ituness上下载xxx.ipa</li>
 <li>然后将ipa安装到越狱的手机中</li>
 <li>将<code>dumpdecrypted.dylib</code>拷贝到手机的<code>(iOS8)/var/mobile/Containers/Data/Application/xxx-xxx/Documents</code>目录下，在iOS7中是<code>/var/mobile/Applications/xxx-xxx/Documents</code></li>
@@ -593,11 +643,326 @@ seg2
 <li><code>./class-dump -H yyy.decrypted -o outputs</code></li>
 <li>然后就能在<code>outputs</code>中看到导出的头文件</li>
 </ul>
-<h3 id="针对不需要砸壳的ipa进行的class-dump-不需要越狱的设备"><a href="#针对不需要砸壳的ipa进行的class-dump-不需要越狱的设备" class="headerlink" title="针对不需要砸壳的ipa进行的class-dump(不需要越狱的设备)"></a>针对不需要砸壳的ipa进行的class-dump(不需要越狱的设备)</h3><ul>
+<h2 id="针对不需要砸壳的ipa进行的class-dump-不需要越狱的设备"><a href="#针对不需要砸壳的ipa进行的class-dump-不需要越狱的设备" class="headerlink" title="针对不需要砸壳的ipa进行的class-dump(不需要越狱的设备)"></a>针对不需要砸壳的ipa进行的class-dump(不需要越狱的设备)</h2><ul>
 <li>将xxx.ipa解压到<code>class-dump</code>同个目录下，然后使用下面的命令将头文件导出到<code>outputs</code>目录下:</li>
 <li><code>./class-dump -H xx.app -o  outputs</code></li>
 <li>然后就能在<code>outputs</code>中看到导出的头文件</li>
 </ul>
+<h1 id="B-amp-A-amp-D"><a href="#B-amp-A-amp-D" class="headerlink" title="B&amp;A&amp;D"></a>B&amp;A&amp;D</h1><h2 id="环境要求"><a href="#环境要求" class="headerlink" title="环境要求:"></a>环境要求:</h2><ol>
+<li>OSX 10.8以上.</li>
+<li>Xcode8.0以上.</li>
+</ol>
+<h2 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式:"></a>使用方式:</h2><ol>
+<li>将<code>exportOptions</code>,<code>build.sh</code>,<code>archive.config</code>放入你项目的根目录</li>
+<li>修改<code>build.sh</code>中<code>ARCHIVE_SCHEME_NAME</code>,<code>ARCHIVE_PROJECT_NAME</code>,<code>ApplicationLoader_UserName</code>,<code>ApplicationLoader_Password</code>为你对应的</li>
+<li>执行<code>build.sh archive.config</code><br>4.<h1 id="isWKoUI"><a href="#isWKoUI" class="headerlink" title="isWKoUI"></a>isWKoUI</h1><h2 id="如何通过Safari检测第三方app的某个页面是WKWebview还是UIWebview"><a href="#如何通过Safari检测第三方app的某个页面是WKWebview还是UIWebview" class="headerlink" title="如何通过Safari检测第三方app的某个页面是WKWebview还是UIWebview"></a>如何通过Safari检测第三方app的某个页面是WKWebview还是UIWebview</h2></li>
+</ol>
+<h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法:"></a>使用方法:</h2><ol>
+<li>使用这里的<a href="https://github.com/MrChens/iOS_Tools/tree/master/autoResign" target="_blank" rel="noopener">传送门</a>脚本对app进行重签名.<ul>
+<li>PS:要选择Development的配置来进行重签名</li>
+</ul>
+</li>
+<li>重签名后将app安装到手机并使用闪电转USB连接线连接Mac电脑</li>
+<li>打开app到你想要验证的页面</li>
+<li>打开Mac电脑上的Safari浏览器</li>
+<li>打开Safari菜单栏上的<code>开发</code>选项.如果没找到开发选项，请依次点击<code>Safari浏览器</code>-&gt;<code>偏好设置</code>-&gt;<code>高级</code>-&gt;<code>在菜单栏中显示“开发”菜单</code>将勾勾选中.<ul>
+<li>PS:实在不明白请百度：Safari打开开发者选项</li>
+</ul>
+</li>
+<li>然后按如下图操作:<ul>
+<li>点击<code>Develop</code>.(PS:中文里面是叫做<code>开发</code>)</li>
+<li>选择<code>devmatocloud的iPhone</code>, 这时会有个<code>WSPXDemo</code>下面会显示app内webview加载的网址.(PS:如果没有网址出现在里面，那么该页面并不是webview做的)<ul>
+<li><code>devmatocloud的iPhone</code>对应你的手机;<code>WSPXDemo</code>对应你app的名字</li>
+</ul>
+</li>
+<li>选择其中一个网址，会弹出对应的<code>Web Inspector</code>.(PS:中文应该叫web检查器)</li>
+<li>然后在<code>Console</code>中输入<code>window.statusbar.visible</code>并按回车键,如果输出<code>true</code>那么就是<code>wkwebview</code>，相反则为<code>uiwebview</code>.</li>
+</ul>
+</li>
+</ol>
+<p><img src="https://github.com/MrChens/iOS_Tools/tree/master/isWKoUI" alt="传说中的下图"></p>
+<h2 id="Trick"><a href="#Trick" class="headerlink" title="Trick"></a>Trick</h2><ul>
+<li>一般使用<code>WKWebview</code>都会在native这边通过<code>- (void)addScriptMessageHandler:(id &lt;WKScriptMessageHandler&gt;)scriptMessageHandler name:(NSString *)name;</code>添加一个script消息的handler，那么就可以通过在<code>Web Inspector</code>中输入<code>window.webkit.messageHandlers</code>查看是否有输出对应的输出来判断是哪个<code>webview</code><ul>
+<li><code>UIWebview</code>中的输出为:<code>TypeError: undefined is not an object (evaluating &#39;window.webkit.messageHandlers&#39;)</code></li>
+<li><code>WKWebview</code>中的输出为:<code>UserMessageHandlersNamespace {}</code></li>
+</ul>
+</li>
+</ul>
+<h1 id="TODO"><a href="#TODO" class="headerlink" title="TODO:"></a>TODO:</h1><ul>
+<li>弄个网址直接弹窗显示检测结果</li>
+</ul>
+<h1 id="crashMe"><a href="#crashMe" class="headerlink" title="crashMe"></a>crashMe</h1><h2 id="app崩溃时排查步骤"><a href="#app崩溃时排查步骤" class="headerlink" title="app崩溃时排查步骤"></a>app崩溃时排查步骤</h2><blockquote>
+<p>在app崩溃时所生成的<code>.crash</code>文件，默认情况下该文件显示的都是十六进制数无法分析。所以我们需要对这些文件进行分析。</p>
+</blockquote>
+<h2 id="需要的工具"><a href="#需要的工具" class="headerlink" title="需要的工具:"></a>需要的工具:</h2><ul>
+<li><code>Xcode</code></li>
+<li><code>app</code>崩溃时生成的<code>.crash</code>文件,可通过<code>Xcode</code>–&gt; <code>Window</code>–&gt; <code>Devices and Simulators</code>–&gt; <code>View Device Logs</code>从iPhone中提取出来</li>
+<li><code>dsym</code>文件(符号表文件)</li>
+<li><code>symbolicatecrash</code>(可通过执行<code>find /Applications/Xcode.app/ -name symbolicatecrash</code>找到该文件的所在位置)</li>
+</ul>
+<h2 id="使用方式-1"><a href="#使用方式-1" class="headerlink" title="使用方式:"></a>使用方式:</h2><ol>
+<li>打开<code>.crash</code>文件找到其中的<code>uuid</code></li>
+<li>找到对应的<code>dysm</code>文件.(可通过<code>dwarfdump --uuid xxx.dsym</code>查看<code>uuid</code>是否和1的一致)</li>
+<li>将<code>.crash</code>,<code>dysm</code>,<code>symbolicatecrash</code>这3个文件放在同一个文件夹下方便处理</li>
+<li>执行命令<code>./symbolicatecrash xxxx.crash xxxx.dSYM/ &gt; output.crash</code>就可以看到符号化以后的崩溃堆栈信息</li>
+<li>若报错<code>Error: &quot;DEVELOPER_DIR&quot; is not defined at ./symbolicatecrash</code>，则在终端执行一次后面的命令<code>export DEVELOPER_DIR=&quot;/Applications/XCode.app/Contents/Developer&quot;</code>，然后再执行一次<code>4</code>的命令.</li>
+</ol>
+<p>ps:最后生成的<code>.crash</code>文件只会解析当前项目的代码，其余的还是十六进制数据</p>
+<h2 id="实际操作"><a href="#实际操作" class="headerlink" title="实际操作"></a>实际操作</h2><ol>
+<li><p>从<code>iPhone</code>中获取<code>wspxDemo  2018-11-5, 2-42 PM.crash.crash</code>文件如下(只保留需要的关键信息)</p>
+<pre><code>Incident Identifier: 211AB31B-F097-47DC-83ED-3AC6B3AC6B05
+CrashReporter Key:   991d9b4c57cf7b9c00c2cabc05f20cb4812ea851
+Hardware Model:      iPhone10,3
+Process:             wspxDemo [1214]
+Path:                /private/var/containers/Bundle/Application/DF7AAB28-9FF0-99EC-4EA1-16B5C50EB87C/wspxDemo.app/wspxDemo
+Identifier:          com.crash.CrashMe
+Version:             2222 (22.22.222)
+Code Type:           ARM-64 (Native)
+Role:                Foreground
+Parent Process:      launchd [1]
+Coalition:           com.crash.CrashMe [738]
+
+Date/Time:           2018-11-05 14:42:17.6018 +0800
+Launch Time:         2018-11-05 14:42:17.3303 +0800
+OS Version:          iPhone OS 12.1 (16B5089b)
+Baseband Version:    3.11.00
+Report Version:      104
+
+Exception Type:  EXC_CRASH (SIGABRT)
+Exception Codes: 0x0000000000000000, 0x0000000000000000
+Exception Note:  EXC_CORPSE_NOTIFY
+Triggered by Thread:  0
+
+Application Specific Information:
+abort() called
+
+Last Exception Backtrace:
+(0x1dcfcfea0 0x1dc1a1a40 0x1dcede054 0x102ceb9b4 0x209fda3c8 0x209fdbb30 0x209fe157c 0x20987ea18 0x209887698 0x20987e694 0x20987f034 0x20987d134 0x20987cde0 0x209881fa0 0x209882f00 0x209881e58 0x209886d44 0x209fdfa74 0x209bca088 0x1dfa049d4 0x1dfa0f79c 0x1dfa0ee94 0x1dca0a484 0x1dc9e13f0 0x1dfa43a9c 0x1dfa43728 0x1dfa43d44 0x1dcf601cc 0x1dcf6014c 0x1dcf5fa30 0x1dcf5a8fc 0x1dcf5a1cc 0x1df1d1584 0x209fe3328 0x102cebaf0 0x1dca1abb4)
+
+Thread 0 name:  Dispatch queue: com.apple.main-thread
+Thread 0 Crashed:
+0   libsystem_kernel.dylib            0x00000001dcb67104 0x1dcb44000 + 143620
+1   libsystem_pthread.dylib           0x00000001dcbe6998 0x1dcbe0000 + 27032
+2   libsystem_c.dylib                 0x00000001dcabed78 0x1dca67000 + 359800
+3   libc++abi.dylib                   0x00000001dc188f78 0x1dc187000 + 8056
+4   libc++abi.dylib                   0x00000001dc189120 0x1dc187000 + 8480
+5   libobjc.A.dylib                   0x00000001dc1a1e48 0x1dc19b000 + 28232
+6   libc++abi.dylib                   0x00000001dc1950fc 0x1dc187000 + 57596
+7   libc++abi.dylib                   0x00000001dc195188 0x1dc187000 + 57736
+8   libdispatch.dylib                 0x00000001dca0a498 0x1dc9a9000 + 398488
+9   libdispatch.dylib                 0x00000001dc9e13f0 0x1dc9a9000 + 230384
+10  FrontBoardServices                0x00000001dfa43a9c 0x1df9f8000 + 309916
+11  FrontBoardServices                0x00000001dfa43728 0x1df9f8000 + 309032
+12  FrontBoardServices                0x00000001dfa43d44 0x1df9f8000 + 310596
+13  CoreFoundation                    0x00000001dcf601cc 0x1dceb4000 + 704972
+14  CoreFoundation                    0x00000001dcf6014c 0x1dceb4000 + 704844
+15  CoreFoundation                    0x00000001dcf5fa30 0x1dceb4000 + 703024
+16  CoreFoundation                    0x00000001dcf5a8fc 0x1dceb4000 + 682236
+17  CoreFoundation                    0x00000001dcf5a1cc 0x1dceb4000 + 680396
+18  GraphicsServices                  0x00000001df1d1584 0x1df1c6000 + 46468
+19  UIKitCore                         0x0000000209fe3328 0x2096fc000 + 9335592
+20  wspxDemo                          0x0000000102cebaf0 0x102ce4000 + 31472
+21  libdyld.dylib                     0x00000001dca1abb4 0x1dca1a000 + 2996
+
+Thread 1:
+0   libsystem_pthread.dylib           0x00000001dcbeece8 0x1dcbe0000 + 60648
+
+Thread 2:
+0   libsystem_pthread.dylib           0x00000001dcbeece8 0x1dcbe0000 + 60648
+
+Thread 3:
+0   libsystem_pthread.dylib           0x00000001dcbeece8 0x1dcbe0000 + 60648
+
+Thread 4:
+0   libsystem_pthread.dylib           0x00000001dcbeece8 0x1dcbe0000 + 60648
+
+Thread 5 name:  com.apple.uikit.eventfetch-thread
+Thread 5:
+0   libsystem_kernel.dylib            0x00000001dcb5bed0 0x1dcb44000 + 98000
+1   libsystem_kernel.dylib            0x00000001dcb5b3a8 0x1dcb44000 + 95144
+2   CoreFoundation                    0x00000001dcf5fbc4 0x1dceb4000 + 703428
+3   CoreFoundation                    0x00000001dcf5aa60 0x1dceb4000 + 682592
+4   CoreFoundation                    0x00000001dcf5a1cc 0x1dceb4000 + 680396
+5   Foundation                        0x00000001dd94f404 0x1dd947000 + 33796
+6   Foundation                        0x00000001dd94f2b0 0x1dd947000 + 33456
+7   UIKitCore                         0x000000020a0d0430 0x2096fc000 + 10306608
+8   Foundation                        0x00000001dda821ac 0x1dd947000 + 1290668
+9   libsystem_pthread.dylib           0x00000001dcbeb2ac 0x1dcbe0000 + 45740
+10  libsystem_pthread.dylib           0x00000001dcbeb20c 0x1dcbe0000 + 45580
+11  libsystem_pthread.dylib           0x00000001dcbeecf4 0x1dcbe0000 + 60660
+
+Thread 0 crashed with ARM Thread State (64-bit):
+    x0: 0x0000000000000000   x1: 0x0000000000000000   x2: 0x0000000000000000   x3: 0x000000028248b4b7
+    x4: 0x00000001dc198b81   x5: 0x000000016d11a570   x6: 0x000000000000006e   x7: 0xffffffff00000500
+    x8: 0x0000000000000800   x9: 0x00000001dcbe6870  x10: 0x00000001dcbe1ef4  x11: 0x0000000000000003
+   x12: 0x0000000000000069  x13: 0x0000000000000000  x14: 0x0000000000000010  x15: 0x0000000000000016
+   x16: 0x0000000000000148  x17: 0x0000000000000000  x18: 0x0000000000000000  x19: 0x0000000000000006
+   x20: 0x00000001030aeb80  x21: 0x000000016d11a570  x22: 0x0000000000000303  x23: 0x00000001030aec60
+   x24: 0x0000000000001903  x25: 0x0000000000002103  x26: 0x0000000000000000  x27: 0x0000000000000000
+   x28: 0x00000002836bc408   fp: 0x000000016d11a4d0   lr: 0x00000001dcbe6998
+    sp: 0x000000016d11a4a0   pc: 0x00000001dcb67104 cpsr: 0x00000000
+
+Binary Images:
+0x102ce4000 - 0x102ceffff wspxDemo arm64  &lt;b0ffd72fc5c33a59bf97c79556430202&gt; /var/containers/Bundle/Application/DF7AAB28-9FF0-99EC-4EA1-16B5C50EB87C/wspxDemo.app/wspxDemo
+</code></pre></li>
+<li><p>从<code>Binary Images:
+0x102ce4000 - 0x102ceffff wspxDemo arm64  &lt;b0ffd72fc5c33a59bf97c79556430202&gt; /var/containers/Bundle/Application/DF7AAB28-9FF0-99EC-4EA1-16B5C50EB87C/wspxDemo.app/wspxDemo</code>中我们拿到<code>b0ffd72fc5c33a59bf97c79556430202</code></p>
+</li>
+<li><p>在终端执行<code>dwarfdump --uuid wspxDemo.app.dSYM/</code>后得到如下的输出:</p>
+<pre><code>Mero:wspxDemo 2018-11-05 12-56-20 dc$ dwarfdump --uuid wspxDemo.app.dSYM/
+UUID: 43C734F8-405F-3970-8B8D-D58575672912 (armv7) wspxDemo.app.dSYM/Contents/Resources/DWARF/wspxDemo
+UUID: B0FFD72F-C5C3-3A59-BF97-C79556430202 (arm64) wspxDemo.app.dSYM/Contents/Resources/DWARF/wspxDemo
+</code></pre></li>
+<li><p>对比步骤2和3的结果会发现:<code>b0ffd72fc5c33a59bf97c79556430202</code>和<code>B0FFD72F-C5C3-3A59-BF97-C79556430202</code>是一致的，所以该<code>wspxDemo  2018-11-5, 2-42 PM.crash.crash</code>对应的<code>dysm</code>就是<code>wspxDemo.app.dSYM</code></p>
+</li>
+<li><p>在终端执行命令：<code>./symbolicatecrash wspxDemo\ \ 2018-11-5\,\ 2-42\ PM.crash wspxDemo.app.dSYM/ &gt; output.crash</code>得到如下的输出:</p>
+<pre><code>Mero:wspxDemo 2018-11-05 12-56-20 dc$ ./symbolicatecrash wspxDemo\ \ 2018-11-5\,\ 2-42\ PM.crash wspxDemo.app.dSYM/ &gt; output.crash
+Error: &quot;DEVELOPER_DIR&quot; is not defined at ./symbolicatecrash line 69.
+</code></pre></li>
+<li><p>报错:<code>Error: &quot;DEVELOPER_DIR&quot; is not defined at ./symbolicatecrash line 69.</code></p>
+</li>
+<li><p>执行如下命令:<code>export DEVELOPER_DIR=&quot;/Applications/XCode.app/Contents/Developer&quot;</code>然后再执行<code>5</code>的命令.执行结果如下:</p>
+<pre><code>Mero:wspxDemo 2018-11-05 12-56-20 dc$ export DEVELOPER_DIR=&quot;/Applications/XCode.app/Contents/Developer&quot;
+Mero:wspxDemo 2018-11-05 12-56-20 dc$ ./symbolicatecrash wspxDemo\ \ 2018-11-5\,\ 2-42\ PM.crash wspxDemo.app.dSYM/ &gt; output.crash
+</code></pre></li>
+<li><p>如果没有报任何其他错误，则说明你已经成功把<code>crash</code>符号了，这时打开<code>output.crash</code>开始查看崩溃堆栈吧</p>
+</li>
+<li><p>如下是符号化后的<code>output.crash</code>文件的内容:</p>
+<pre><code>Incident Identifier: 211AB31B-F097-47DC-83ED-3AC6B3AC6B05
+CrashReporter Key:   991d9b4c57cf7b9c00c2cabc05f20cb4812ea851
+Hardware Model:      iPhone10,3
+Process:             wspxDemo [1214]
+Path:                /private/var/containers/Bundle/Application/DF7AAB28-9FF0-99EC-4EA1-16B5C50EB87C/wspxDemo.app/wspxDemo
+Identifier:          com.crash.CrashMe
+Version:             2222 (22.22.222)
+Code Type:           ARM-64 (Native)
+Role:                Foreground
+Parent Process:      launchd [1]
+Coalition:           com.crash.CrashMe [738]
+
+Date/Time:           2018-11-05 14:42:17.6018 +0800
+Launch Time:         2018-11-05 14:42:17.3303 +0800
+OS Version:          iPhone OS 12.1 (16B5089b)
+Baseband Version:    3.11.00
+Report Version:      104
+
+Exception Type:  EXC_CRASH (SIGABRT)
+Exception Codes: 0x0000000000000000, 0x0000000000000000
+Exception Note:  EXC_CORPSE_NOTIFY
+Triggered by Thread:  0
+
+Application Specific Information:
+abort() called
+
+Last Exception Backtrace:
+0   CoreFoundation                    0x1dcfcfea0 __exceptionPreprocess + 228
+1   libobjc.A.dylib                   0x1dc1a1a40 objc_exception_throw + 55
+2   CoreFoundation                    0x1dcede054 -[__NSSingleObjectArrayI objectAtIndex:] + 127
+3   wspxDemo                          0x102ceb9b4 -[AppDelegate application:didFinishLaunchingWithOptions:] + 31156 (AppDelegate.m:150)
+4   UIKitCore                         0x209fda3c8 -[UIApplication _handleDelegateCallbacksWithOptions:isSuspended:restoreState:] + 411
+5   UIKitCore                         0x209fdbb30 -[UIApplication _callInitializationDelegatesForMainScene:transitionContext:] + 3339
+6   UIKitCore                         0x209fe157c -[UIApplication _runWithMainScene:transitionContext:completion:] + 1551
+7   UIKitCore                         0x20987ea18 __111-[__UICanvasLifecycleMonitor_Compatability _scheduleFirstCommitForScene:transition:firstActivation:completion:]_block_invoke + 783
+8   UIKitCore                         0x209887698 +[_UICanvas _enqueuePostSettingUpdateTransactionBlock:] + 159
+9   UIKitCore                         0x20987e694 -[__UICanvasLifecycleMonitor_Compatability _scheduleFirstCommitForScene:transition:firstActivation:completion:] + 239
+10  UIKitCore                         0x20987f034 -[__UICanvasLifecycleMonitor_Compatability activateEventsOnly:withContext:completion:] + 1075
+11  UIKitCore                         0x20987d134 __82-[_UIApplicationCanvas _transitionLifecycleStateWithTransitionContext:completion:]_block_invoke + 771
+12  UIKitCore                         0x20987cde0 -[_UIApplicationCanvas _transitionLifecycleStateWithTransitionContext:completion:] + 431
+13  UIKitCore                         0x209881fa0 __125-[_UICanvasLifecycleSettingsDiffAction performActionsForCanvas:withUpdatedScene:settingsDiff:fromSettings:transitionContext:]_block_invoke + 219
+14  UIKitCore                         0x209882f00 _performActionsWithDelayForTransitionContext + 111
+15  UIKitCore                         0x209881e58 -[_UICanvasLifecycleSettingsDiffAction performActionsForCanvas:withUpdatedScene:settingsDiff:fromSettings:transitionContext:] + 247
+16  UIKitCore                         0x209886d44 -[_UICanvas scene:didUpdateWithDiff:transitionContext:completion:] + 367
+17  UIKitCore                         0x209fdfa74 -[UIApplication workspace:didCreateScene:withTransitionContext:completion:] + 539
+18  UIKitCore                         0x209bca088 -[UIApplicationSceneClientAgent scene:didInitializeWithEvent:completion:] + 363
+19  FrontBoardServices                0x1dfa049d4 -[FBSSceneImpl _didCreateWithTransitionContext:completion:] + 443
+20  FrontBoardServices                0x1dfa0f79c __56-[FBSWorkspace client:handleCreateScene:withCompletion:]_block_invoke_2 + 259
+21  FrontBoardServices                0x1dfa0ee94 __40-[FBSWorkspace _performDelegateCallOut:]_block_invoke + 63
+22  libdispatch.dylib                 0x1dca0a484 _dispatch_client_callout + 15
+23  libdispatch.dylib                 0x1dc9e13f0 _dispatch_block_invoke_direct$VARIANT$armv81 + 215
+24  FrontBoardServices                0x1dfa43a9c __FBSSERIALQUEUE_IS_CALLING_OUT_TO_A_BLOCK__ + 39
+25  FrontBoardServices                0x1dfa43728 -[FBSSerialQueue \_performNext] + 415
+26  FrontBoardServices                0x1dfa43d44 -[FBSSerialQueue \_performNextFromRunLoopSource] + 55
+27  CoreFoundation                    0x1dcf601cc __CFRUNLOOP_IS_CALLING_OUT_TO_A_SOURCE0_PERFORM_FUNCTION__ + 23
+28  CoreFoundation                    0x1dcf6014c __CFRunLoopDoSource0 + 87
+29  CoreFoundation                    0x1dcf5fa30 __CFRunLoopDoSources0 + 175
+30  CoreFoundation                    0x1dcf5a8fc __CFRunLoopRun + 1039
+31  CoreFoundation                    0x1dcf5a1cc CFRunLoopRunSpecific + 435
+32  GraphicsServices                  0x1df1d1584 GSEventRunModal + 99
+33  UIKitCore                         0x209fe3328 UIApplicationMain + 211
+34  wspxDemo                          0x102cebaf0 main + 31472 (main.m:14)
+35  libdyld.dylib                     0x1dca1abb4 start + 3
+
+Thread 0 name:  Dispatch queue: com.apple.main-thread
+Thread 0 Crashed:
+0   libsystem_kernel.dylib            0x00000001dcb67104 __pthread_kill + 8
+1   libsystem_pthread.dylib           0x00000001dcbe6998 pthread_kill$VARIANT$armv81 + 296
+2   libsystem_c.dylib                 0x00000001dcabed78 abort + 140
+3   libc++abi.dylib                   0x00000001dc188f78 __cxa_bad_cast + 0
+4   libc++abi.dylib                   0x00000001dc189120 default_unexpected_handler+ 8480 () + 0
+5   libobjc.A.dylib                   0x00000001dc1a1e48 _objc_terminate+ 28232 () + 124
+6   libc++abi.dylib                   0x00000001dc1950fc std::__terminate(void (*)+ 57596 ()) + 16
+7   libc++abi.dylib                   0x00000001dc195188 std::terminate+ 57736 () + 84
+8   libdispatch.dylib                 0x00000001dca0a498 _dispatch_client_callout + 36
+9   libdispatch.dylib                 0x00000001dc9e13f0 _dispatch_block_invoke_direct$VARIANT$armv81 + 216
+10  FrontBoardServices                0x00000001dfa43a9c __FBSSERIALQUEUE_IS_CALLING_OUT_TO_A_BLOCK__ + 40
+11  FrontBoardServices                0x00000001dfa43728 -[FBSSerialQueue _performNext] + 416
+12  FrontBoardServices                0x00000001dfa43d44 -[FBSSerialQueue _performNextFromRunLoopSource] + 56
+13  CoreFoundation                    0x00000001dcf601cc __CFRUNLOOP_IS_CALLING_OUT_TO_A_SOURCE0_PERFORM_FUNCTION__ + 24
+14  CoreFoundation                    0x00000001dcf6014c __CFRunLoopDoSource0 + 88
+15  CoreFoundation                    0x00000001dcf5fa30 __CFRunLoopDoSources0 + 176
+16  CoreFoundation                    0x00000001dcf5a8fc __CFRunLoopRun + 1040
+17  CoreFoundation                    0x00000001dcf5a1cc CFRunLoopRunSpecific + 436
+18  GraphicsServices                  0x00000001df1d1584 GSEventRunModal + 100
+19  UIKitCore                         0x0000000209fe3328 UIApplicationMain + 212
+20  wspxDemo                          0x0000000102cebaf0 main + 31472 (main.m:14)
+21  libdyld.dylib                     0x00000001dca1abb4 start + 4
+
+Thread 1:
+0   libsystem_pthread.dylib           0x00000001dcbeece8 start_wqthread + 0
+
+Thread 2:
+0   libsystem_pthread.dylib           0x00000001dcbeece8 start_wqthread + 0
+
+Thread 3:
+0   libsystem_pthread.dylib           0x00000001dcbeece8 start_wqthread + 0
+
+Thread 4:
+0   libsystem_pthread.dylib           0x00000001dcbeece8 start_wqthread + 0
+
+Thread 5 name:  com.apple.uikit.eventfetch-thread
+Thread 5:
+0   libsystem_kernel.dylib            0x00000001dcb5bed0 mach_msg_trap + 8
+1   libsystem_kernel.dylib            0x00000001dcb5b3a8 mach_msg + 72
+2   CoreFoundation                    0x00000001dcf5fbc4 __CFRunLoopServiceMachPort + 236
+3   CoreFoundation                    0x00000001dcf5aa60 __CFRunLoopRun + 1396
+4   CoreFoundation                    0x00000001dcf5a1cc CFRunLoopRunSpecific + 436
+5   Foundation                        0x00000001dd94f404 -[NSRunLoop+ 33796 (NSRunLoop) runMode:beforeDate:] + 300
+6   Foundation                        0x00000001dd94f2b0 -[NSRunLoop+ 33456 (NSRunLoop) runUntilDate:] + 148
+7   UIKitCore                         0x000000020a0d0430 -[UIEventFetcher threadMain] + 136
+8   Foundation                        0x00000001dda821ac __NSThread__start__ + 1040
+9   libsystem_pthread.dylib           0x00000001dcbeb2ac \_pthread_body + 128
+10  libsystem_pthread.dylib           0x00000001dcbeb20c \_pthread_start + 48
+11  libsystem_pthread.dylib           0x00000001dcbeecf4 thread_start + 4
+
+Thread 0 crashed with ARM Thread State (64-bit):
+x0: 0x0000000000000000   x1: 0x0000000000000000   x2: 0x0000000000000000   x3: 0x000000028248b4b7
+x4: 0x00000001dc198b81   x5: 0x000000016d11a570   x6: 0x000000000000006e   x7: 0xffffffff00000500
+x8: 0x0000000000000800   x9: 0x00000001dcbe6870  x10: 0x00000001dcbe1ef4  x11: 0x0000000000000003
+x12: 0x0000000000000069  x13: 0x0000000000000000  x14: 0x0000000000000010  x15: 0x0000000000000016
+x16: 0x0000000000000148  x17: 0x0000000000000000  x18: 0x0000000000000000  x19: 0x0000000000000006
+x20: 0x00000001030aeb80  x21: 0x000000016d11a570  x22: 0x0000000000000303  x23: 0x00000001030aec60
+x24: 0x0000000000001903  x25: 0x0000000000002103  x26: 0x0000000000000000  x27: 0x0000000000000000
+x28: 0x00000002836bc408   fp: 0x000000016d11a4d0   lr: 0x00000001dcbe6998
+sp: 0x000000016d11a4a0   pc: 0x00000001dcb67104 cpsr: 0x00000000
+
+Binary Images:
+0x102ce4000 - 0x102ceffff wspxDemo arm64  &lt;b0ffd72fc5c33a59bf97c79556430202&gt; /var/containers/Bundle/Application/DF7AAB28-9FF0-99EC-4EA1-16B5C50EB87C/wspxDemo.app/wspxDemo
+</code></pre></li>
+<li>从<code>crash</code>文件中我们很容易定位到<code>app</code>挂在了<code>AppDelegate.m</code>文件中的<code>第150行</code>这里.并且可能是因为数组越界导致崩溃。从源码截图中看确实是在<code>AppDelegate.m</code>的<code>150行</code>有问题.</li>
+<li>得到符号化<code>crash</code>文件后就可以进一步排查问题，之前有写过相关的博客<a href="https://mrchens.github.io/2018/07/26/debug-with-crashlog">传送门</a>在这里就不再详细说明.</li>
+</ol>
+<p><img src="https://github.com/MrChens/iOS_Tools/blob/master/crashMe/sourcecode.png" alt="源码"></p>
+<h1 id="nextDay"><a href="#nextDay" class="headerlink" title="nextDay"></a>nextDay</h1><p>  <a href="https://github.com/MrChens/iOS_Tools/tree/master/nextDay" target="_blank" rel="noopener">传送门</a></p>
 
       
     </div>
@@ -772,7 +1137,7 @@ seg2
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">35</span>
+                    <span class="site-state-item-count">36</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -901,7 +1266,7 @@ seg2
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#codeObfuscated"><span class="nav-number">1.</span> <span class="nav-text">codeObfuscated</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#本工具是用于混淆方法名和类名"><span class="nav-number">1.0.1.</span> <span class="nav-text">本工具是用于混淆方法名和类名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用步骤"><span class="nav-number">1.0.2.</span> <span class="nav-text">使用步骤:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#autoResign"><span class="nav-number">2.</span> <span class="nav-text">autoResign</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#环境要求"><span class="nav-number">2.0.1.</span> <span class="nav-text">环境要求:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用方式"><span class="nav-number">2.0.2.</span> <span class="nav-text">使用方式:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重要的"><span class="nav-number">2.0.3.</span> <span class="nav-text">重要的:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何获取xx-mobileprovision"><span class="nav-number">2.0.4.</span> <span class="nav-text">如何获取xx.mobileprovision</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何修改Entitlements-plist"><span class="nav-number">2.0.5.</span> <span class="nav-text">如何修改Entitlements.plist</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件结构"><span class="nav-number">2.0.6.</span> <span class="nav-text">文件结构:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#inject-with-jailbreaking"><span class="nav-number">3.</span> <span class="nav-text">inject_with_jailbreaking</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#有空的时候补充一下文档，可以先从传送门过去看看"><span class="nav-number">3.0.1.</span> <span class="nav-text">有空的时候补充一下文档，可以先从传送门过去看看.</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#class-dump"><span class="nav-number">4.</span> <span class="nav-text">class_dump</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#导出头文件操作流程文档"><span class="nav-number">4.0.1.</span> <span class="nav-text">导出头文件操作流程文档</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#本目录下已经预先放置好了需要使用的工具，如果不能使用请从上面的网址去download新的工具来。"><span class="nav-number">4.0.1.1.</span> <span class="nav-text">本目录下已经预先放置好了需要使用的工具，如果不能使用请从上面的网址去download新的工具来。</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#针对App-Store下载的ipa进行的class-dump-需要越狱的设备"><span class="nav-number">4.0.2.</span> <span class="nav-text">针对App Store下载的ipa进行的class-dump(需要越狱的设备)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#针对不需要砸壳的ipa进行的class-dump-不需要越狱的设备"><span class="nav-number">4.0.3.</span> <span class="nav-text">针对不需要砸壳的ipa进行的class-dump(不需要越狱的设备)</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#codeObfuscated"><span class="nav-number">1.</span> <span class="nav-text">codeObfuscated</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#本工具是用于混淆方法名和类名"><span class="nav-number">1.1.</span> <span class="nav-text">本工具是用于混淆方法名和类名</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用步骤"><span class="nav-number">1.1.1.</span> <span class="nav-text">使用步骤:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#aUtoReSiGn"><span class="nav-number">2.</span> <span class="nav-text">aUtoReSiGn</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-环境要求"><span class="nav-number">2.1.</span> <span class="nav-text">1. 环境要求:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-使用方式"><span class="nav-number">2.2.</span> <span class="nav-text">2. 使用方式:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-重要的"><span class="nav-number">2.3.</span> <span class="nav-text">3. 重要的:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Development配置"><span class="nav-number">2.4.</span> <span class="nav-text">3.1 Development配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Distribution配置"><span class="nav-number">2.5.</span> <span class="nav-text">3.1 Distribution配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-如何修改对应的Entitlements-plist"><span class="nav-number">2.6.</span> <span class="nav-text">3.2 如何修改对应的Entitlements.plist</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-如何获取对应的xx-mobileprovision"><span class="nav-number">2.7.</span> <span class="nav-text">3.3 如何获取对应的xx.mobileprovision</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-如何获取您证书的名字"><span class="nav-number">2.8.</span> <span class="nav-text">3.4 如何获取您证书的名字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如果不想使用自动重签名，可以将xx-ipa放在resign目录下-并执行脚本resign-sh"><span class="nav-number">2.9.</span> <span class="nav-text">如果不想使用自动重签名，可以将xx.ipa放在resign目录下,并执行脚本resign.sh</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件结构"><span class="nav-number">2.10.</span> <span class="nav-text">文件结构:</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#inject-with-jailbreaking"><span class="nav-number">3.</span> <span class="nav-text">inject_with_jailbreaking</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#有空的时候补充一下文档，可以先从传送门过去看看"><span class="nav-number">3.1.</span> <span class="nav-text">有空的时候补充一下文档，可以先从传送门过去看看.</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#class-dump"><span class="nav-number">4.</span> <span class="nav-text">class_dump</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#导出头文件操作流程文档"><span class="nav-number">4.1.</span> <span class="nav-text">导出头文件操作流程文档</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#砸壳时遇见如下"><span class="nav-number">4.2.</span> <span class="nav-text">砸壳时遇见如下</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#本目录下已经预先放置好了需要使用的工具，如果不能使用请从上面的网址去download新的工具来。"><span class="nav-number">4.3.</span> <span class="nav-text">本目录下已经预先放置好了需要使用的工具，如果不能使用请从上面的网址去download新的工具来。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#针对App-Store下载的ipa进行的class-dump-需要越狱的设备"><span class="nav-number">4.4.</span> <span class="nav-text">针对App Store下载的ipa进行的class-dump(需要越狱的设备)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#针对不需要砸壳的ipa进行的class-dump-不需要越狱的设备"><span class="nav-number">4.5.</span> <span class="nav-text">针对不需要砸壳的ipa进行的class-dump(不需要越狱的设备)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#B-amp-A-amp-D"><span class="nav-number">5.</span> <span class="nav-text">B&amp;A&amp;D</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境要求"><span class="nav-number">5.1.</span> <span class="nav-text">环境要求:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用方式"><span class="nav-number">5.2.</span> <span class="nav-text">使用方式:</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#isWKoUI"><span class="nav-number">6.</span> <span class="nav-text">isWKoUI</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何通过Safari检测第三方app的某个页面是WKWebview还是UIWebview"><span class="nav-number">6.1.</span> <span class="nav-text">如何通过Safari检测第三方app的某个页面是WKWebview还是UIWebview</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用方法"><span class="nav-number">6.2.</span> <span class="nav-text">使用方法:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Trick"><span class="nav-number">6.3.</span> <span class="nav-text">Trick</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TODO"><span class="nav-number">7.</span> <span class="nav-text">TODO:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#crashMe"><span class="nav-number">8.</span> <span class="nav-text">crashMe</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#app崩溃时排查步骤"><span class="nav-number">8.1.</span> <span class="nav-text">app崩溃时排查步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#需要的工具"><span class="nav-number">8.2.</span> <span class="nav-text">需要的工具:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用方式-1"><span class="nav-number">8.3.</span> <span class="nav-text">使用方式:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实际操作"><span class="nav-number">8.4.</span> <span class="nav-text">实际操作</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#nextDay"><span class="nav-number">9.</span> <span class="nav-text">nextDay</span></a></li></ol></div>
             
 
           </div>
