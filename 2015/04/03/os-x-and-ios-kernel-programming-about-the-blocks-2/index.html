@@ -1,0 +1,1798 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/zerlz.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/zerlz.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/zerlz.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/zerlz.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前言: 以下文字都是摘自ios与osx多线程和内存管理一书，方便以后自己过来查阅的.本文梗概：Block的实质：Block究竟是什么？本节将通过Block的实现进一步帮大家加深理解。。">
+<meta name="keywords" content="iOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="objective-c高级编程(ios与osx多线程和内存管理)(Blocks-2)">
+<meta property="og:url" content="https://mrchens.github.io/2015/04/03/os-x-and-ios-kernel-programming-about-the-blocks-2/index.html">
+<meta property="og:site_name" content="Zerlz&#39;s blog">
+<meta property="og:description" content="前言: 以下文字都是摘自ios与osx多线程和内存管理一书，方便以后自己过来查阅的.本文梗概：Block的实质：Block究竟是什么？本节将通过Block的实现进一步帮大家加深理解。。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://mrchens.github.io/images/article/2015.04/2015-04-03-os-x-and-ios-kernel-programming-about-the-blocks-2-2-1.png">
+<meta property="og:updated_time" content="2016-12-27T05:36:36.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="objective-c高级编程(ios与osx多线程和内存管理)(Blocks-2)">
+<meta name="twitter:description" content="前言: 以下文字都是摘自ios与osx多线程和内存管理一书，方便以后自己过来查阅的.本文梗概：Block的实质：Block究竟是什么？本节将通过Block的实现进一步帮大家加深理解。。">
+<meta name="twitter:image" content="http://mrchens.github.io/images/article/2015.04/2015-04-03-os-x-and-ios-kernel-programming-about-the-blocks-2-2-1.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://mrchens.github.io/2015/04/03/os-x-and-ios-kernel-programming-about-the-blocks-2/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>objective-c高级编程(ios与osx多线程和内存管理)(Blocks-2) | Zerlz's blog</title>
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-112744328-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-112744328-1');
+</script>
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2250627e2fe66049584e97edac149bb6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Zerlz's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">Yesterday once more</h1>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/aboutme/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />About</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags<span class="badge">15</span></a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />Categories<span class="badge">9</span></a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives<span class="badge">36</span></a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-sitemap">
+    <a href="/sitemap.xml" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />Sitemap</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />Search</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mrchens.github.io/2015/04/03/os-x-and-ios-kernel-programming-about-the-blocks-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zerlz">
+      <meta itemprop="description" content="It’s amazing how the unexpected, can take your life and change directions.">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zerlz's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">objective-c高级编程(ios与osx多线程和内存管理)(Blocks-2)
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2015-04-03 20:45:50" itemprop="dateCreated datePublished" datetime="2015-04-03T20:45:50+08:00">2015-04-03</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2016-12-27 13:36:36" itemprop="dateModified" datetime="2016-12-27T13:36:36+08:00">2016-12-27</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/读书笔记-ReadingNote/" itemprop="url" rel="index"><span itemprop="name">读书笔记(ReadingNote)</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2015/04/03/os-x-and-ios-kernel-programming-about-the-blocks-2/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2015/04/03/os-x-and-ios-kernel-programming-about-the-blocks-2/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2015/04/03/os-x-and-ios-kernel-programming-about-the-blocks-2/" class="leancloud_visitors" data-flag-title="objective-c高级编程(ios与osx多线程和内存管理)(Blocks-2)">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Views: </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言:"></a><code>前言:</code></h1><blockquote>
+<p>以下文字都是摘自ios与osx多线程和内存管理一书，方便以后自己过来查阅的.<br>本文梗概：Block的实质：Block究竟是什么？本节将通过Block的实现进一步帮大家加深理解。。<br><a id="more"></a></p>
+</blockquote>
+<h1 id="1-Blocks的实现"><a href="#1-Blocks的实现" class="headerlink" title="1. Blocks的实现:"></a>1. <code>Blocks的实现</code>:</h1><hr>
+<h2 id="1-1-Block的实质"><a href="#1-1-Block的实质" class="headerlink" title="1.1 Block的实质:"></a>1.1 <em><code>Block的实质</code></em>:</h2><p>在实际编译时无法转换成我们能够理解的代码，但clang（LLVM编译器）具有转换为我们可读代码的功能。通过”<code>-rewrite-objc</code>“选项就能讲含有Block语法的代码变换为C++代码，其实也仅是使用了struct结构，本质是c语言代码。</p>
+<pre><code>clang -rewrite-objc 源代码文件名
+</code></pre><p>转换Block语法。</p>
+<pre><code>int main()
+{
+    void (^blk)(void) = ^{printf(&quot;Block\n&quot;);};
+
+    blk();
+
+    return 0;
+}
+</code></pre><p>该Block省略了返回值类型以及参数列表，通过变换为一下形式：</p>
+<pre><code>struct __block_impl {
+    void *isa;
+    int Flags;
+    int Reserved;
+    void *FuncPtr;
+};
+
+struct __main_block_impl_0 {
+    struct __block_impl impl;
+    struct __main_block_desc_0* Desc;
+
+    __main_block_impl_0(void *fp, struct __main_block_desc_0 *desc, int flags=0) {
+        impl.isa = &amp;_NSConcreteStackBlock;
+        impl.Flags = flags;
+        impl.FuncPtr = fp;
+        Desc = desc;
+    }
+};
+
+static void __main_block_func_0(struct __main_block_impl_0 *__cself)
+{
+    printf(&quot;Block\n&quot;);
+}
+
+static struct __main_block_desc_0 {
+    unsigned long reserved;
+    unsigned long Block_size;
+} __main_block_desc_0_DATA = {
+    0,
+    sizeof(struct __main_block_impl_0)
+};
+
+int main()
+{
+    void (*blk)(void) = 
+        (void (*)(void))&amp;__main_block_impl_0(
+            (void *)__main_block_func_0, &amp;__main_block_desc_0_DATA);
+
+    ((void (*)(struct __block_impl *))(
+        (struct __block_impl *)blk)-&gt;FuncPtr)((struct __block_impl *)blk);
+        return 0;
+}
+</code></pre><p>8行的代码居然增加到了43行。<br>下面，将源码分成几个部分逐步理解。首先看最初源码中的Block语法。</p>
+<pre><code>^{printf(&quot;Block\n&quot;);};
+</code></pre><p>变换后的代码：</p>
+<pre><code>static void __main_block_func_0(struct __main_block_impl_0 *__cself)
+{
+    printf(&quot;Block\n&quot;);
+}
+</code></pre><p>如上所示，通过Blocks使用的匿名函数实际上被作为简单的c语言函数来处理。<em>另外，根据Block语法所属的函数名（此处为main）和该Block语法在该函数出现的顺序值（此处为0）来给经clang变换的函数命名。</em><br>该函数的参数<code>__cself</code>相当于C++实例方法中指向实例自身的变量this，或是oc实例方法中指向对象自身的变量self，即参数<code>__cself</code>为指向Block值的变量。</p>
+<p>遗憾的是，由这次Block语法变换而来的<code>__main_block_func_0</code>函数并没有使用参数<code>__cself</code>.使用参数<code>__cself</code>的例子将在后面介绍。我们先来看看该参数的声明。</p>
+<pre><code>struct __main_block_impl_0 *__cself
+</code></pre><p>与c++的this和oc的self相同，参数<code>__cself</code>是<code>__main_block_impl_0</code>结构体的指针。<br>该结构体声明如下：</p>
+<pre><code>struct __main_block_impl_0 {
+    struct __block_impl impl;
+    struct __main_block_desc_0* Desc;
+}
+</code></pre><p>由于转换后的代码中，也一并写入了其构造函数，所以看起来复杂。如果去除构造函数，就变的简单。<br>第一个成员变量是<code>impl</code>，先看其<code>__block_impl</code>结构体的声明。</p>
+<pre><code>struct __block_impl {
+    void *isa;
+    int Flags;
+    int Reserved;
+    void *FuncPtr;
+};
+</code></pre><p>我们从其名称可以联想到某些标志，今后版本升级所需要的区域以及函数指针。(这些会在后面详细说明)。<br>第二个成员变量是<code>Desc</code>指针，以下为其<code>__main_block_desc_0</code>结构体的声明。</p>
+<pre><code>struct __main_block_desc_0 {
+    unsigned long reserved;
+    unsigned long Block_size;
+}
+</code></pre><p>这些也如同其成员名称所示，其结构为今后版本升级所需的区域和Block的大小。<br>那么，下面我们来看看初始化含有这些结构体的<code>__main_block_impl_0</code>结构体的构造函数。(初始化<code>__main_block_impl_0</code>结构体成员的代码)</p>
+<pre><code>__main_block_impl_0(void *fp, struct __main_block_desc_0 *desc, int flags=0) {
+        impl.isa = &amp;_NSConcreteStackBlock;
+        impl.Flags = flags;
+        impl.FuncPtr = fp;
+        Desc = desc;
+    }
+</code></pre><p>用于初始化<code>__block_impl</code>结构体的<code>isa</code>成员的<code>_NSConcreteStackBlock</code>，在我们讲解它之前，先看看该构造函数的调用。</p>
+<pre><code>void (*blk)(void) =
+    (void (*)(void))&amp;__main_block_impl_0(
+        (void *)__main_block_func_0, &amp;__main_block_desc_0_DATA);
+</code></pre><p>因为转换较多，看起来不是很清楚，所以我们去掉转换的部分。如下：</p>
+<pre><code>struct __main_block_impl_0 tmp = __main_block_impl_0(__main_block_func_0, &amp;__main_block_desc_0_DATA);
+
+struct __main_block_impl_0 *blk = &amp;tmp;
+</code></pre><p>由上可知，代码将<code>__main_block_impl_0</code>结构体类型的自动变量，即<code>栈上</code>生成的<code>__main_block_impl_0</code>结构体实例的指针，赋值给<code>__main_block_impl_0</code>结构体指针类型的变量<code>blk</code>。以下为这部分代码对应的最初代码：</p>
+<pre><code>void (^blk)(void) = ^{printf(&quot;Block\n&quot;);};
+</code></pre><p>将Block语法生成的Block赋给Block类型变量<code>blk</code>。它等同于将<code>__main_block_impl_0</code>结构体实例的指针赋给变量<code>blk</code>。它等同于将<code>__main_block_impl_0</code>结构体实例的指针赋给变量<code>blk</code>。该源码中的Block就是<code>__main_block_impl_0</code>结构体类型的自动变量，即栈上生成的<code>__main_block_impl_0</code>结构体实例。<br>下面就看看<code>__main_block_impl_0</code>结构体实例构造函数。</p>
+<pre><code>static struct __main_block_desc_0 __main_block_desc_0_DATA = {
+    0,
+    sizeof(struct __main_block_impl_0)
+};
+</code></pre><p>由此可知，该源码使用Block，即<code>__main_block_impl_0</code>结构体实例的大小，进行初始化。<br>下面看栈上的<code>__main_block_impl_0</code>结构体实例（即Block）是如何根据这些参数进行初始化的。<br>如果张开<code>__main_block_impl_0</code>结构体的<code>__block_impl</code>结构体，可记述为如下形式：</p>
+<pre><code>struct __main_block_impl_0 {
+    void *isa;
+    int Flags;
+    int Reserved;
+    void *FuncPtr;
+    struct __main_block_desc_0* Desc;
+}
+</code></pre><p>该结构体根据构造函数会像下面这样进行初始化。</p>
+<pre><code>isa = &amp;_NSConcreteStackBlock;
+Flags = 0;
+Reserved = 0;
+FuncPtr = __main_block_func_0;
+Desc = &amp;__main_block_desc_0_DATA;
+</code></pre><p>将<code>__main_block_func_0</code>函数指针赋给成员变量FuncPtr。<br>对应的Block部分；<br><code>blk();</code><br>这部分可变换为以下源码：</p>
+<pre><code>((void (*)(struct __block_impl *))(
+    (struct __block_impl *)blk)-&gt;FuncPtr)((struct __block_impl *)blk);
+</code></pre><p>去掉转换部分。<br><code>(*blk-&gt;impl.FuncPtr)(blk);</code><br>这就是简单地使用函数指针调用函数。正如我们刚才确认的，由Block语法转换的<code>__main_block_func_0</code>函数的指针被赋值成员变量<code>FuncPtr</code>中。另外也说明了，<code>__main_block_func_0</code>函数的参数<code>__cself</code>指向Block值。在调用该函数的代码中可以看出Block正是作为参数进行了传递。<br>到此总算是摸清了Block的实质。现在说说<code>_NSConcreteStackBlock</code>到底是什么？<br><code>isa = &amp;_NSConcreteStackBlock;</code><br>将Block指针赋给Block的结构体成员变量isa。<em>为了理解它，首先要了解oc类和对象的实质</em>。其实所谓Block就是oc对象。<br>“<code>id</code>“这一变量类型用于存储oc对象。在oc源码中，虽然可以像使用void *类型那样随意使用<code>id</code>，但此id类型也能够在c语言中声明。在<code>/usr/include/objc/runtime.h</code>中是这样子声明的：</p>
+<pre><code>typedef struct objc_object {
+    Class isa;
+} *id;
+</code></pre><p><code>id</code>为objc_object结构体的指针类型。我们再看看<code>Class</code>。<br><code>typedef struct objc_calss *Class;</code><br><code>Class</code>为<code>objc_class</code>结构体的指针类型。<code>objc_class</code>结构体在<code>/usr/include/objc/runtime.h</code>中声明如下：</p>
+<pre><code>struct objc_class {
+Class isa;
+};
+</code></pre><p>这与<code>objc_object</code>结构体相同。然而，<code>objc_object</code>结构体和<code>objc_class</code>结构体归根结底是在各个对象和类的实现中使用的最基本的结构体。<br>下面我们通过编写简单的oc类声明来确认下。</p>
+<pre><code>@interface MyObject : NSObject
+{
+    int val0;
+    int val1;
+}
+@end
+</code></pre><p>基于<code>objc_object</code>结构体，该类的对象的结构体如下：</p>
+<pre><code>struct MyObject {
+    Class isa;
+    int val0;
+    int val1;
+};
+</code></pre><p><code>MyObject</code>类的实例变量val0和val1被直接声明为对象的结构体成员。“Objective-C中由类生成对象”意味着，像该结构体这样“生成由该类生成的对象的结构体实例”。生成的各个对象，即由该类生成的对象的各个结构体实例，通过成员变量isa保持该类的结构体实例指针。<br>如图2-1所示：<br><img src="http://mrchens.github.io/images/article/2015.04/2015-04-03-os-x-and-ios-kernel-programming-about-the-blocks-2-2-1.png" alt="2-1"></p>
+<p>各类的结构体就是基于<code>objc_class</code>结构体的<code>class_t</code>结构体。<code>class_t</code>结构体在objc4运行时库的runtime/objc-runtime-new.h中声明如下：</p>
+<pre><code>struct class_t {
+    struct class_t *isa;
+    struct class_t *superclass;
+    Cache cache;
+    IMP *vtable;
+    uintptr_t data_NENER_USE;
+};
+</code></pre><p>在oc中，比如NSObject的<code>class_t</code>结构体实例以及NSMutableArray的<code>class_t</code>结构体实例等，均生成并保持各个类的<code>class_t</code>结构体实例。该实例持有声明的成员变量，方法的名称，方法的实现（即函数指针），属性以及父类的指针，并被oc运行时库所使用。<br>到这里，就可以理解oc的类与对象的实质了。<br>那么回到刚才的Block结构体。</p>
+<pre><code>struct __main_block_impl_0 {
+    void *isa;
+    int Flags;
+    int Reserved;
+    void *FuncPtr;
+    struct __main_block_desc_0* Desc;
+}
+</code></pre><p>此<code>__main_block_impl_0</code>结构体相当于基于<code>objc_object</code>结构体的oc类对象的结构体。另外，对其中的成员变量isa进行初始化，具体如下：<br><code>isa = &amp;_NSConcreteStackBlock;</code><br>即<code>_NSConcreteStackBlock</code>相当于<code>class_t</code>结构体实例。在将Block作为oc的对象处理时，关于该类的信息放置于<code>_NSConcreteStackBlock</code>中。<br>现在大家就能理解Block的实质，知道Block即为oc的对象了。</p>
+<h2 id="专栏-C-的this，Objective-c的self"><a href="#专栏-C-的this，Objective-c的self" class="headerlink" title="专栏:C++的this，Objective-c的self"></a><code>专栏:</code>C++的this，Objective-c的self</h2><pre><code>C++中定义类的实例方法如下：
+
+    void MyClass::method(int arg)
+    {
+        printf(&quot;%p %d\n&quot;, this, arg);
+    }
+
+    C++编译器将该方法作为c语言函数来处理。
+    void __ZN7MyClass6methodEi(MyClass *this, int arg);
+    {
+        printf(&quot;%p %d\n&quot;, this, arg);
+    }
+
+    MyClass::method方法的实质就是__ZN7MyClass6methodEi函数。“this”作为第一个参数传递进去。
+    该方法的调用如下：
+
+    MyClass cls;
+
+    cls.method(10);
+    该源码通过c++编译器转换成c语言函数调用的形式：
+
+    struct MyClass cls;
+
+    __ZN7MyClass6methodEi(&amp;cls, 10);
+
+    即this就是MyClass类（结构体）的实例。
+    同样，来看下oc的实例方法：
+
+    - (void) method:(int)arg
+    {
+        NSLog(@&quot;%p %d\n&quot;, self, arg);
+    }
+
+    oc编译器同C++的方法一样，也将该方法作为C语言的函数来处理。
+
+    void _I_MyObject_method_(struct MyObject *self, SEL _cmd, int arg)
+    {
+        NSLog(@&quot;%p %d\n&quot;, self, arg);
+    }
+    与C++中变换结果的this相同，“self”作为第一个参数被传递过去，以下为调用方代码。
+
+    MyObject *obj = [[MyObject alloc] init];
+    [obj method:10];
+
+    如果使用clang的-rewrite-objc选项，则上面源码会转换为：
+
+    MyObject *obj = objc_msgSend(
+        objc_getClass(&quot;MyObject&quot;), sel_registerName(&quot;alloc&quot;));
+
+    obj = objc_msgSend(obj, sel_registerName(&quot;init&quot;));
+
+    obj_msgSend(obj, sel_registerName(&quot;method:&quot;), 10);
+
+    objc_msgSend函数根据指定的对象和函数名，从对象持有类的结构体中检索_|_MyObject_method_函数的指针并调用。
+    此时，objc_msgSend函数的第一个参数obj作为_|_MyObject_method_函数的第一个参数self进行传递。同C++一样，
+    self就是MyObject类的对象。
+</code></pre><h2 id="1-2-截获自动变量："><a href="#1-2-截获自动变量：" class="headerlink" title="1.2 截获自动变量："></a>1.2 <em><code>截获自动变量：</code></em></h2><p>本节主要讲解如何截获自动变量值。通过clang进行代码转换。</p>
+<pre><code>    int main()
+{
+      int dmy = 256;
+      int val = 10;
+      const char *fmt = &quot;val = %d\n&quot;;
+      void (^blk)(void) = ^{printf(fmt, val);};
+
+      val = 2;
+      fmt = &quot;These values were changed. val = %d\n&quot;;
+
+     blk();
+
+      return 0;
+  }
+</code></pre><p>转换后的代码：</p>
+<pre><code>struct __main_block_impl_0 {
+    struct __block_impl impl;
+    struct __main_block_desc_0*Desc;
+    const char *fmt;
+    int val;
+
+    __main_block_impl_0(void *fp, struct __main_block_desc_0 *desc,
+             const char *_fmt, int _val, int flags=0) : fmt(_fmt), val(_val) {
+        impl.isa = &amp;_NSConcreteStackBlock;
+        impl.Flags = flags;
+        impl.FuncPtr = fp;
+        Desc = desc;
+    }
+};
+
+static void __main_block_func_0 (struct __main_block_impl_0 *__cself)
+{
+    const char *fmt = __cself-&gt;fmt;
+    int val = __cself-&gt;val;
+
+    printf(fmt, val);
+}
+
+static struct __main_block_desc_0 {
+    unsigned long reserved;
+    unsigned long Block_size;
+} __main_block_desc_0_DATA = {
+    0,
+    sizeof(struct __main_block_impl_0)
+};
+
+int main()
+{
+    int dmy = 256;
+    int val = 10;
+    const char *fmt = &quot;val = %d\n&quot;;
+    void (*blk)(void) = &amp;__main_block_impl_0(__main_block_func_0,
+     &amp;__main_block_desc_0_DATA, fmt, val);
+
+     return 0;
+}
+</code></pre><p>着与前面转换的代码稍有不同。首先Block语法表达式中使用的自动变量被作为成员变量追加到了<code>__main_block_impl_0</code>结构体中。</p>
+<pre><code>struct __main_block_impl_0 {
+    struct __block_impl impl;
+    struct __main_block_desc_0*Desc;
+    const char *fmt;
+    int val;
+};
+</code></pre><p><code>__main_block_impl_0</code>结构体内声明的成员变量类型与自动变量类型完全相同。注意，_Block语法表达式中没有使用的自动变量不会被追加，如代码中的变量dmy。_Blocks的自动变量截获只针对Block中使用的自动变量。下面看看初始化该结构体实例的构造函数的差异。</p>
+<pre><code>__main_block_impl_0(void *fp, struct __main_block_desc_0 *desc,
+             const char *_fmt, int _val, int flags=0) : fmt(_fmt), val(_val) {
+</code></pre><p>在初始化结构体实例时，根据传递给构造函数的参数对自动变量追加的成员变量进行初始化。以下通过构造函数调用确认其参数。</p>
+<pre><code>void (*blk)(void) = &amp;__main_block_impl_0(__main_block_func_0,
+     &amp;__main_block_desc_0_DATA, fmt, val);
+</code></pre><p>使用执行Block语法时的自动变量<code>fmt</code>和<code>val</code>来初始化<code>__main_block_impl_0</code>结构体实例。<br>即在该源码中，<code>__main_block_impl_0</code>结构体实例的初始化如下。</p>
+<pre><code>impl.isa = &amp;_NSConcreteStackBlock;
+impl.Flags = 0;
+impl.FuncPtr = __main_block_func_0;
+Desc = &amp;__main_block_desc_0_DATA;
+fmt = &quot;val = %d\n&quot;;
+val = 10;
+</code></pre><p>由此可知，在<code>__main_block_impl_0</code>结构体实例（即Block）中，自动变量值被截获。<br>下面再来看下使用Block的匿名函数的实现。最初源码的Block语法如下：<br><code>{printf(fmt, val);}</code><br>该源码可转换为一下函数：</p>
+<pre><code>static void __main_block_func_0 (struct __main_block_impl_0 *__cself)
+{
+    const char *fmt = __cself-&gt;fmt;
+    int val = __cself-&gt;val;
+
+    printf(fmt, val);
+}
+</code></pre><p>在转换后的代码中，截获到<code>__main_block_impl_0</code>结构体实例的成员变量上的自动变量，这些变量在Block语法表达式之前被声明定义。因此原来的源码表达式无需改动便可食用截获的自动变量值值。<br>总的来说，所谓“截获自动变量值”意味着在执行Block语法时，Block语法表达式所使用的自动变量值被保存到Block的结构体实例（即Block自身）中。<br>然而，<a href="http://mrchens.github.io/blog/2015/04/02/os-x-and-ios-kernel-programming-about-the-blocks-1/" title="objective-c高级编程(ios与osx多线程和内存管理)(Blocks-1)">前一篇文章</a>中提到的，Block不能直接使用C语言数组类型的自动变量。如上所诉，截获自动变量时，将值传递给结构体的构造函数进行保存。<br>下面确认在Block中利用c语言数组类型的变量时有可能使用到的源码。首先来看数组传递给Block的结构体构造函数的情况。</p>
+<pre><code>void func(char a[10])
+{
+    printf(&quot;%d\n&quot;, a[0]);
+}
+
+int main()
+{
+    char a[10] = {2};
+    func(a);
+}
+</code></pre><p>该源码可以顺利编译，并正常执行。在之后的构造函数中，将参数赋给成员变量中，这样在变换了Block语法的函数内可由成员变量赋值给自动变量。代码预测如下：</p>
+<pre><code>void func(char a[10])
+{
+    char b[10] = a;
+    printf(&quot;%d\n&quot;,b[0]);
+}
+
+int main()
+{
+    char a[10] = {2};
+    func(a);
+}
+</code></pre><p>该源码将<code>C语言数组类型变量</code>赋值给<code>C语言数组类型变量</code>中，这是不能编译的，虽然变量的类型以及数组的大小都相同，但c语言规范不允许这种赋值。当然，有许多方法可以截获值，但Blocks似乎更遵循c语言规范。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wechat_qrcode.jpg" alt="Zerlz wechat" style="width: 200px; max-width: 100%;"/>
+    <div>扫码关注一个很懒的程序员!</div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>Winter is coming, give me a penny!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>Donate</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechat_reward.JPG" alt="Zerlz WeChat Pay"/>
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay_reward.jpg" alt="Zerlz Alipay"/>
+        <p>Alipay</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Zerlz</li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://mrchens.github.io/2015/04/03/os-x-and-ios-kernel-programming-about-the-blocks-2/" title="objective-c高级编程(ios与osx多线程和内存管理)(Blocks-2)">https://mrchens.github.io/2015/04/03/os-x-and-ios-kernel-programming-about-the-blocks-2/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> unless stating additionally.</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/04/02/markdown-syntax/" rel="next" title="Markdown语法说明">
+                <i class="fa fa-chevron-left"></i> Markdown语法说明
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/04/05/os-x-and-ios-kernel-programming-about-the-blocks-3/" rel="prev" title="objective-c高级编程(ios与osx多线程和内存管理)(Blocks-3)">
+                objective-c高级编程(ios与osx多线程和内存管理)(Blocks-3) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Zerlz" />
+            
+              <p class="site-author-name" itemprop="name">Zerlz</p>
+              <p class="site-description motion-element" itemprop="description">It’s amazing how the unexpected, can take your life and change directions.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">36</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/MrChens" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/LableTag" target="_blank" title="Twitter" rel="external nofollow"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/325751212" target="_blank" title="Weibo" rel="external nofollow"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Blocks的实现"><span class="nav-number">2.</span> <span class="nav-text">1. Blocks的实现:</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-Block的实质"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 Block的实质:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#专栏-C-的this，Objective-c的self"><span class="nav-number">2.2.</span> <span class="nav-text">专栏:C++的this，Objective-c的self</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-截获自动变量："><span class="nav-number">2.3.</span> <span class="nav-text">1.2 截获自动变量：</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zerlz</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a> v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" rel="external nofollow" href="https://theme-next.org">NexT.Gemini</a> v6.3.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://mrchens.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'https://mrchens.github.io/2015/04/03/os-x-and-ios-kernel-programming-about-the-blocks-2/';
+        this.page.identifier = '2015/04/03/os-x-and-ios-kernel-programming-about-the-blocks-2/';
+        this.page.title = 'objective-c高级编程(ios与osx多线程和内存管理)(Blocks-2)';
+        };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://mrchens.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("Rbmck7R3KAm9W7niGDdiqynV-gzGzoHsz", "vkjMmth4lwiUrDQ7gMeA9MkM");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            
+            counter.save(null, {
+              success: function(counter) {
+                
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(counter.get('time'));
+                
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            
+              var newcounter = new Counter();
+              /* Set ACL */
+              var acl = new AV.ACL();
+              acl.setPublicReadAccess(true);
+              acl.setPublicWriteAccess(true);
+              newcounter.setACL(acl);
+              /* End Set ACL */
+              newcounter.set("title", title);
+              newcounter.set("url", url);
+              newcounter.set("time", 1);
+              newcounter.save(null, {
+                success: function(newcounter) {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+                },
+                error: function(newcounter, error) {
+                  console.log('Failed to create');
+                }
+              });
+            
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

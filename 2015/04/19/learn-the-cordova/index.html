@@ -1,0 +1,1590 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/zerlz.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/zerlz.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/zerlz.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/zerlz.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前言： 进了公司，组长要我使用cordova来开发公司的新项目，这里主要记录下学习cordova中的一些东西。内容梗概：cordova的创建项目后目录结构，以及每个文件夹的作用。">
+<meta name="keywords" content="iOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="cordova学习笔记">
+<meta property="og:url" content="https://mrchens.github.io/2015/04/19/learn-the-cordova/index.html">
+<meta property="og:site_name" content="Zerlz&#39;s blog">
+<meta property="og:description" content="前言： 进了公司，组长要我使用cordova来开发公司的新项目，这里主要记录下学习cordova中的一些东西。内容梗概：cordova的创建项目后目录结构，以及每个文件夹的作用。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://mrchens.github.io/images/article/2015.04/2015-04-19-learn-the-cordova-ios-vs-cordova-disk-nav-1.png">
+<meta property="og:image" content="http://mrchens.github.io/images/article/2015.04/2015-04-19-learn-the-cordova-ios-vs-cordova-xcode-nav-1.png">
+<meta property="og:image" content="http://mrchens.github.io/images/article/2015.04/2015-04-19-learn-the-cordova-cordova-disk-nav-1.png">
+<meta property="og:image" content="http://mrchens.github.io/images/article/2015.04/2015-04-19-learn-the-cordova-cordova-disk-nav-2.png">
+<meta property="og:image" content="http://mrchens.github.io/images/article/2015.04/2015-04-19-learn-the-cordova-cordova-xcode-nav-1.png">
+<meta property="og:image" content="http://mrchens.github.io/images/article/2015.04/2015-04-19-learn-the-cordova-cordova-xcode-nav-2.png">
+<meta property="og:updated_time" content="2016-12-27T05:36:36.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="cordova学习笔记">
+<meta name="twitter:description" content="前言： 进了公司，组长要我使用cordova来开发公司的新项目，这里主要记录下学习cordova中的一些东西。内容梗概：cordova的创建项目后目录结构，以及每个文件夹的作用。">
+<meta name="twitter:image" content="http://mrchens.github.io/images/article/2015.04/2015-04-19-learn-the-cordova-ios-vs-cordova-disk-nav-1.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://mrchens.github.io/2015/04/19/learn-the-cordova/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>cordova学习笔记 | Zerlz's blog</title>
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-112744328-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-112744328-1');
+</script>
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2250627e2fe66049584e97edac149bb6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Zerlz's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">Yesterday once more</h1>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/aboutme/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />About</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags<span class="badge">15</span></a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />Categories<span class="badge">9</span></a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives<span class="badge">36</span></a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-sitemap">
+    <a href="/sitemap.xml" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />Sitemap</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />Search</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mrchens.github.io/2015/04/19/learn-the-cordova/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zerlz">
+      <meta itemprop="description" content="It’s amazing how the unexpected, can take your life and change directions.">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zerlz's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">cordova学习笔记
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2015-04-19 19:31:28" itemprop="dateCreated datePublished" datetime="2015-04-19T19:31:28+08:00">2015-04-19</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2016-12-27 13:36:36" itemprop="dateModified" datetime="2016-12-27T13:36:36+08:00">2016-12-27</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/读书笔记-ReadingNote/" itemprop="url" rel="index"><span itemprop="name">读书笔记(ReadingNote)</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2015/04/19/learn-the-cordova/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2015/04/19/learn-the-cordova/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2015/04/19/learn-the-cordova/" class="leancloud_visitors" data-flag-title="cordova学习笔记">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Views: </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言："><a href="#前言：" class="headerlink" title="前言："></a><code>前言：</code></h1><blockquote>
+<p>进了公司，组长要我使用cordova来开发公司的新项目，这里主要记录下学习cordova中的一些东西。<br>内容梗概：cordova的创建项目后目录结构，以及每个文件夹的作用。<br><a id="more"></a>    </p>
+</blockquote>
+<h2 id="1-cordova创建项目的目录结构"><a href="#1-cordova创建项目的目录结构" class="headerlink" title="1. cordova创建项目的目录结构:"></a><strong>1.</strong> <strong><code>cordova创建项目的目录结构</code></strong>:</h2><blockquote>
+<p>这里是一些资料的链接地址<br><a href="https://github.com/apache/cordova-cli/" target="_blank" rel="noopener">cordova-cli</a><br><a href="http://cordova.apache.org/docs/en/4.0.0/guide_cli_index.md.html#The%20Command-Line%20Interface_using_merges_to_customize_each_platform" target="_blank" rel="noopener">Apache Cordova API Documentation</a><br><a href="http://ccoenraets.github.io/cordova-tutorial/create-cordova-project.html" target="_blank" rel="noopener">Apache Cordova Tutorial</a><br><a href="http://devgirl.org/2013/11/12/three-hooks-your-cordovaphonegap-project-needs/" target="_blank" rel="noopener">Three hooks your Cordova/PhoneGap project needs</a>  </p>
+<blockquote>
+<p><a href="http://blog.csdn.net/mociml/article/details/10540623" target="_blank" rel="noopener">Cordova CLI源码分析（一）——简介</a><br><a href="http://www.360doc.com/content/14/0506/09/16688557_375110717.shtml" target="_blank" rel="noopener">cordova3.x基础（1）</a>  </p>
+</blockquote>
+</blockquote>
+<p>A Cordova application built with <code>cordova-cli</code> will have following directory structure:<br>一个标准的用cordova CLI创建的应用程序的物理目录文件夹的结构如下:</p>
+<pre><code>APPName/
+|-- config.xml
+|-- hooks/
+|-- merges/
+| | |-- android/
+| | |-- blackberry10/
+| | `-- ios/
+|-- www/
+|-- platforms/
+| |-- android/
+| |-- blackberry10/
+| `-- ios/
+`-- plugins/
+</code></pre><h2 id="hooks"><a href="#hooks" class="headerlink" title="hooks/"></a>hooks/</h2><p>这个目录下可能会包含自定义的cordova－cli脚本。这个目录以前一般存在于<code>.cordova/hooks</code>，但是现在已经转移到项目的根目录下了。任何你加到这里的脚本将被执行对应于目录名的命令之前和之后。对于整合自己构建的系统或者版本控制系统时很有用的。  </p>
+<h2 id="merges"><a href="#merges" class="headerlink" title="merges/"></a>merges/</h2><p>平台特殊的网页资源（HTML，CSS和JavaScript文件等）被包含在该目录下合适的子文件夹下。当运行<code>prepare</code>时这些会被部署到合适的本地目录。放在<code>merges/</code>下的文件将会优先匹配相关平台在<code>www/</code>文件下的文件。举个例子，假设一个项目的结构如下：</p>
+<pre><code>merges/
+|-- ios/
+| `-- app.js
+|-- android/
+| `-- android.js
+www/
+`-- app.js
+</code></pre><p>在编译Android和iOS项目时，Android应用程序会包含<code>app.js</code>和<code>android.js</code>。然而iOS应用程序只会包含一个<code>app.js</code>,而且这个是来自<code>merges/ios/app.js</code>中的，优先于<code>www/</code>下的“正常的”<code>app.js</code>.  </p>
+<h2 id="www"><a href="#www" class="headerlink" title="www/"></a>www/</h2><p>包含这个项目网页资源，例如.html,.css和.js文件等。这些是你主要的应用程序资源。当运行<code>cordova prepare</code>时，它们将会被拷贝到每一个平台下的<code>www</code>目录下。</p>
+<h2 id="platforms"><a href="#platforms" class="headerlink" title="platforms/"></a>platforms/</h2><p>每个平台加到你的应用中时，将会生成原生应用的项目结构布局在这个目录下。</p>
+<h2 id="plugins"><a href="#plugins" class="headerlink" title="plugins/"></a>plugins/</h2><p>任何加入的插件将会被提取或者复制到这个目录下。</p>
+<h2 id="config-xml"><a href="#config-xml" class="headerlink" title="config.xml"></a>config.xml</h2><p>这个是你需要修改你应用程序元数据时需要编辑的文件。任何时间当你运行<code>cordova-cli</code>命令，这个工具将会查找<code>config.xml</code>的内容并且使用所有从这个文件中定义的本地应用程序的相关的信息。’cordova-cli’支持通过下面这些在<code>config.xml</code>文件中元素来改变你的应用程序的数据：</p>
+<ul>
+<li>展示给用户的应用程序名字可以通过修改<code>config.xml</code>中的<code>&lt;name&gt;</code>元素来修改名字。</li>
+<li>包名（又称束标识符(bundle identifier)或者应用程序id(application id)）可以通过修改在<code>&lt;widget&gt;</code>元素顶层上的<code>id</code>属性来修改包名。</li>
+<li>版本可以通过修改在<code>&lt;widget&gt;</code>元素顶层上的<code>version</code>属性来修改版本。</li>
+<li>白名单通过使用<code>&lt;access&gt;</code>元素来修改。确定在你的<code>&lt;access&gt;</code>节点下的<code>origin</code>属性中指定的URL是有效的（你可以使用<code>*</code>来通配所有的网站）。</li>
+<li>平台特殊的偏好可以通过<code>&lt;preference&gt;</code>标签来自定义。<a href="docs.phonegap.com">相关文档</a></li>
+<li>可以通过<code>&lt;content src&gt;</code>元素＋属性来定义你应用程序的进入／启动页面。</li>
+</ul>
+<hr>
+<p>讲下在iOS中的cordova项目和iOS原生项目的文件目录的差别，因为自己也是菜鸟所以不一定讲的都对，很大的可能就是实际和我说的完全不是那么回事。<br>由于创建cordova的方式有2种：  </p>
+<ul>
+<li>通过cordova cli 命令行直接创建cordova项目</li>
+<li>先创建iOS原生项目然后再embedding进去cordova  </li>
+</ul>
+<h2 id="1-看截图-通过cordova-cli-命令行直接创建cordova项目-："><a href="#1-看截图-通过cordova-cli-命令行直接创建cordova项目-：" class="headerlink" title="1.看截图(通过cordova cli 命令行直接创建cordova项目)：  "></a>1.看截图(通过cordova cli 命令行直接创建cordova项目)：  </h2><p>先看看原生应用程序<code>nativeIos</code>和cordova应用程序<code>NativeCordova</code>在物理路径上的不同，（上面的文件展示的是<code>nativeIos</code>，下面文件展示的是<code>NativeCordova</code>）如下图  </p>
+<p><img src="http://mrchens.github.io/images/article/2015.04/2015-04-19-learn-the-cordova-ios-vs-cordova-disk-nav-1.png" alt="Ios vs Cordova Disk Nav 1" title="Disk Nav 2"></p>
+<p>图片上层的<code>nativeIos</code>的文件结构.  </p>
+<ul>
+<li><code>1</code>(指nativeIos)表示是你应用程序存放路径的开始(也就是你应用程序的根目录).  </li>
+<li><code>2</code>(指nativeIos,对应于xcode导航栏中黄色的文件夹(黄色的文件夹代表在逻辑上的文件夹而不是物理上的文件夹。蓝色的代表物理文件夹))这里主要就是放一些类文件和其他配置文件。（比如你自定义的view类等）  </li>
+</ul>
+<p>图片下层的<code>NativeCordova</code>的文件结构。  </p>
+<ul>
+<li><code>1</code>(new)表示是你cordova应用程序存放的路径的开始(也就是你应用程序的根目录)。 </li>
+<li><code>1.1</code>中的<ul>
+<li><code>config.xml</code> 配置全局(各个平台)的应用程序的信息包含用于生成和分发给应用程序的重要的元数据(metadata)。比如修改展示给用的应用程序的名字。</li>
+<li><code>hooks</code> 存放自定义的cordova-cli脚本(具体是干什么用的得再看看资料才行)</li>
+<li><code>platforms</code> 存放cordova项目各个平台的原生项目。比如你有个android和ios平台的，那么在这个目录下会创建对应于ios和android的项目目录。</li>
+<li><code>plugins</code>存放你加入的插件文件</li>
+<li><code>www</code> 是你应用程序(所有平台的)家页面(home page),存放各种的资源文件，例如html，css和js，img文件等。这个是根据传统的web开发的文件命名习惯来的。这些资源(assets)会被存储在设备的本地文件系统中而不是在远程服务上。复制每个平台内部的子目录，官方建议应该编辑这个<code>www</code>而不是各个平台下的www文件。因为运行<code>cordova prepare</code>时会把当前目录下的东西拷贝到每个平台下的<code>www</code>目录下。如果你要使用版本控制，那么应该在<code>www</code>同级的目录中加一个<code>merges</code>文件夹，这个可以用来定制针对不同平台的<code>www</code>资源文件。</li>
+</ul>
+</li>
+<li><code>1.2</code>（ios）表示是你cordova框架下的iOS平台的应用程序存放路径的开始(也就是你ios平台应用程序的根目录)。(和图片上面的<code>1</code>是一样的功能)</li>
+<li><code>2</code>(NativeCordova)和图片上层的<code>2</code>一样，但是多出了下面几个文件夹<ul>
+<li><code>cordova</code> 暂时不知道是干什么用的</li>
+<li><code>CordovaLib</code> 存放iOS平台的CordovaLib库主要是些用于和原生<code>沟通</code>的类文件。</li>
+<li><code>platform_www</code> 存放对应平台的js</li>
+<li><code>www</code> 存放项目的网页资源文件，一般是从cordova根目录下的<code>www</code>目录中自动拷贝过来的。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><img src="http://mrchens.github.io/images/article/2015.04/2015-04-19-learn-the-cordova-ios-vs-cordova-xcode-nav-1.png" alt="Ios vs Cordova Xcode Nav 1" title="Disk Nav 2"></p>
+<p>图片左边的是<strong>原生的</strong>iOS应用，右边的是使用<strong>Cordova的</strong>iOS应用。  </p>
+<ul>
+<li>原生的目录基本上和它的物理目录没什么大的变化，多了个<code>Supporting File</code>逻辑文件夹，这里主要放些资源文件和类库。  <ul>
+<li><code>nativeIos</code>文件夹用来存放源代码的。  </li>
+<li><code>Supporting File</code>，存放资源文件和一些官方的框架。  </li>
+<li><code>nativeIos Tests</code>,存放测试的配置文件  </li>
+<li><code>Products</code>,存放类似android的apk文件(编译生成的二进制文件)，但不能像apk一样拿来安装运行运行。  </li>
+</ul>
+</li>
+<li>非原生的目录和它的物理文件目录差别挺大的。<ul>
+<li><code>config.xml</code> 是cordova根目录下的config.xml（最外层的，应该说是负责每个平台的配置文件）<ul>
+<li>而<code>Staging/config.xml</code>下的<code>config.xml</code>才是对应于ios下的配置文件。</li>
+</ul>
+</li>
+<li><code>www</code>是你应用程序(所有平台的)家页面(home page),存放各种的资源文件，例如html，css和js，img文件等。这个是根据传统的web开发的文件命名习惯来的。这些资源(assets)会被存储在设备的本地文件系统中而不是在远程服务上。复制每个平台内部的子目录，官方建议应该编辑这个<code>www</code>而不是各个平台下的www文件。因为运行<code>cordova prepare</code>时会把当前目录下的东西拷贝到每个平台下的<code>www</code>目录下。<ul>
+<li>而<code>Staging/www</code>则存放的是对应于ios平台的网页资源文件，就是当你在<code>mergers</code>文件夹中加入了特定于ios平台的资源。例如在<code>merges/ios</code>目录下加了一个<code>iosIndex.html</code>，那么<code>Staging/www</code>这里就会相应地多出了一个<code>iosIndex.html</code>。</li>
+<li><code>CordovaLib.xcodeproj</code>则对应于上图中下层中的<code>cordovaLib</code>物理目录，用于和原生<code>沟通</code>的类文件。</li>
+<li><code>CordovaLib.xcodeproj/Classes</code>存放些用于和原生<code>沟通</code>的类文件。</li>
+<li><code>CordovaLib.xcodeproj/Other Sources</code> 不知道干什么的，应该是存放配置文件什么的。</li>
+<li><code>CordovaLib.xcodeproj/Frameworks</code> 存放需要用到的系统框架。</li>
+<li><code>CordovaLib.xcodeproj/products</code> 存放编译好的二进制文件</li>
+</ul>
+</li>
+<li><code>Classes</code>存放iOS原生的类文件或者源代码。</li>
+<li><code>Plugins</code>存放在ios平台的插件文件。</li>
+<li><code>Other Sources</code> 存放配置文件什么的。</li>
+<li><code>Resources</code> 存放一些资源文件，图片等。</li>
+<li><code>Frameworks</code> 存放原生代码需要用到的官方框架。</li>
+<li><code>Products</code> 存放编译生成的二进制文件，但不能像apk一样拿来安装运行运行。</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-看截图-先创建iOS原生项目然后再embedding进去cordova"><a href="#2-看截图-先创建iOS原生项目然后再embedding进去cordova" class="headerlink" title="2.看截图(先创建iOS原生项目然后再embedding进去cordova)"></a>2.看截图(先创建iOS原生项目然后再embedding进去cordova)</h2><p><img src="http://mrchens.github.io/images/article/2015.04/2015-04-19-learn-the-cordova-cordova-disk-nav-1.png" alt="Cordova Disk Nav 1" title="Disk Nav 1"><br>上图中左边的(<code>NativeCordova</code>)文件目录是使用<code>cordova cli</code>(4.0.0版本的)命令行创建的标准的cordova项目的文件目录结构。<br>图中间的文件(<code>phoneMgr</code>)目录是公司以前创建的标准的cordova项目，可能是因为<code>cordova cli</code>版本的不同所以少了最新版本中的<code>platform_www</code>文件夹。<br>图右边的文件(<code>TMA</code>)是我新建一个原生的iOS项目(<code>TMA</code>)然后模仿图左边的(<code>NativeCordova</code>)文件目录结构从组长给的tma_ios中加了<code>TMA</code>,<code>CordovaLib</code>,<code>cordova</code>到原生的<code>TMA</code>中。然后从标准的左边的(<code>NativeCordova</code>)文件目录中拷贝了<code>www</code>,<code>platform_www</code>和<code>config.xml</code>到原生的<code>TMA</code>中。当然期间还有根据plugins中的插件像组长要了需要用到的plugins插件，然后再xcode中配置的需要添加的系统框架库。(说到这里就像吐槽一句，为什么组长要给我不完整的！！！)<br><img src="http://mrchens.github.io/images/article/2015.04/2015-04-19-learn-the-cordova-cordova-disk-nav-2.png" alt="Cordova Disk Nav 2" title="Disk Nav 2"><br>这张图中展示的是使用<code>cordova cli</code>(4.0.0版本的)命令行创建的标准的(<code>NativeCordova</code>)下对应的源<code>new/www</code>的内容以及<code>new/platforms/ios/www</code>的内容。</p>
+<hr>
+<p>这张图中左边的(<code>TMA</code>)展示的是通过先创建iOS原生项目然后再embedding进去cordova后的在IDE（xcode）中的目录结构。<br>可以看见和中间的(<code>phoneMgr</code>公司的旧版本cordova cli创建的)目录差别不大,多了个<code>staging</code>逻辑文件夹和<code>merges</code><br>和右边的保持了一致。<br><img src="http://mrchens.github.io/images/article/2015.04/2015-04-19-learn-the-cordova-cordova-xcode-nav-1.png" alt="Cordova Xcode Nav 1" title="Disk Nav 1"><br>下图中展示的是具体展开了<code>www</code>和<code>CordovaLib.xcodeproj</code>下的目录。<br><img src="http://mrchens.github.io/images/article/2015.04/2015-04-19-learn-the-cordova-cordova-xcode-nav-2.png" alt="Cordova Xcode Nav 2" title="Disk Nav 2"></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wechat_qrcode.jpg" alt="Zerlz wechat" style="width: 200px; max-width: 100%;"/>
+    <div>扫码关注一个很懒的程序员!</div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>Winter is coming, give me a penny!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>Donate</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechat_reward.JPG" alt="Zerlz WeChat Pay"/>
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay_reward.jpg" alt="Zerlz Alipay"/>
+        <p>Alipay</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Zerlz</li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://mrchens.github.io/2015/04/19/learn-the-cordova/" title="cordova学习笔记">https://mrchens.github.io/2015/04/19/learn-the-cordova/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> unless stating additionally.</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/04/06/os-x-and-ios-kernel-programming-about-the-blocks-4/" rel="next" title="objective-c高级编程(ios与osx多线程和内存管理)(Blocks-4)">
+                <i class="fa fa-chevron-left"></i> objective-c高级编程(ios与osx多线程和内存管理)(Blocks-4)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/04/20/apache-cordova-tutorial-1/" rel="prev" title="Apache Cordova 教程">
+                Apache Cordova 教程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Zerlz" />
+            
+              <p class="site-author-name" itemprop="name">Zerlz</p>
+              <p class="site-description motion-element" itemprop="description">It’s amazing how the unexpected, can take your life and change directions.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">36</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/MrChens" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/LableTag" target="_blank" title="Twitter" rel="external nofollow"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/325751212" target="_blank" title="Weibo" rel="external nofollow"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言："><span class="nav-number">1.</span> <span class="nav-text">前言：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-cordova创建项目的目录结构"><span class="nav-number">1.1.</span> <span class="nav-text">1. cordova创建项目的目录结构:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hooks"><span class="nav-number">1.2.</span> <span class="nav-text">hooks/</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#merges"><span class="nav-number">1.3.</span> <span class="nav-text">merges/</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#www"><span class="nav-number">1.4.</span> <span class="nav-text">www/</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#platforms"><span class="nav-number">1.5.</span> <span class="nav-text">platforms/</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#plugins"><span class="nav-number">1.6.</span> <span class="nav-text">plugins/</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#config-xml"><span class="nav-number">1.7.</span> <span class="nav-text">config.xml</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-看截图-通过cordova-cli-命令行直接创建cordova项目-："><span class="nav-number">1.8.</span> <span class="nav-text">1.看截图(通过cordova cli 命令行直接创建cordova项目)：  </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-看截图-先创建iOS原生项目然后再embedding进去cordova"><span class="nav-number">1.9.</span> <span class="nav-text">2.看截图(先创建iOS原生项目然后再embedding进去cordova)</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zerlz</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a> v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" rel="external nofollow" href="https://theme-next.org">NexT.Gemini</a> v6.3.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://mrchens.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'https://mrchens.github.io/2015/04/19/learn-the-cordova/';
+        this.page.identifier = '2015/04/19/learn-the-cordova/';
+        this.page.title = 'cordova学习笔记';
+        };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://mrchens.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("Rbmck7R3KAm9W7niGDdiqynV-gzGzoHsz", "vkjMmth4lwiUrDQ7gMeA9MkM");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            
+            counter.save(null, {
+              success: function(counter) {
+                
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(counter.get('time'));
+                
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            
+              var newcounter = new Counter();
+              /* Set ACL */
+              var acl = new AV.ACL();
+              acl.setPublicReadAccess(true);
+              acl.setPublicWriteAccess(true);
+              newcounter.setACL(acl);
+              /* End Set ACL */
+              newcounter.set("title", title);
+              newcounter.set("url", url);
+              newcounter.set("time", 1);
+              newcounter.save(null, {
+                success: function(newcounter) {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+                },
+                error: function(newcounter, error) {
+                  console.log('Failed to create');
+                }
+              });
+            
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

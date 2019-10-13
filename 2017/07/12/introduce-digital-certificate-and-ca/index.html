@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/zerlz.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/zerlz.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/zerlz.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/zerlz.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前言自从苹果要求所有开发者在2017年1月1日前，要开启ATS功能（App Transport Security）来强制App在链接web服务的时候通过HTTPS链接而不是HTTP，以此来保护用户数据在传输过程中的安全。然后还有Mozilla决定停止信任沃通和StartCom证书，以及最近测试调试需要能看到https传输内容(可以通过wireshark和charles以及Fiddler来显示htt">
+<meta name="keywords" content="iOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数字证书及CA常识介绍">
+<meta property="og:url" content="https://mrchens.github.io/2017/07/12/introduce-digital-certificate-and-ca/index.html">
+<meta property="og:site_name" content="Zerlz&#39;s blog">
+<meta property="og:description" content="前言自从苹果要求所有开发者在2017年1月1日前，要开启ATS功能（App Transport Security）来强制App在链接web服务的时候通过HTTPS链接而不是HTTP，以此来保护用户数据在传输过程中的安全。然后还有Mozilla决定停止信任沃通和StartCom证书，以及最近测试调试需要能看到https传输内容(可以通过wireshark和charles以及Fiddler来显示htt">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://mrchens.github.io/images/article/2017.07/2017-07-12-12306certificate.png">
+<meta property="og:updated_time" content="2017-07-21T13:02:07.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数字证书及CA常识介绍">
+<meta name="twitter:description" content="前言自从苹果要求所有开发者在2017年1月1日前，要开启ATS功能（App Transport Security）来强制App在链接web服务的时候通过HTTPS链接而不是HTTP，以此来保护用户数据在传输过程中的安全。然后还有Mozilla决定停止信任沃通和StartCom证书，以及最近测试调试需要能看到https传输内容(可以通过wireshark和charles以及Fiddler来显示htt">
+<meta name="twitter:image" content="http://mrchens.github.io/images/article/2017.07/2017-07-12-12306certificate.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://mrchens.github.io/2017/07/12/introduce-digital-certificate-and-ca/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>数字证书及CA常识介绍 | Zerlz's blog</title>
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-112744328-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-112744328-1');
+</script>
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2250627e2fe66049584e97edac149bb6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Zerlz's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">Yesterday once more</h1>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/aboutme/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />About</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags<span class="badge">15</span></a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />Categories<span class="badge">9</span></a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives<span class="badge">36</span></a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-sitemap">
+    <a href="/sitemap.xml" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />Sitemap</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />Search</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mrchens.github.io/2017/07/12/introduce-digital-certificate-and-ca/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zerlz">
+      <meta itemprop="description" content="It’s amazing how the unexpected, can take your life and change directions.">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zerlz's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">数字证书及CA常识介绍
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2017-07-12 11:08:15" itemprop="dateCreated datePublished" datetime="2017-07-12T11:08:15+08:00">2017-07-12</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2017-07-21 21:02:07" itemprop="dateModified" datetime="2017-07-21T21:02:07+08:00">2017-07-21</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/常识-Common-sense/" itemprop="url" rel="index"><span itemprop="name">常识(Common sense)</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/07/12/introduce-digital-certificate-and-ca/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/07/12/introduce-digital-certificate-and-ca/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/07/12/introduce-digital-certificate-and-ca/" class="leancloud_visitors" data-flag-title="数字证书及CA常识介绍">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Views: </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><code>前言</code><br>自从苹果要求所有开发者在2017年1月1日前，要开启ATS功能（App Transport Security）来强制App在链接web服务的时候通过HTTPS链接而不是HTTP，以此来保护用户数据在传输过程中的安全。然后还有Mozilla决定停止信任沃通和StartCom证书，以及最近测试调试需要能看到https传输内容(可以通过wireshark和charles以及Fiddler来显示https的传输内容).<br>虽然能用这些工具看到https的传输内容，但是我对这些CA相关的东西不是很懂。<br>所以觉得有必要给自己扫盲CA证书的基础知识。<br>本文就是博主自己去查阅资料并整理相关的知识点来梳理这些关系，如果哪里不对或者理解错误还希望能帮忙指出。如果能给出文档出处的链接，感恩。</p>
+<a id="more"></a>
+<h1 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h1><ul>
+<li>举个栗子</li>
+<li>专业术语</li>
+<li>证书作用</li>
+<li>总结</li>
+</ul>
+<h1 id="举个栗子"><a href="#举个栗子" class="headerlink" title="举个栗子"></a>举个栗子</h1><p>因为证书体系的相关知识比较枯燥、晦涩。所以先用个通俗易懂的栗子来说明这个身份认证机制。<br><!-- 彼采葛兮，一日不见，如三月兮。 彼采萧兮，一日不见，如三秋兮。 彼采艾兮，一日不见，如三岁兮 --></p>
+<h2 id="普通的情书"><a href="#普通的情书" class="headerlink" title="普通的情书"></a><em>普通的情书</em></h2><p>想必大家都写过情书或听说过写情书吧？<br>假设家在东边的Jack要表达对家在西边的Rose的思念之情，遂决定写一封情书(情书的内容:一日不见,如三秋兮.)随便找了个要去西边的送信人(Old Wang)带给Rose。<br>概括下这个场景的需求：Jack能将一日不见,如三秋兮的思念之情传达给Rose。</p>
+<ul>
+<li><p>期望的寄送过程</p>
+<p>  Old Wang将信完整(也没有偷窥信件的内容)送到Rose手上，Rose看完信后很开心。</p>
+</li>
+<li><p>实际上寄送过程可能是这样子的</p>
+<ul>
+<li>Old Wang出于好奇偷窥了信件的内容，然后再送到Rose手上，Rose看完信后很开心。</li>
+<li>Old Wang刚好是Rose家隔壁的，他不仅偷窥了信件的内容，还修改了信件的内容为：我不喜欢你了，分手吧，然后再送到Rose手上。Rose看完信后很伤心。Rose写了封信询问Jack为什么，然后让Old Wang送到Jack手上，Old Wang故技重施又修改了信件的内容。最后Old Wang通过这种在送信过程中修改信件内容成功让Jack和Rose分手，并趁虚而入成为了Rose男朋友。</li>
+</ul>
+</li>
+</ul>
+<p>从上面的描述来看问题是出现在送信人的身上，但即使找个正义、正直的送信人也有可能在送信的途中信件被Old Wang调包。所以问题就变怎样让收到手的信件证明它就是Jack寄来给Rose(或Rose寄给Jack的)！如果能证明这封信件确实是Jack写给Rose(或Rose写给Jack的)。<br><del>某些爱思考的同学会问了，那如果送信人被杀了岂不是送不到？就算信件能送到Rose手并且证明了信件确实是Jack所写的但也有可能已经被偷窥了啊喂？<br>阿席巴！爱思考的童鞋说的极是，是我前提没说好。关于偷窥的事情其实是为了https做铺垫的，我们这里现在主要是介绍数字证书和CA的常识，所以关键的地方就是：证明xx东西确实是xx东西。用例子里面的话说就是：证明Jack情书确实是Jack情书(即情书确实是Jack所写，并且没有被篡改过)。因为我们需求就是：Jack能将一日不见,如三秋兮的思念之情传达给Rose。</del></p>
+<h2 id="有加盖章的情书"><a href="#有加盖章的情书" class="headerlink" title="有加盖章的情书"></a><em>有加盖章的情书</em></h2><p>好，回到刚才的栗子。那怎么证明这封信件是Jack寄给Rose的呢？常用的办法就是在信件上敲上Jack的印章。，这样子当Rose收到情书一看上面的印章是Jack的，Rose就相信这封信件确实是Jack所发来的。那这个印章就是用来证明这个被送达的情书信件确实是Jack写给Rose的情书信件的东西。<br><del>说到这，爱思考的童鞋又会问了：万一Jack的印章是伪造的，怎么办捏？<br>就喜欢爱思考的童鞋。在此栗子中，我先声明，先假设印章是难以伪造的，不然只能凉拌了</del></p>
+<h2 id="引入镖局的情书"><a href="#引入镖局的情书" class="headerlink" title="引入镖局的情书"></a><em>引入镖局的情书</em></h2><p>好，回到刚才的话题。如果Rose是个很受欢迎的大美女，并且还是单身(假设Jack还不是Rose的男朋友)，有着一大堆追求者(Jack,Jack1,Jack2,Jack3)，那么Rose就要很烦恼了。因为她要记得住每个Jack的印章是什么样子的,不然弄混了或者其中有个印章被Old Wang调包都不知道，非常的消耗脑容量。<br>所以我们的镖局发现了这个商机。开设了一项代理送信的业务。</p>
+<p>  那么剧情的发展就是:家在东边的Jack要表达对家在西边的Rose的思念之情，遂决定写一封情书(情书的内容:一日不见,如三秋兮.)于是去镖局签订镖单(镖单上盖了镖局的印章(镖章)和Jack的印章(J章))并写明：镖章信任J章(即J章确实是Jack的而不是Jack1或者其他人的)让镖局负责把信件(信件上盖了Jack的印章)带给Rose,然后Rose从镖师手中拿到镖单和信件，先验证镖单上的镖章是否是真的，确认是真的以后再对比镖单上的J章和信件伤的J章是否是一致的如果是一致的就认为这确实是Jack写来的信件。<br>  <del>说到这，爱抬杠的同学会反驳问：万一镖局是假的或者镖章是假的，咋办捏？在此，我先声明，在本例中，先假设镖局和镖章都是是难以假冒的，否则我的故事没法说下去，还是只能凉拌了</del></p>
+<h1 id="专业术语"><a href="#专业术语" class="headerlink" title="专业术语"></a>专业术语</h1><p>萝莉啰嗦了半天，终于举完了一个我自认为比较通俗易懂的栗子。如果看到这，你还是不知道这个栗子在说啥。那下面的内容，可以不用浪费时间看了。<br>先把上面的栗子和相关的名词做个解释。</p>
+<ul>
+<li>什么是证书?<br>“证书”(<code>digital certificate</code>;<code>public key certificate</code>)(专业的解释看<a href="https://en.wikipedia.org/wiki/Public_key_certificate" target="_blank" rel="noopener">证书</a>)<br>它是用来证明xx东西确实是xx东西的一个东西。用上面的栗子来说就是印章。通过镖章，可以证明这个人(镖单)确实是镖局的，通过J章可以证明这封信件确实是Jack所写的。<br>理论上，人人都可以自己做印章，即人人都可以自己做个证书。那如何防止Old Wang自己制作J章来骗Rose，即如何防止坏人自己制作证书出来骗人呢？这就要涉及到CA了。</li>
+<li>什么是CA？<br>CA是<code>Certificate Authority</code>的缩写，也叫<code>证书授权中心</code>(专业的解释看<a href="https://en.wikipedia.org/wiki/Certificate_authority" target="_blank" rel="noopener">CA</a>)<br>它是负责管理和签发证书的第三方机构，拿栗子里面的来说这个——CA就是镖局。一般来说，CA必须是所有行业和所有公众都信任的、认可的。因此它必须具有足够的权威性。就好比Jack和Rose必须信任镖局，才会找镖局作为印章的中介。</li>
+<li>什么是CA证书？<br>CA证书，顾名思义，就是CA颁发的证书。<br>前面说了，人人都可以自己制作证书，但是你自己制作出来的证书是没有用的最多只能在自己的内部流通使用，因为你<strong>不是</strong>权威的CA机构，你自己弄的证书不具备权威性其他人是不认同你的。<br>拿栗子来说，就是(假设Jack去了Old Wang假扮的镖局寄信件)Old Wang自己刻了一个镖章，盖到镖单上，然后送到Rose手中，但是Rose一看镖章不是镖局的，知道是假的镖局，就不理睬了。Old Wang的阴谋就没法继续了。<br>如若没有特殊说明，后面提及的证书都是指CA证书。</li>
+<li>什么是证书之间的信任关系？<br>就是用一个证书来证明另外一个证书是真的。就好比栗子中镖单上盖了镖章和J章，并注明镖章信任J章是类似的。</li>
+<li>什么是证书信任链？<br>因为证书之间的信任关系是可以嵌套的，所以会存在一个叫做证书的信任连的关系。比如镖局没空送信，于是找了投递员A1并做了镖章信任A1章，投递员A1也没空送信，于是找了投递员A2并做了A1章A2章…这个就叫做证书的信任链。只要你信任链上的第一个证书，那么链上在第一个以后的证书，都是可以信任的。</li>
+<li>什么是根证书？<br>根证书<code>root certificate</code>(专业的解释看<a href="https://en.wikipedia.org/wiki/Root_certificate" target="_blank" rel="noopener">root certificate</a>)<br>为了说清楚根证书是什么，我再来举个复杂的栗子。<br>假设你要买iPhone,你会去苹果的官网买，然后在官网(A)看见说可以直接去本地的直营店买因为官网指定了信任本地的直营店(A1)。因为你信任苹果的官网，所以你去它指定的本地直营店买，然后你在直营店买了iPhone，然后你可能还要买手机壳和蓝牙耳机和贴膜。于是问了直营店(A1)哪里能买手机壳、蓝牙耳机、贴膜，于是直营店告诉你(A1)信任xx手机壳专卖店(B1)、(A1)信任xx蓝牙耳机专卖店(C1)、(A1)信任xx贴膜专卖店(D1)。然后因为这个信任链接(A信任A1，A1信任B1，A1信任C1，A1信任D1)你去了xx手机壳专卖店、xx蓝牙耳机专卖店、xx贴膜专卖店购买对应的东西。(当然D1还能继续往下信任，比如D1信任E2:一个祖传贴膜技术的小哥)<br>上面说的这些A、A1、B1、C1、D1、E2它们之间构成了个树形的关系。<br>如果画成图就是一个树形的关系图，有机会再画。<br>那么处于树根的位置的证书，就是所谓<code>根证书</code>。出了根证书，其他的证书都需要它的上一级证书来证明自己是可信任的证书。爱思考的同学可能就会马上追问:其他证书都需要上一级证书来证明自己是可信任的，那么根证书呢？它可是位于最顶上的没有上一级证书来证明它。<br>哈哈，没错，没有其他证书能证明根证书是可信任的，所以根证书是自己证明自己是可信任的(即根证书不需要证明)。<br>哈哈。马上有同学会想到。那如果根证书出了问题(不可信任了)，那么整个证书链上的证书都是不可信任的。就好像多米诺骨牌牌一样第一个倒下，后面的都是要跟着倒下的。<br>补充：根证书是CA认证中心给自己颁发的证书,是信任链的起始点。<br>所以如果根证书是不可信任的，那说明这个CA认证中心是不可信任的，不是权威的。从这里应该可以看出根证书是自己证明自己是可信任的。</li>
+</ul>
+<h1 id="证书作用"><a href="#证书作用" class="headerlink" title="证书作用"></a>证书作用</h1><p>CA证书的作用有很多，我就列出我接触比较多的2个。</p>
+<ul>
+<li><p>验证网站是否可信(针对https)(是否是真的官网)<br>  平时我们访问一些对数据比较敏感的网页(比如登录页面)，在地址栏上会出现一把绿色的🔒，其使用的的协议是https而不是http。因为http协议是明文传输的，一旦有坏蛋在嗅探你的网络通讯，ta就能看到你传输的内容(密码账号啥的)；而https是加密后的http，这个可以保证你的传输过程无法被坏蛋偷窥。<br>  but，<strong>不要认为</strong> 有了加密就可以高枕无忧了。假设有个坏蛋，弄了个假的网银的站点，然后你不小心上了这个站点。然后你有很不小心吧账号和密码都输入了。那这个坏蛋就能拿到你的账号密码了。(不是说有加密了吗？怎么还是能拿到？因为这个加密是你和站点协商好的，站点是能解密出来的)<br>  所以为了防止坏蛋使用这种招数，HTTPS除了有加密机制，还有一个证书机制。通过证书来确保，你正在链接的站点是可信任的站点。<br>  补充:每个浏览器都会内置一些它信任的根证书<br>  在使用浏览器购买火车票的时候，地址栏的https是不是会划红线。点击红线前面的🔒会弹出过一个框：kyfw.12306.cn，此网站使用了安全系数较低的安全配置，因此您的连接可能不具有私密性。<br>  会出现这个的原因是12306使用的证书并没有包含在浏览器内置的根证书里面，也就是说12306使用的是不可信的证书，浏览器才会提示出上面的警告。所以，如果你以后上某个知名的网站，发现浏览器跳出上述警告，就要小心了。</p>
+<p>  <img src="http://mrchens.github.io/images/article/2017.07/2017-07-12-12306certificate.png" alt="12306"></p>
+</li>
+<li><p>验证文件是否可信（是否被篡改）<br>  待完善</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>待完善</p>
+</li>
+</ul>
+<!-- | 身份认证机制    | Jack发送时的情书内容     | Rose接收到的情书内容     |
+| :------------- | :------------- | :------------- |
+| 什么都没有做 | 一日不见,如三秋兮. | xxxxxxxxxxxxxx |
+| 什么都没有做 | 一日不见,如三秋兮. | xxxxxxxxxxxxxx |
+| CA证书体系 | 一日不见,如三秋兮. | 一日不见,如三秋兮. | -->
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wechat_qrcode.jpg" alt="Zerlz wechat" style="width: 200px; max-width: 100%;"/>
+    <div>扫码关注一个很懒的程序员!</div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>Winter is coming, give me a penny!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>Donate</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechat_reward.JPG" alt="Zerlz WeChat Pay"/>
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay_reward.jpg" alt="Zerlz Alipay"/>
+        <p>Alipay</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Zerlz</li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://mrchens.github.io/2017/07/12/introduce-digital-certificate-and-ca/" title="数字证书及CA常识介绍">https://mrchens.github.io/2017/07/12/introduce-digital-certificate-and-ca/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> unless stating additionally.</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/08/Guan-Ju/" rel="next" title="周南·关雎 Guan Ju">
+                <i class="fa fa-chevron-left"></i> 周南·关雎 Guan Ju
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/26/shell-learning-notes/" rel="prev" title="shell learning notes">
+                shell learning notes <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Zerlz" />
+            
+              <p class="site-author-name" itemprop="name">Zerlz</p>
+              <p class="site-description motion-element" itemprop="description">It’s amazing how the unexpected, can take your life and change directions.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">36</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/MrChens" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/LableTag" target="_blank" title="Twitter" rel="external nofollow"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/325751212" target="_blank" title="Weibo" rel="external nofollow"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#目录结构"><span class="nav-number">1.</span> <span class="nav-text">目录结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#举个栗子"><span class="nav-number">2.</span> <span class="nav-text">举个栗子</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#普通的情书"><span class="nav-number">2.1.</span> <span class="nav-text">普通的情书</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#有加盖章的情书"><span class="nav-number">2.2.</span> <span class="nav-text">有加盖章的情书</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引入镖局的情书"><span class="nav-number">2.3.</span> <span class="nav-text">引入镖局的情书</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#专业术语"><span class="nav-number">3.</span> <span class="nav-text">专业术语</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#证书作用"><span class="nav-number">4.</span> <span class="nav-text">证书作用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zerlz</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a> v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" rel="external nofollow" href="https://theme-next.org">NexT.Gemini</a> v6.3.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://mrchens.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'https://mrchens.github.io/2017/07/12/introduce-digital-certificate-and-ca/';
+        this.page.identifier = '2017/07/12/introduce-digital-certificate-and-ca/';
+        this.page.title = '数字证书及CA常识介绍';
+        };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://mrchens.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("Rbmck7R3KAm9W7niGDdiqynV-gzGzoHsz", "vkjMmth4lwiUrDQ7gMeA9MkM");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            
+            counter.save(null, {
+              success: function(counter) {
+                
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(counter.get('time'));
+                
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            
+              var newcounter = new Counter();
+              /* Set ACL */
+              var acl = new AV.ACL();
+              acl.setPublicReadAccess(true);
+              acl.setPublicWriteAccess(true);
+              newcounter.setACL(acl);
+              /* End Set ACL */
+              newcounter.set("title", title);
+              newcounter.set("url", url);
+              newcounter.set("time", 1);
+              newcounter.save(null, {
+                success: function(newcounter) {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+                },
+                error: function(newcounter, error) {
+                  console.log('Failed to create');
+                }
+              });
+            
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

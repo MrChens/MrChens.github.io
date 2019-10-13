@@ -1,0 +1,1725 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/zerlz.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/zerlz.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/zerlz.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/zerlz.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前言 对每个程序员来说调试(Debug)是一个不可或缺的技能">
+<meta name="keywords" content="lldb,Xcode,debug">
+<meta property="og:type" content="article">
+<meta property="og:title" content="借助lldb的bt命令Debug">
+<meta property="og:url" content="https://mrchens.github.io/2018/08/05/debug-with-bt/index.html">
+<meta property="og:site_name" content="Zerlz&#39;s blog">
+<meta property="og:description" content="前言 对每个程序员来说调试(Debug)是一个不可或缺的技能">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://mrchens.github.io/images/article/2018.08/leak_wireShark.png">
+<meta property="og:image" content="http://mrchens.github.io/images/article/2018.08/wireshark_detail.png">
+<meta property="og:updated_time" content="2018-08-23T17:56:55.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="借助lldb的bt命令Debug">
+<meta name="twitter:description" content="前言 对每个程序员来说调试(Debug)是一个不可或缺的技能">
+<meta name="twitter:image" content="http://mrchens.github.io/images/article/2018.08/leak_wireShark.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://mrchens.github.io/2018/08/05/debug-with-bt/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>借助lldb的bt命令Debug | Zerlz's blog</title>
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-112744328-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-112744328-1');
+</script>
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2250627e2fe66049584e97edac149bb6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Zerlz's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">Yesterday once more</h1>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/aboutme/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />About</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags<span class="badge">15</span></a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />Categories<span class="badge">9</span></a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives<span class="badge">36</span></a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-sitemap">
+    <a href="/sitemap.xml" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />Sitemap</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />Search</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mrchens.github.io/2018/08/05/debug-with-bt/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zerlz">
+      <meta itemprop="description" content="It’s amazing how the unexpected, can take your life and change directions.">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zerlz's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">借助lldb的bt命令Debug
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-08-05 16:26:21" itemprop="dateCreated datePublished" datetime="2018-08-05T16:26:21+08:00">2018-08-05</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-08-24 01:56:55" itemprop="dateModified" datetime="2018-08-24T01:56:55+08:00">2018-08-24</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/调试-Debug/" itemprop="url" rel="index"><span itemprop="name">调试(Debug)</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/08/05/debug-with-bt/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/08/05/debug-with-bt/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/08/05/debug-with-bt/" class="leancloud_visitors" data-flag-title="借助lldb的bt命令Debug">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Views: </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><code>前言</code></p>
+<pre><code>对每个程序员来说调试(Debug)是一个不可或缺的技能
+</code></pre><a id="more"></a>
+<blockquote>
+<p>偵錯（英语：Debug），又稱除錯，是发现和减少计算机程序或电子仪器设备中程序错误的一个过程（<a href="https://zh.wikipedia.org/wiki/调试" target="_blank" rel="noopener">wiki-调试</a>）</p>
+</blockquote>
+<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>做SDK开发，难免会有些app接入SDK后并没有达到所需要的效果，这时候就需要你具备一定的<code>debug</code>的能力找到问题的所在,并提示/建议app开发人员进行修改.</p>
+<p>比如: app开发人员并没有按照SDK接入文档进行<code>Coding</code>，又或是app开发人员按照SDK接入文档进行Coding(但由于app的业务逻辑比较复杂某些细节忽略了)导致没有达到所需的效果.</p>
+<blockquote>
+<p>使用我们sdk进行流量引导的app必须在app启动时优先调用<code>sdk</code>的<code>+[WSPX start]</code></p>
+</blockquote>
+<h1 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h1><ul>
+<li>某民直播APP，在接入我方SDK后发现：在进入首页的直播平台后，会有几条请求无法被SDK引导(以下简称<code>流量泄露</code>)</li>
+<li>某民直播APP开发人员，一再确认已按照SDK接入文档进行Coding</li>
+</ul>
+<h1 id="调试前已有的资料"><a href="#调试前已有的资料" class="headerlink" title="调试前已有的资料"></a>调试前已有的资料</h1><ul>
+<li>流量泄露时对应的抓包数据</li>
+<li>某民直播提供的IPA包</li>
+</ul>
+<h1 id="问题重现的操作步骤"><a href="#问题重现的操作步骤" class="headerlink" title="问题重现的操作步骤:"></a>问题重现的操作步骤:</h1><ul>
+<li>激活sdk，重启app</li>
+<li>使用<code>Wireshark</code>对手机进行抓包</li>
+<li>首页随便逛逛，点开一个直播间<h1 id="查看抓包数据"><a href="#查看抓包数据" class="headerlink" title="查看抓包数据"></a>查看抓包数据</h1>wireShark抓包图:</li>
+</ul>
+<p><img src="http://mrchens.github.io/images/article/2018.08/leak_wireShark.png" alt="wireShark抓包图" title="wireShark抓包图"></p>
+<p>follow tcp flow of <code>FvlrC6LHMC9LspI_jVj-qzDhktiq</code>:<br><img src="http://mrchens.github.io/images/article/2018.08/wireshark_detail.png" alt="wireShark详细" title="wireShark详细"></p>
+<h1 id="根据抓包数据能得到的有用数据"><a href="#根据抓包数据能得到的有用数据" class="headerlink" title="根据抓包数据能得到的有用数据"></a>根据抓包数据能得到的有用数据</h1><ul>
+<li>从图中红色圈起来的部分我们可以知道该http请求发往的<code>Destination</code>不是<code>36.250.87.88</code></li>
+<li>绿色圈起来的部分是我们SDK有意让其不走我们的的节点<code>36.250.87.88</code></li>
+<li>除了有意使其不走节点<code>36.250.87.88</code>，剩下的就是泄露的流量</li>
+<li>从<code>UA</code>看<code>FvlrC6LHMC9LspI_jVj-qzDhktiq</code>这条请求确实是某民app发出的</li>
+<li>从<code>Content-Type</code>可以看出这是个zip包之类的资源(判定是一个需要下载的资源)</li>
+</ul>
+<h1 id="判定泄露类型"><a href="#判定泄露类型" class="headerlink" title="判定泄露类型:"></a>判定泄露类型:</h1><blockquote>
+<p>SDK现有的技术壁垒</p>
+<ul>
+<li>不支持wkwebview的流量引导</li>
+<li>不支持cfsocket和cfstream写的</li>
+<li>不支持对Apple的一些服务的流量引导</li>
+<li>如果有session的创建比sdk的session创建的早，则会导致泄漏</li>
+<li>如果有第三方也对我们hook的API也做了hook，有可能会导致泄漏</li>
+</ul>
+</blockquote>
+<ul>
+<li><code>UA</code>判定不是<code>wkwebview</code>发出的流量</li>
+<li>应该不是cfsocket和cfstream的流量，下载数据，是我的话应该会选择<code>downloadSession</code>来做的</li>
+<li>不是Apple的一些后台服务发出的流量</li>
+<li>可能<code>session</code>创建时没有挂上sdk的<code>nsurlprotocol</code></li>
+<li>第三方也对我们hook的API做了hook</li>
+</ul>
+<h1 id="借助OC语言的特性使用methodSwizzling对可疑session相关的API进行hook并打印session的实例地址"><a href="#借助OC语言的特性使用methodSwizzling对可疑session相关的API进行hook并打印session的实例地址" class="headerlink" title="借助OC语言的特性使用methodSwizzling对可疑session相关的API进行hook并打印session的实例地址"></a>借助OC语言的特性使用methodSwizzling对可疑<code>session</code>相关的API进行<code>hook</code>并打印<code>session</code>的实例地址</h1><pre><code>#import &quot;NSURLSession+Hooked.h&quot;
+#import &quot;MethodSwizzling.h&quot;
+@implementation NSURLSession (Hooked)
+
++ (void)load {
+    if ([WSPXConfig enableHook]) {
+
+    exchangeInstanceMethod([NSURLSession class], @selector(downloadTaskWithRequest:), @selector(debugHookedDownloadTaskWithRequest:));
+
+    exchangeInstanceMethod([NSURLSession class], @selector(dataTaskWithRequest:), @selector(debugHookedDataTaskWithRequest:));
+    exchangeInstanceMethod([NSURLSession class], @selector(dataTaskWithURL:), @selector(debugHookedDataTaskWithURL:));
+    exchangeInstanceMethod([NSURLSession class], @selector(uploadTaskWithRequest:fromFile:), @selector(debugHookedUploadTaskWithRequest:fromFile:));
+    exchangeInstanceMethod([NSURLSession class], @selector(uploadTaskWithRequest:fromData:), @selector(debugHookedUploadTaskWithRequest:fromData:));
+    exchangeInstanceMethod([NSURLSession class], @selector(uploadTaskWithStreamedRequest:), @selector(debugHookedUploadTaskWithStreamedRequest:));
+    exchangeInstanceMethod([NSURLSession class], @selector(downloadTaskWithURL:), @selector(debugHookedDownloadTaskWithURL:));
+    exchangeInstanceMethod([NSURLSession class], @selector(downloadTaskWithResumeData:), @selector(debugHookedDownloadTaskWithResumeData:));
+        exchangeMethodClass([NSURLSession class],
+                            @selector(sessionWithConfiguration:delegate:delegateQueue:),
+                            @selector(debugHookedSessionWithConfiguration:delegate:delegateQueue:));
+    }
+}
+
++ (NSURLSession *)debugHookedSessionWithConfiguration:(NSURLSessionConfiguration *)configuration delegate:(id&lt;NSURLSessionDelegate&gt;)delegate delegateQueue:(NSOperationQueue *)queue {
+    NSURLSession* finalSession = [self debugHookedSessionWithConfiguration:configuration delegate:delegate delegateQueue:queue];
+    NSLog(@&quot;Hallo--&gt;session debugHookedSessionWithConfiguration -&gt; session(%@), delegate(%@)\n&quot;,finalSession, delegate);
+    return finalSession;
+}
+/* Creates a data task with the given request.  The request may have a body stream. */
+- (NSURLSessionDataTask *)debugHookedDataTaskWithRequest:(NSURLRequest *)request; {
+    NSLog(@&quot;Hallo--&gt;session(%@), --&gt;request(%@) \n%s&quot;, self, request, __PRETTY_FUNCTION__);
+    return [self debugHookedDataTaskWithRequest:request];
+}
+
+/* Creates a data task to retrieve the contents of the given URL. */
+- (NSURLSessionDataTask *)debugHookedDataTaskWithURL:(NSURL *)url; {
+    NSLog(@&quot;Hallo--&gt;session(%@), --&gt;url(%@) \n%s&quot;, self, url, __PRETTY_FUNCTION__);
+    return [self debugHookedDataTaskWithURL:url];
+}
+
+/* Creates an upload task with the given request.  The body of the request will be created from the file referenced by fileURL */
+- (NSURLSessionUploadTask *)debugHookedUploadTaskWithRequest:(NSURLRequest *)request fromFile:(NSURL *)fileURL; {
+    NSLog(@&quot;Hallo--&gt;session(%@), --&gt;request(%@) \n%s&quot;, self, request, __PRETTY_FUNCTION__);
+    return [self debugHookedUploadTaskWithRequest:request fromFile:fileURL];
+}
+
+/* Creates an upload task with the given request.  The body of the request is provided from the bodyData. */
+- (NSURLSessionUploadTask *)debugHookedUploadTaskWithRequest:(NSURLRequest *)request fromData:(NSData *)bodyData; {
+    NSLog(@&quot;Hallo--&gt;session(%@), --&gt;request(%@) \n%s&quot;, self, request, __PRETTY_FUNCTION__);
+    return [self debugHookedUploadTaskWithRequest:request fromData:bodyData];
+}
+
+/* Creates an upload task with the given request.  The previously set body stream of the request (if any) is ignored and the URLSession:task:needNewBodyStream: delegate will be called when the body payload is required. */
+- (NSURLSessionUploadTask *)debugHookedUploadTaskWithStreamedRequest:(NSURLRequest *)request; {
+   NSLog(@&quot;Hallo--&gt;session(%@), --&gt;request(%@) \n%s&quot;, self, request, __PRETTY_FUNCTION__);
+    return [self debugHookedUploadTaskWithStreamedRequest:request];
+}
+
+/* Creates a download task with the given request. */
+- (NSURLSessionDownloadTask *)debugHookedDownloadTaskWithRequest:(NSURLRequest *)request; {
+    NSLog(@&quot;Hallo--&gt;session(%@), --&gt;request(%@) \n%s&quot;, self, request, __PRETTY_FUNCTION__);
+    return [self debugHookedDownloadTaskWithRequest:request];
+}
+
+/* Creates a download task to download the contents of the given URL. */
+- (NSURLSessionDownloadTask *)debugHookedDownloadTaskWithURL:(NSURL *)url; {
+    NSLog(@&quot;Hallo--&gt;session(%@), --&gt;url(%@) \n%s&quot;, self, url, __PRETTY_FUNCTION__);
+    return [self debugHookedDownloadTaskWithURL:url];
+}
+
+/* Creates a download task with the resume data.  If the download cannot be successfully resumed, URLSession:task:didCompleteWithError: will be called. */
+- (NSURLSessionDownloadTask *)debugHookedDownloadTaskWithResumeData:(NSData *)resumeData;{
+    NSLog(@&quot;Hallo--&gt;session(%@), \n%s&quot;, self, __PRETTY_FUNCTION__);
+    return [self debugHookedDownloadTaskWithResumeData:resumeData];
+}
+@end
+</code></pre><h1 id="借助MonkeyDev动态库注入工具将上面的代码注入某民的可执行文件"><a href="#借助MonkeyDev动态库注入工具将上面的代码注入某民的可执行文件" class="headerlink" title="借助MonkeyDev动态库注入工具将上面的代码注入某民的可执行文件"></a>借助MonkeyDev动态库注入工具将上面的代码注入某民的可执行文件</h1><ul>
+<li>具体如何使用该工具我就不再赘述，不懂的话可以去看<a href="https://github.com/AloneMonkey/MonkeyDev/wiki" target="_blank" rel="noopener">Wiki</a></li>
+</ul>
+<h1 id="复现问题"><a href="#复现问题" class="headerlink" title="复现问题"></a>复现问题</h1><ul>
+<li>使用<code>Wireshark</code>对手机进行抓包</li>
+<li>点开首页随便逛逛，点开一个直播间</li>
+<li>如愿<code>Wireshark</code>中出现了那个泄露的关键字符串<code>FvlrC6LHMC9LspI_jVj-qzDhktiq</code></li>
+<li>也如愿收获了一大堆log</li>
+</ul>
+<h1 id="在log寻找线索"><a href="#在log寻找线索" class="headerlink" title="在log寻找线索"></a>在log寻找线索</h1><ul>
+<li>在log中搜索关键字<code>FvlrC6LHMC9LspI_jVj-qzDhktiq</code>找到如下这条<pre><code>2018-08-02 15:27:46.070729+0800 QuanMinTV-Mini[1529:185056] Hallo--&gt;session(&lt;__NSURLSessionLocal: 0x1741d8150&gt;), --&gt;request(&lt;NSURLRequest: 0x174214f90&gt; { URL: http://attachment.shouyintv.cn/FvlrC6LHMC9LspI_jVj-qzDhktiq })
+</code></pre></li>
+<li>根据上面得到的那条log，拿到<code>0x1741d8150</code>，并对log文件进行过滤得到如下结果:<pre><code> 2018-08-02 15:09:49.403756+0800 QuanMinTV-Mini[1529:182446] Hallo--&gt;session debugHookedSessionWithConfiguration -&gt; session(&lt;__NSURLSessionLocal: 0x1741d8150&gt;), delegate(&lt;AFHTTPSessionManager: 0x1701d9140, baseURL: (null), session: (null), operationQueue: &lt;NSOperationQueue: 0x17422cb80&gt;{name = &apos;NSOperationQueue 0x17422cb80&apos;}&gt;)
+2018-08-02 15:09:49.418955+0800 QuanMinTV-Mini[1529:182446] Hallo--&gt;session(&lt;__NSURLSessionLocal: 0x1741d8150&gt;), --&gt;request(&lt;NSMutableURLRequest: 0x17001aa40&gt; { URL: https://api-shouyin.quanmin.tv/public/version/check/2/4346?cid=6&amp;conn=3G&amp;cv=iphone2_4.3.40&amp;debug=0&amp;dev=1F57FD00-74E2-4007-942B-8F9744151B9B&amp;device=&amp;nonce=QBMHVSNPSZJQUOOFNEVPZXFPAHNNXIWE&amp;os=30&amp;osversion=ios_10.3.1&amp;sign=B2DEA231ED08CD9BDDABD0C75B7714FB&amp;toid=-1&amp;ua=iPhone7%2C2 })
+2018-08-02 15:09:49.424917+0800 QuanMinTV-Mini[1529:182446] Hallo--&gt;session(&lt;__NSURLSessionLocal: 0x1741d8150&gt;), --&gt;request(&lt;NSMutableURLRequest: 0x1740194c0&gt; { URL: https://api-shouyin.quanmin.tv/public/app/msg?cid=6&amp;conn=3G&amp;cv=iphone2_4.3.40&amp;debug=0&amp;dev=1F57FD00-74E2-4007-942B-8F9744151B9B&amp;device=&amp;nonce=NHWKXUEVMDFVAJINOJRHPOWUNYSWZSBP&amp;os=30&amp;osversion=ios_10.3.1&amp;sign=4787B043ECCD08701DAAA511A1A57E11&amp;toid=-1&amp;ua=iPhone7%2C2 })
+2018-08-02 15:09:49.426879+0800 QuanMinTV-Mini[1529:182446] Hallo--&gt;session(&lt;__NSURLSessionLocal: 0x1741d8150&gt;), --&gt;request(&lt;NSMutableURLRequest: 0x17001ab50&gt; { URL: https://api-shouyin.quanmin.tv/public/config/gift/version?cid=6&amp;conn=3G&amp;cv=iphone2_4.3.40&amp;debug=0&amp;dev=1F57FD00-74E2-4007-942B-8F9744151B9B&amp;device=&amp;nonce=EPTGXBVCVGWNNMOAEJPDFCMKGIMRTKTY&amp;os=30&amp;osversion=ios_10.3.1&amp;sign=96C4834DAB7554ECCC1A4CB1100D7A8B&amp;toid=-1&amp;ua=iPhone7%2C2 })
+2018-08-02 15:09:49.428882+0800 QuanMinTV-Mini[1529:182446] Hallo--&gt;session(&lt;__NSURLSessionLocal: 0x1741d8150&gt;), --&gt;request(&lt;NSMutableURLRequest: 0x17001ac10&gt; { URL: https://api-shouyin.quanmin.tv/bag/propConfigVersion?cid=6&amp;conn=3G&amp;cv=iphone2_4.3.40&amp;debug=0&amp;dev=1F57FD00-74E2-4007-942B-8F9744151B9B&amp;device=&amp;nonce=DIYIROKGPMHUYPIEMJUMWDPDWJPBQYIP&amp;os=30&amp;osversion=ios_10.3.1&amp;sign=417C6DC17E0B63EFF3D4A22FBEE0C60F&amp;toid=-1&amp;ua=iPhone7%2C2 })
+2018-08-02 15:09:49.431908+0800 QuanMinTV-Mini[1529:182446] Hallo--&gt;session(&lt;__NSURLSessionLocal: 0x1741d8150&gt;), --&gt;request(&lt;NSMutableURLRequest: 0x174019700&gt; { URL: https://api-shouyin.quanmin.tv/public/app/act?cid=6&amp;conn=3G&amp;cv=iphone2_4.3.40&amp;debug=0&amp;dev=1F57FD00-74E2-4007-942B-8F9744151B9B&amp;device=&amp;nonce=QCATFARGNZSQTESFECNREAJFSYGCYBVN&amp;os=30&amp;osversion=ios_10.3.1&amp;sign=8C631191D38D45F6BFD5BAE1504DB99D&amp;toid=-1&amp;ua=iPhone7%2C2 })
+2018-08-02 15:09:49.932752+0800 QuanMinTV-Mini[1529:182446] Hallo--&gt;session(&lt;__NSURLSessionLocal: 0x1741d8150&gt;), --&gt;request(&lt;NSMutableURLRequest: 0x17401a440&gt; { URL: https://api-shouyin.quanmin.tv/auth/check?cid=6&amp;conn=3G&amp;cv=iphone2_4.3.40&amp;debug=0&amp;dev=1F57FD00-74E2-4007-942B-8F9744151B9B&amp;device=&amp;nonce=KQVXMQLGZUVPBYNKMYRRQKFSYAKAWJBQ&amp;os=30&amp;osversion=ios_10.3.1&amp;sign=98A1A861B795A6FE5E5FA9D8F81CCD08&amp;toid=-1&amp;ua=iPhone7%2C2 })
+2018-08-02 15:09:52.778470+0800 QuanMinTV-Mini[1529:182446] Hallo--&gt;session(&lt;__NSURLSessionLocal: 0x1741d8150&gt;), --&gt;request(&lt;NSMutableURLRequest: 0x174203ca0&gt; { URL: https://api-shouyin.quanmin.tv/bag/propConfig?cid=6&amp;client=app&amp;conn=3G&amp;cv=iphone2_4.3.40&amp;debug=0&amp;dev=1F57FD00-74E2-4007-942B-8F9744151B9B&amp;device=&amp;nonce=KLPMQQQLQPRGWLBERPQBDEHOHTCVZRNV&amp;os=30&amp;osversion=ios_10.3.1&amp;sign=C8B31DD95B00DCB64ADA533C6D275CF8&amp;toid=-1&amp;ua=iPhone7%2C2 })
+2018-08-02 15:09:55.811342+0800 QuanMinTV-Mini[1529:182446] Hallo--&gt;session(&lt;__NSURLSessionLocal: 0x1741d8150&gt;), --&gt;request(&lt;NSMutableURLRequest: 0x170216310&gt; { URL: https://api-shouyin.quanmin.tv/auth/check?cid=6&amp;conn=3G&amp;cv=iphone2_4.3.40&amp;debug=0&amp;dev=1F57FD00-74E2-4007-942B-8F9744151B9B&amp;device=&amp;nonce=KQXUGSPOATHXRNJGGVWSIRVVXGLEFHXM&amp;os=30&amp;osversion=ios_10.3.1&amp;sign=0D0762A1D2C39E2904035AE8C248F826&amp;toid=-1&amp;ua=iPhone7%2C2 })
+2018-08-02 15:09:58.884550+0800 QuanMinTV-Mini[1529:182446] Hallo--&gt;session(&lt;__NSURLSessionLocal: 0x1741d8150&gt;), --&gt;request(&lt;NSMutableURLRequest: 0x1702132b0&gt; { URL: https://api-shouyin.quanmin.tv/auth/check?cid=6&amp;conn=3G&amp;cv=iphone2_4.3.40&amp;debug=0&amp;dev=1F57FD00-74E2-4007-942B-8F9744151B9B&amp;device=&amp;nonce=BYRNKTDIGMVYPVYYGXSOXENFPQIUBGHN&amp;os=30&amp;osversion=ios_10.3.1&amp;sign=D00DF763A33CC62288FA219D98DBBBA4&amp;toid=-1&amp;ua=iPhone7%2C2 })
+2018-08-02 15:10:02.214492+0800 QuanMinTV-Mini[1529:182446] Hallo--&gt;session(&lt;__NSURLSessionLocal: 0x1741d8150&gt;), --&gt;request(&lt;NSMutableURLRequest: 0x17401bb90&gt; { URL: https://api-shouyin.quanmin.tv/auth/check?cid=6&amp;conn=3G&amp;cv=iphone2_4.3.40&amp;debug=0&amp;dev=1F57FD00-74E2-4007-942B-8F9744151B9B&amp;device=&amp;nonce=FKQONYAGQJHWBPJEQVXHTXOXYEDMMNBV&amp;os=30&amp;osversion=ios_10.3.1&amp;sign=B784F426048B7DC5EF1B86988725D822&amp;toid=-1&amp;ua=iPhone7%2C2 })
+onLocal: 0x1741d8150&gt;), --&gt;request(&lt;NSMutableURLRequest: 0x170218e00&gt; { URL: https://api-shouyin.quanmin.tv/user/honor/single?cid=6&amp;conn=3G&amp;cv=iphone2_4.3.40&amp;debug=0&amp;dev=1F57FD00-74E2-4007-942B-8F9744151B9B&amp;device=&amp;nonce=USEAFOCLRVOYRAHHGOYDIHUKOFITNSHQ&amp;os=30&amp;osversion=ios_10.3.1&amp;owid=1639748150&amp;sign=A22A2E14B358545B355D8C454DAC828F&amp;toid=-1&amp;ua=iPhone7%2C2 })
+2018-08-02 15:27:45.693859+0800 QuanMinTV-Mini[1529:182446] Hallo--&gt;session(&lt;__NSURLSessionLocal: 0x1741d8150&gt;), --&gt;request(&lt;NSMutableURLRequest: 0x17021aaa0&gt; { URL: https://api-shouyin.quanmin.tv/public/config/gift/version?cid=6&amp;conn=WIFI&amp;cv=iphone2_4.3.40&amp;debug=0&amp;dev=1F57FD00-74E2-4007-942B-8F9744151B9B&amp;device=&amp;nonce=MSARXVQPBUSSTRXVLBLM2018-08-02 15:27:45.695986+0800 QuanMinTV-Mini[1529:182446] Hallo--&gt;session(&lt;__NSURLSessionLocal: 0x1741d8150&gt;), --&gt;request(&lt;NSMutableURLRequest: 0x1742141d0&gt; { URL: https://api-shouyin.quanmin.tv/bag/propConfigVersion?cid=6&amp;conn=WIFI&amp;cv=iphone2_4.3.40&amp;debug=0&amp;dev=1F57FD00-74E2-4007-942B-8F9744151B9B&amp;device=&amp;nonce=WGKLJVVVABHMMKTOHJJXVRBVNCIVDMDF&amp;os=30&amp;osversion=ios_10.3.1&amp;sign=F20484F9E26A949403144286937FFD2F&amp;toid=-1&amp;ua=iPhone7%2C2 })
+2018-08-02 15:27:45.980003+0800 QuanMinTV-Mini[1529:182446] Hallo--&gt;session(&lt;__NSURLSessionLocal: 0x1741d8150&gt;), --&gt;request(&lt;NSMutableURLRequest: 0x174213ec0&gt; { URL: https://api-shouyin.quanmin.tv/bag/propConfig?cid=6&amp;client=app&amp;conn=WIFI&amp;cv=iphone2_4.3.40&amp;debug=0&amp;dev=1F57FD00-74E2-4007-942B-8F9744151B9B&amp;device=&amp;nonce=BZMZIXOWSUALQDCKSCZUBAQYMLTRSNYX&amp;os=30&amp;osversion=ios_10.3.1&amp;sign=E4D305CACD884D959D8A242C8C28DC06&amp;toid=-1&amp;ua=iPhone7%2C2 })
+2018-08-02 15:27:46.070729+0800 QuanMinTV-Mini[1529:185056] Hallo--&gt;session(&lt;__NSURLSessionLocal: 0x1741d8150&gt;), --&gt;request(&lt;NSURLRequest: 0x174214f90&gt; { URL: http://attachment.shouyintv.cn/FvlrC6LHMC9LspI_jVj-qzDhktiq })
+</code></pre></li>
+<li><p>从上面的log中第一条可以判定该条<code>session</code>是由<code>AFHTTPSessionManager</code>创建的并不是我们sdk创建的,或者说该<code>session</code>在我们sdk在hook<code>sessionWithConfiguration:delegate:delegateQueue:</code>之前就已经创建了</p>
+</li>
+<li><p>因为以前有看过<code>AFHTTPSessionManager</code>的session初始化方法所以我直接在Xcode中使用符号断点在<code>-[AFHTTPSessionManager initWithBaseURL:sessionConfiguration:]</code>下了个断点</p>
+</li>
+<li>并且也在我们sdk启动的方法下了个符号断点<code>+[WSPX start]</code></li>
+<li>如果Xcode先停在了<code>-[AFHTTPSessionManager initWithBaseURL:sessionConfiguration:]</code>那么可以确定就是因为<code>session</code>没有挂上sdk的<code>nsurlprotocol</code>，导致该<code>session</code>无法被我们sdk进行流量引导</li>
+<li><p>如下是断点<code>-[AFHTTPSessionManager initWithBaseURL:sessionConfiguration:]</code>触发时使用bt查看堆栈</p>
+<pre><code>   (lldb) bt
+* thread #1, queue = &apos;com.apple.main-thread&apos;, stop reason = breakpoint 9.1
+  * frame #0: 0x00000001007ad6c4 QuanMinTV-Mini`-[DVLHttpManager initWithBaseUrl:]
+    frame #1: 0x00000001001eaac0 QuanMinTV-Mini`-[ZXHttpTask init] + 132
+    frame #2: 0x00000001001eaa1c QuanMinTV-Mini`___lldb_unnamed_symbol2824$$QuanMinTV-Mini + 36
+    frame #3: 0x0000000105f8da10 libdispatch.dylib`_dispatch_client_callout + 16
+    frame #4: 0x0000000105f8e778 libdispatch.dylib`dispatch_once_f + 116
+    frame #5: 0x00000001001ea9f4 QuanMinTV-Mini`+[ZXHttpTask sharedManager] + 112
+    frame #6: 0x00000001001eb268 QuanMinTV-Mini`+[ZXHttpTask GET:parameters:taskResponse:] + 164
+    frame #7: 0x00000001007a48d4 QuanMinTV-Mini`-[ZXUserModel checkUpate:] + 344
+    frame #8: 0x00000001007a2604 QuanMinTV-Mini`-[ZXUserModel delayFetchThings] + 56
+    frame #9: 0x000000010079e9f8 QuanMinTV-Mini`-[ZXUserModel fetchData] + 56
+    frame #10: 0x00000001007a0080 QuanMinTV-Mini`-[ZXUserModel userInfo] + 148
+    frame #11: 0x0000000100623fb8 QuanMinTV-Mini`-[AppDelegate setupBugly] + 408
+    frame #12: 0x0000000100623798 QuanMinTV-Mini`-[AppDelegate application:didFinishLaunchingWithOptions:] + 184
+    frame #13: 0x00000001940c72dc UIKit`-[UIApplication _handleDelegateCallbacksWithOptions:isSuspended:restoreState:] + 380
+    frame #14: 0x00000001942d3800 UIKit`-[UIApplication _callInitializationDelegatesForMainScene:transitionContext:] + 3452
+    frame #15: 0x00000001942d92a8 UIKit`-[UIApplication _runWithMainScene:transitionContext:completion:] + 1684
+    frame #16: 0x00000001942edde0 UIKit`__84-[UIApplication _handleApplicationActivationWithScene:transitionContext:completion:]_block_invoke.3151 + 48
+    frame #17: 0x00000001942d653c UIKit`-[UIApplication workspaceDidEndTransaction:] + 168
+    frame #18: 0x000000018facf884 FrontBoardServices`__FBSSERIALQUEUE_IS_CALLING_OUT_TO_A_BLOCK__ + 36
+    frame #19: 0x000000018facf6f0 FrontBoardServices`-[FBSSerialQueue _performNext] + 176
+    frame #20: 0x000000018facfaa0 FrontBoardServices`-[FBSSerialQueue _performNextFromRunLoopSource] + 56
+    frame #21: 0x000000018ded5424 CoreFoundation`__CFRUNLOOP_IS_CALLING_OUT_TO_A_SOURCE0_PERFORM_FUNCTION__ + 24
+    frame #22: 0x000000018ded4d94 CoreFoundation`__CFRunLoopDoSources0 + 540
+    frame #23: 0x000000018ded29a0 CoreFoundation`__CFRunLoopRun + 744
+    frame #24: 0x000000018de02d94 CoreFoundation`CFRunLoopRunSpecific + 424
+    frame #25: 0x00000001940c045c UIKit`-[UIApplication _run] + 652
+    frame #26: 0x00000001940bb130 UIKit`UIApplicationMain + 208
+    frame #27: 0x0000000100a0f8d4 QuanMinTV-Mini`___lldb_unnamed_symbol16136$$QuanMinTV-Mini + 88
+    frame #28: 0x000000018ce1159c libdyld.dylib`start + 4
+</code></pre></li>
+<li><p>从上面的调用栈可以整理出如下的调用关系1:</p>
+<pre><code>[AppDelegate application:didFinishLaunchingWithOptions:]
+[AppDelegate setupBugly]
+[ZXUserModel userInfo]
+[ZXUserModel fetchData]
+[ZXUserModel delayFetchThings]
+[ZXUserModel checkUpate:]
+[ZXHttpTask GET:parameters:taskResponse:]
+[ZXHttpTask sharedManager]
+.
+.
+.
+[ZXHttpTask init]
+[DVLHttpManager initWithBaseUrl:]
+[AFHTTPSessionManager initWithBaseURL:sessionConfiguration:]
+</code></pre></li>
+<li>如下是符号断点<code>+[WSPX start]</code>触发时使用bt查看的堆栈<pre><code>(lldb) bt
+* thread #1, queue = &apos;com.apple.main-thread&apos;, stop reason = breakpoint 8.1
+* frame #0: 0x0000000100d46a34 QuanMinTV-Mini`+[WSPX start]
+frame #1: 0x00000001008c027c QuanMinTV-Mini`+[QMFreeFlowManager start] + 40
+frame #2: 0x0000000100623830 QuanMinTV-Mini`-[AppDelegate application:didFinishLaunchingWithOptions:] + 336
+frame #3: 0x00000001940c72dc UIKit`-[UIApplication _handleDelegateCallbacksWithOptions:isSuspended:restoreState:] + 380
+frame #4: 0x00000001942d3800 UIKit`-[UIApplication _callInitializationDelegatesForMainScene:transitionContext:] + 3452
+frame #5: 0x00000001942d92a8 UIKit`-[UIApplication _runWithMainScene:transitionContext:completion:] + 1684
+frame #6: 0x00000001942edde0 UIKit`__84-[UIApplication _handleApplicationActivationWithScene:transitionContext:completion:]_block_invoke.3151 + 48
+frame #7: 0x00000001942d653c UIKit`-[UIApplication workspaceDidEndTransaction:] + 168
+frame #8: 0x000000018facf884 FrontBoardServices`__FBSSERIALQUEUE_IS_CALLING_OUT_TO_A_BLOCK__ + 36
+frame #9: 0x000000018facf6f0 FrontBoardServices`-[FBSSerialQueue _performNext] + 176
+frame #10: 0x000000018facfaa0 FrontBoardServices`-[FBSSerialQueue _performNextFromRunLoopSource] + 56
+frame #11: 0x000000018ded5424 CoreFoundation`__CFRUNLOOP_IS_CALLING_OUT_TO_A_SOURCE0_PERFORM_FUNCTION__ + 24
+frame #12: 0x000000018ded4d94 CoreFoundation`__CFRunLoopDoSources0 + 540
+frame #13: 0x000000018ded29a0 CoreFoundation`__CFRunLoopRun + 744
+frame #14: 0x000000018de02d94 CoreFoundation`CFRunLoopRunSpecific + 424
+frame #15: 0x00000001940c045c UIKit`-[UIApplication _run] + 652
+frame #16: 0x00000001940bb130 UIKit`UIApplicationMain + 208
+frame #17: 0x0000000100a0f8d4 QuanMinTV-Mini`___lldb_unnamed_symbol16136$$QuanMinTV-Mini + 88
+frame #18: 0x000000018ce1159c libdyld.dylib`start + 4
+</code></pre></li>
+<li>从上面的调用栈可以整理出如下的调用关系2:<pre><code>[WSPX start]
+[QMFreeFlowManager start]
+[AppDelegate application:didFinishLaunchingWithOptions:]
+</code></pre></li>
+<li>说明一下：断点是先触发了<code>-[AFHTTPSessionManager initWithBaseURL:sessionConfiguration:]</code>然后放行再触发了<code>+[WSPX start]</code></li>
+</ul>
+<h1 id="排查结论"><a href="#排查结论" class="headerlink" title="排查结论:"></a>排查结论:</h1><ul>
+<li>根据断点触发的先后顺序，可以确定是因为session没有挂上sdk的<code>nsurlprotocol</code>，导致该session无法被我们sdk进行流量引导</li>
+<li>然后将调用关系1和调用关系2结合得出:<code>[QMFreeFlowManager start]</code>比<code>[AppDelegate setupBugly]</code>调用的晚导致导致泄露了。</li>
+<li>将上述结论发给某民直播的开发者，让其将<code>[QMFreeFlowManager start]</code>放在<code>[AppDelegate setupBugly]</code>之前调用</li>
+</ul>
+<h1 id="Note"><a href="#Note" class="headerlink" title="Note:"></a>Note:</h1><ul>
+<li>这里使用bt就是为了找到某民直播app因为业务逻辑比较复杂导致<code>[QMFreeFlowManager start]</code>并没有按照接入文档进行coding的证据，这样子和甲方沟通起来就比较硬气一些了。</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wechat_qrcode.jpg" alt="Zerlz wechat" style="width: 200px; max-width: 100%;"/>
+    <div>扫码关注一个很懒的程序员!</div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>Winter is coming, give me a penny!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>Donate</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechat_reward.JPG" alt="Zerlz WeChat Pay"/>
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay_reward.jpg" alt="Zerlz Alipay"/>
+        <p>Alipay</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Zerlz</li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://mrchens.github.io/2018/08/05/debug-with-bt/" title="借助lldb的bt命令Debug">https://mrchens.github.io/2018/08/05/debug-with-bt/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> unless stating additionally.</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/lldb/" rel="tag"># lldb</a>
+          
+            <a href="/tags/Xcode/" rel="tag"># Xcode</a>
+          
+            <a href="/tags/debug/" rel="tag"># debug</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/26/debug-with-crashlog/" rel="next" title="根据crash.log调试BUG">
+                <i class="fa fa-chevron-left"></i> 根据crash.log调试BUG
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/11/AADSII-linkedList/" rel="prev" title="AADSII-linkedList">
+                AADSII-linkedList <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Zerlz" />
+            
+              <p class="site-author-name" itemprop="name">Zerlz</p>
+              <p class="site-description motion-element" itemprop="description">It’s amazing how the unexpected, can take your life and change directions.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">36</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/MrChens" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/LableTag" target="_blank" title="Twitter" rel="external nofollow"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/325751212" target="_blank" title="Weibo" rel="external nofollow"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#案例"><span class="nav-number">2.</span> <span class="nav-text">案例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#调试前已有的资料"><span class="nav-number">3.</span> <span class="nav-text">调试前已有的资料</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#问题重现的操作步骤"><span class="nav-number">4.</span> <span class="nav-text">问题重现的操作步骤:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查看抓包数据"><span class="nav-number">5.</span> <span class="nav-text">查看抓包数据</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#根据抓包数据能得到的有用数据"><span class="nav-number">6.</span> <span class="nav-text">根据抓包数据能得到的有用数据</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#判定泄露类型"><span class="nav-number">7.</span> <span class="nav-text">判定泄露类型:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#借助OC语言的特性使用methodSwizzling对可疑session相关的API进行hook并打印session的实例地址"><span class="nav-number">8.</span> <span class="nav-text">借助OC语言的特性使用methodSwizzling对可疑session相关的API进行hook并打印session的实例地址</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#借助MonkeyDev动态库注入工具将上面的代码注入某民的可执行文件"><span class="nav-number">9.</span> <span class="nav-text">借助MonkeyDev动态库注入工具将上面的代码注入某民的可执行文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#复现问题"><span class="nav-number">10.</span> <span class="nav-text">复现问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#在log寻找线索"><span class="nav-number">11.</span> <span class="nav-text">在log寻找线索</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#排查结论"><span class="nav-number">12.</span> <span class="nav-text">排查结论:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Note"><span class="nav-number">13.</span> <span class="nav-text">Note:</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zerlz</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a> v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" rel="external nofollow" href="https://theme-next.org">NexT.Gemini</a> v6.3.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://mrchens.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'https://mrchens.github.io/2018/08/05/debug-with-bt/';
+        this.page.identifier = '2018/08/05/debug-with-bt/';
+        this.page.title = '借助lldb的bt命令Debug';
+        };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://mrchens.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("Rbmck7R3KAm9W7niGDdiqynV-gzGzoHsz", "vkjMmth4lwiUrDQ7gMeA9MkM");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            
+            counter.save(null, {
+              success: function(counter) {
+                
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(counter.get('time'));
+                
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            
+              var newcounter = new Counter();
+              /* Set ACL */
+              var acl = new AV.ACL();
+              acl.setPublicReadAccess(true);
+              acl.setPublicWriteAccess(true);
+              newcounter.setACL(acl);
+              /* End Set ACL */
+              newcounter.set("title", title);
+              newcounter.set("url", url);
+              newcounter.set("time", 1);
+              newcounter.save(null, {
+                success: function(newcounter) {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+                },
+                error: function(newcounter, error) {
+                  console.log('Failed to create');
+                }
+              });
+            
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
